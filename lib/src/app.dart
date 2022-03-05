@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
 
+import 'core/types.dart';
 import 'core/const.dart';
 import 'core/view.dart';
 import 'model/state.dart';
@@ -45,7 +45,7 @@ class AppVM {
     required this.theme,
   });
 
-  factory AppVM.fromStore(Store<MyDexState> store, IStyle style, INav nav) => AppVM(
+  factory AppVM.fromStore(MyDexStore store, IStyle style, INav nav) => AppVM(
         home: store.state.authState.isAuthed //
             ? nav.getBy(Const.homeView)
             : nav.getBy(Const.authView),

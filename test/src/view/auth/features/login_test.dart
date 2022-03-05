@@ -3,12 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mydex/src/core/const.dart';
 import 'package:mydex/src/core/di.dart';
+import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
-import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/model/user.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/auth/features/login.dart';
-import 'package:redux/redux.dart';
 
 import '../../../core/util.dart';
 import '../../../service/nav_test.mocks.dart';
@@ -23,7 +22,7 @@ void main() {
 void middlewareTests() {
   late LoginMiddleware middleware;
   late MockIUserRepo userRepo;
-  late Store<MyDexState> store;
+  late MyDexStore store;
   late MockIPrefs prefs;
 
   group('LoginMiddleware', () {
@@ -78,7 +77,7 @@ void middlewareTests() {
 }
 
 void viewTests() {
-  late Store<MyDexState> store;
+  late MyDexStore store;
   late LoginMiddleware middleware;
   late MockINav nav;
   late LoginVM vm;

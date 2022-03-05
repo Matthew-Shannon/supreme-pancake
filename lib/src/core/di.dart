@@ -25,6 +25,7 @@ import '../view/home/features/search.dart';
 import '../view/home/features/settings.dart';
 import '../view/home/home.dart';
 import 'const.dart';
+import 'types.dart';
 
 typedef DI = GetIt;
 
@@ -65,7 +66,7 @@ class RepositoryModule {
 
 class ReduxModule {
   static DI setup(DI di) => di
-    ..registerLazySingleton<Store<MyDexState>>(() => Store<MyDexState>(
+    ..registerLazySingleton<MyDexStore>(() => Store<MyDexState>(
           MyDexReducer.reduce,
           initialState: devState(),
           middleware: [

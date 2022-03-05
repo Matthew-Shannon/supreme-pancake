@@ -18,7 +18,7 @@ extension PostExpectationEx on PostExpectation {
   void thenAnswerStreamN<T>(T? t) => thenAnswer((_) => Stream.value(t));
 }
 
-Store<MyDexState> setupStore(BiFunc<MyDexState, dynamic, MyDexState> onApply) => //
+MyDexStore setupStore(BiFunc<MyDexState, dynamic, MyDexState> onApply) => //
     Store(onApply, initialState: const MyDexState());
 
 class TestApp extends StatelessWidget {

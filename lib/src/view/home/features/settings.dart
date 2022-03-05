@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -57,7 +56,7 @@ class SettingsVM {
     required this.onToggleTheme,
   });
 
-  factory SettingsVM.fromStore(Store<MyDexState> store, SettingsMiddleware middleware) => SettingsVM(
+  factory SettingsVM.fromStore(MyDexStore store, SettingsMiddleware middleware) => SettingsVM(
         settingsState: store.state.settingsState,
         userVM: UserVM(store.state.authState.owner),
         onLogout: () => store.dispatch(middleware.logout()),
@@ -69,12 +68,12 @@ class SettingsMiddleware {
   final IPrefs prefs;
   SettingsMiddleware(this.prefs);
 
-  Func<Store<MyDexState>, Future<void>> toggleTheme(bool status) => (store) async {
+  Func<MyDexStore, Future<void>> toggleTheme(bool status) => (store) async {
         await prefs.setTheme(status);
         store.dispatch(SettingsAction.themeChanged(status));
       };
 
-  Func<Store<MyDexState>, Future<void>> logout() => (store) async {
+  Func<MyDexStore, Future<void>> logout() => (store) async {
         await prefs.setAuth(false);
         store.dispatch(const AuthAction.authChanged(false));
       };

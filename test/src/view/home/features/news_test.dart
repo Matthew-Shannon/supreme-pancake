@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mydex/src/core/const.dart';
+import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
-import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/view/home/features/news.dart';
-import 'package:redux/redux.dart';
 
 import '../../../core/util.dart';
 
@@ -16,7 +15,7 @@ void middlewareTests() {}
 
 void viewTests() {
   group('NewsView', () {
-    late Store<MyDexState> store;
+    late MyDexStore store;
 
     setUp(() {
       store = setupStore((_, c) => _);

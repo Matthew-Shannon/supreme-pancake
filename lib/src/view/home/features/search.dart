@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../core/const.dart';
@@ -110,7 +109,7 @@ class SearchVM {
     required this.onSearchQueryChanged,
   });
 
-  factory SearchVM.fromStore(Store<MyDexState> store, SearchMiddleware middleware) => SearchVM(
+  factory SearchVM.fromStore(MyDexStore store, SearchMiddleware middleware) => SearchVM(
       state: store.state.searchState,
       pairsVM: store.state.searchState.pairs.mapList(PairVM.new),
       pokemonVm: PokemonVM.def(store.state.searchState.pokemon),

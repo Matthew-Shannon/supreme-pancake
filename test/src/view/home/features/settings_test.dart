@@ -2,12 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mydex/src/core/const.dart';
 import 'package:mydex/src/core/di.dart';
+import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
-import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/model/user.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 import 'package:mydex/src/view/home/features/settings.dart';
-import 'package:redux/redux.dart';
 
 import '../../../core/util.dart';
 import '../../../service/prefs_test.mocks.dart';
@@ -19,7 +18,7 @@ void main() {
 
 void middlewareTests() {
   late SettingsMiddleware middleware;
-  late Store<MyDexState> store;
+  late MyDexStore store;
   late MockIPrefs prefs;
 
   group('SettingsMiddleware', () {
@@ -59,7 +58,7 @@ void middlewareTests() {
 
 void viewTests() {
   late SettingsMiddleware middleware;
-  late Store<MyDexState> store;
+  late MyDexStore store;
 
   group('SettingsView', () {
     setUp(() {
@@ -70,7 +69,7 @@ void viewTests() {
             settingsState: SettingsReducer.reduce(_.settingsState, c),
           ));
       DI.instance
-        ..registerLazySingleton<Store<MyDexState>>(() => store)
+        ..registerLazySingleton<MyDexStore>(() => store)
         ..registerLazySingleton<SettingsMiddleware>(() => middleware);
     });
 

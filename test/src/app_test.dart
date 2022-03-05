@@ -4,13 +4,12 @@ import 'package:mockito/mockito.dart';
 import 'package:mydex/src/app.dart';
 import 'package:mydex/src/core/const.dart';
 import 'package:mydex/src/core/di.dart';
+import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
-import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/service/style.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 import 'package:mydex/src/view/home/features/settings.dart';
-import 'package:redux/redux.dart';
 
 import 'core/util.dart';
 import 'service/nav_test.mocks.dart';
@@ -23,7 +22,7 @@ void main() {
 void viewTests() {
   late MockINav nav;
   late MockIStyle skin;
-  late Store<MyDexState> store;
+  late MyDexStore store;
 
   group('AppView', () {
     setUp(() {
@@ -34,7 +33,7 @@ void viewTests() {
             settingsState: SettingsReducer.reduce(_.settingsState, c),
           ));
       DI.instance
-        ..registerLazySingleton<Store<MyDexState>>(() => store)
+        ..registerLazySingleton<MyDexStore>(() => store)
         ..registerLazySingleton<IStyle>(() => skin)
         ..registerLazySingleton<INav>(() => nav);
     });

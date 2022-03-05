@@ -46,7 +46,7 @@ void middlewareTests() {
 
 void viewTests() {
   // late MockIPrefs prefs;
-  // late Store<MyDexState> store;
+  // late MyDexStore store;
   // late SearchMiddleware middleware;
 
   // group('SearchView', () {
@@ -55,7 +55,7 @@ void viewTests() {
   //     middleware = SearchMiddleware(prefs);
   //     store = setupStore((_, c) => _.copyWith(appState: AppReducer.reduce(_.appState, c)));
   //     Graph.di
-  //       ..registerLazySingleton<Store<MyDexState>>(() => store)
+  //       ..registerLazySingleton<MyDexStore>(() => store)
   //       ..registerLazySingleton<SearchMiddleware>(() => middleware);
   //   });
   //

@@ -17,7 +17,6 @@ class Style implements IStyle {
         primarySwatch: Colors.indigo,
         toggleableActiveColor: Colors.indigoAccent,
         accentColor: Colors.indigoAccent,
-        //visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 
   @override
@@ -27,7 +26,6 @@ class Style implements IStyle {
         primarySwatch: Colors.indigo,
         toggleableActiveColor: Colors.indigoAccent,
         accentColor: Colors.indigoAccent,
-        //visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 }
 

@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -80,7 +79,7 @@ class RegisterMiddleware {
     return null;
   }
 
-  Func<Store<MyDexState>, Future<void>> onRegisterSubmit(Runnable onComplete) => (store) async {
+  Func<MyDexStore, Future<void>> onRegisterSubmit(Runnable onComplete) => (store) async {
         RegisterState state = store.state.authState.registerState;
         var cached = await userRepo.doGetByEmail(state.emailText);
 
@@ -113,7 +112,7 @@ class RegisterVM {
     required this.onSubmit,
   });
 
-  factory RegisterVM.fromStore(Store<MyDexState> store, RegisterMiddleware middleware) => RegisterVM(
+  factory RegisterVM.fromStore(MyDexStore store, RegisterMiddleware middleware) => RegisterVM(
         state: store.state.authState.registerState,
         onNameChanged: (_) => store.dispatch(RegisterAction.nameTextChanged(_)),
         onEmailChanged: (_) => store.dispatch(RegisterAction.emailTextChanged(_)),

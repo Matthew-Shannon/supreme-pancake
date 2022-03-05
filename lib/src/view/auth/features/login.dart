@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -75,7 +74,7 @@ class LoginMiddleware {
     return null;
   }
 
-  Func<Store<MyDexState>, Future<void>> onLoginSubmit() => (store) async {
+  Func<MyDexStore, Future<void>> onLoginSubmit() => (store) async {
         LoginState state = store.state.authState.loginState;
         var cached = await userRepo.doGetByEmail(state.emailText);
 
@@ -102,7 +101,7 @@ class LoginVM {
 
   LoginVM({required this.state, required this.onEmailChanged, required this.onPasswordChanged, required this.onLoginSubmit});
 
-  factory LoginVM.fromStore(Store<MyDexState> store, LoginMiddleware middleware) => LoginVM(
+  factory LoginVM.fromStore(MyDexStore store, LoginMiddleware middleware) => LoginVM(
         state: store.state.authState.loginState,
         onEmailChanged: (_) => store.dispatch(LoginAction.emailTextChanged(_)),
         onPasswordChanged: (_) => store.dispatch(LoginAction.passwordTextChanged(_)),

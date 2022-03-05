@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
 
 import '../../core/const.dart';
 import '../../core/types.dart';
@@ -58,7 +57,7 @@ class HomeMiddleware {
 
   HomeMiddleware(this.prefs);
 
-  Func<Store<MyDexState>, Future<void>> changePos(int i) => (store) async {
+  Func<MyDexStore, Future<void>> changePos(int i) => (store) async {
         await prefs.setPos(i);
         store.dispatch(HomeAction.posChanged(i));
       };
