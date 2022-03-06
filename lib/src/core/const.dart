@@ -1,5 +1,5 @@
 class Const {
-  static const String databaseName = 'lisa19.db';
+  static const String databaseName = 'lisa20.db';
 
   static const String loginTitle = 'Login';
   static const String registerTitle = 'Register';

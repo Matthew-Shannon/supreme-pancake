@@ -32,7 +32,7 @@ class SettingsView extends StatelessWidget with GetItMixin {
   }
 
   static List<Widget> userView(UserVM vm) => //
-      vm.fields().mapList(Text.new).mapList((_) => ListTile(title: _));
+      vm.fields().map(Text.new).mapList((_) => ListTile(title: _));
 
   static List<Widget> toggles(SettingsVM vm) => [
         SwitchListTile(title: const Text(Const.darkModeBtn), onChanged: vm.onToggleTheme, value: vm.settingsState.isDarkMode),

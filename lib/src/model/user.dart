@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
 
+import '../core/extensions.dart';
 import '../service/repo.dart';
 
 @entity
@@ -20,10 +21,11 @@ class UserVM {
   final User owner;
   const UserVM(this.owner);
 
+  String id() => 'Id: ${owner.id}';
   String name() => 'Name: ${owner.name}';
   String email() => 'Email: ${owner.email}';
   String password() => 'Password: ${owner.password}';
-  List<String> fields() => [name(), email(), password()];
+  List<String> fields() => [id(), name(), email(), password()];
 }
 
 @dao
@@ -36,14 +38,13 @@ abstract class UserLocal extends BaseLocal<User> {
 }
 
 class UserRepo extends BaseRepo<User> {
-  final UserLocal local;
-  const UserRepo(this.local) : super(local);
+  const UserRepo(UserLocal local) : super(local);
+
+  @override
+  Future<User> doGet(String query) => //
+      local.onGet(query).thenUnwrap(User.new);
 
   @override
   Future<List<User>> doGetAll() => //
       local.onGetAll();
-
-  @override
-  Future<User> doGet(String id) => //
-      local.onGet(id).then((_) => _ ?? const User());
 }

@@ -99,11 +99,8 @@ extension InputDecoratinoEx on InputDecoration {
 }
 
 extension WidgetExT on List<Widget> {
-  Widget reversedRow() => //
-      Row(mainAxisAlignment: MainAxisAlignment.end, children: this);
-
-  Widget row() => //
-      Row(children: this);
+  Widget row([MainAxisAlignment align = MainAxisAlignment.start]) => //
+      Row(mainAxisAlignment: align, children: this);
 
   Widget column() => //
       Column(children: this);

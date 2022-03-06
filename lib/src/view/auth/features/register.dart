@@ -54,7 +54,7 @@ class RegisterView extends StatelessWidget with GetItMixin {
   static Widget buttonsView(RegisterVM vm, Runnable onBackClick) => [
         const Text(Const.loginBtn).textButton(onBackClick),
         const Text(Const.submitBtn).elevatedButton(vm.onSubmit(onBackClick)),
-      ].reversedRow();
+      ].row(MainAxisAlignment.end);
 }
 
 class RegisterMiddleware {

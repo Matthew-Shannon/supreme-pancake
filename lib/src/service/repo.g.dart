@@ -169,7 +169,7 @@ class _$PokemonLocal extends PokemonLocal {
   final DeletionAdapter<Pokemon> _pokemonDeletionAdapter;
 
   @override
-  Future<List<Pokemon>> doGetAll() async {
+  Future<List<Pokemon>> onGetAll() async {
     return _queryAdapter.queryList('SELECT * FROM Pokemon',
         mapper: (Map<String, Object?> row) => Pokemon(
             id: row['id'] as int,
@@ -182,7 +182,7 @@ class _$PokemonLocal extends PokemonLocal {
   }
 
   @override
-  Future<Pokemon?> doGet(String query) async {
+  Future<Pokemon?> onGet(String query) async {
     return _queryAdapter.query(
         'SELECT * FROM Pokemon WHERE id = ?1 OR name = ?1',
         mapper: (Map<String, Object?> row) => Pokemon(
@@ -197,33 +197,19 @@ class _$PokemonLocal extends PokemonLocal {
   }
 
   @override
-  Future<List<int>> onInsert(List<Pokemon> items) {
-    return _pokemonInsertionAdapter.insertListAndReturnIds(
-        items, OnConflictStrategy.ignore);
+  Future<void> onInsert(List<Pokemon> items) async {
+    await _pokemonInsertionAdapter.insertList(
+        items, OnConflictStrategy.replace);
   }
 
   @override
   Future<void> onUpdate(List<Pokemon> items) async {
-    await _pokemonUpdateAdapter.updateList(items, OnConflictStrategy.abort);
+    await _pokemonUpdateAdapter.updateList(items, OnConflictStrategy.replace);
   }
 
   @override
   Future<void> onDelete(List<Pokemon> items) async {
     await _pokemonDeletionAdapter.deleteList(items);
-  }
-
-  @override
-  Future<void> onInsertOrUpdate(List<Pokemon> items) async {
-    if (database is sqflite.Transaction) {
-      await super.onInsertOrUpdate(items);
-    } else {
-      await (database as sqflite.Database)
-          .transaction<void>((transaction) async {
-        final transactionDatabase = _$AppDatabase(changeListener)
-          ..database = transaction;
-        await transactionDatabase.pokemonLocal.onInsertOrUpdate(items);
-      });
-    }
   }
 }
 
@@ -270,7 +256,7 @@ class _$PairLocal extends PairLocal {
   final DeletionAdapter<Pair> _pairDeletionAdapter;
 
   @override
-  Future<List<Pair>> doGetAll() async {
+  Future<List<Pair>> onGetAll() async {
     return _queryAdapter.queryList('SELECT * FROM Pair',
         mapper: (Map<String, Object?> row) => Pair(
             id: row['id'] as int,
@@ -279,7 +265,7 @@ class _$PairLocal extends PairLocal {
   }
 
   @override
-  Future<Pair?> doGet(String query) async {
+  Future<Pair?> onGet(String query) async {
     return _queryAdapter.query('SELECT * FROM Pair WHERE id = ?1 OR name = ?1',
         mapper: (Map<String, Object?> row) => Pair(
             id: row['id'] as int,
@@ -289,33 +275,18 @@ class _$PairLocal extends PairLocal {
   }
 
   @override
-  Future<List<int>> onInsert(List<Pair> items) {
-    return _pairInsertionAdapter.insertListAndReturnIds(
-        items, OnConflictStrategy.ignore);
+  Future<void> onInsert(List<Pair> items) async {
+    await _pairInsertionAdapter.insertList(items, OnConflictStrategy.replace);
   }
 
   @override
   Future<void> onUpdate(List<Pair> items) async {
-    await _pairUpdateAdapter.updateList(items, OnConflictStrategy.abort);
+    await _pairUpdateAdapter.updateList(items, OnConflictStrategy.replace);
   }
 
   @override
   Future<void> onDelete(List<Pair> items) async {
     await _pairDeletionAdapter.deleteList(items);
-  }
-
-  @override
-  Future<void> onInsertOrUpdate(List<Pair> items) async {
-    if (database is sqflite.Transaction) {
-      await super.onInsertOrUpdate(items);
-    } else {
-      await (database as sqflite.Database)
-          .transaction<void>((transaction) async {
-        final transactionDatabase = _$AppDatabase(changeListener)
-          ..database = transaction;
-        await transactionDatabase.pairLocal.onInsertOrUpdate(items);
-      });
-    }
   }
 }
 
@@ -386,33 +357,18 @@ class _$UserLocal extends UserLocal {
   }
 
   @override
-  Future<List<int>> onInsert(List<User> items) {
-    return _userInsertionAdapter.insertListAndReturnIds(
-        items, OnConflictStrategy.ignore);
+  Future<void> onInsert(List<User> items) async {
+    await _userInsertionAdapter.insertList(items, OnConflictStrategy.replace);
   }
 
   @override
   Future<void> onUpdate(List<User> items) async {
-    await _userUpdateAdapter.updateList(items, OnConflictStrategy.abort);
+    await _userUpdateAdapter.updateList(items, OnConflictStrategy.replace);
   }
 
   @override
   Future<void> onDelete(List<User> items) async {
     await _userDeletionAdapter.deleteList(items);
-  }
-
-  @override
-  Future<void> onInsertOrUpdate(List<User> items) async {
-    if (database is sqflite.Transaction) {
-      await super.onInsertOrUpdate(items);
-    } else {
-      await (database as sqflite.Database)
-          .transaction<void>((transaction) async {
-        final transactionDatabase = _$AppDatabase(changeListener)
-          ..database = transaction;
-        await transactionDatabase.userLocal.onInsertOrUpdate(items);
-      });
-    }
   }
 }
 

@@ -29,31 +29,26 @@ abstract class BaseRepo<T> {
   Future<List<T>> doGetAll();
 
   Future<void> doInsert(List<T> xs) => //
-      local.onInsertOrUpdate(xs);
+      local.onInsert(xs).then((_) => xs);
 
   Future<T> doCache(T x) => //
       doCacheAll([x]).then((_) => x);
 
-  Future<void> doCacheAll(List<T> xs) => //
-      local.onInsertOrUpdate(xs);
+  Future<List<T>> doCacheAll(List<T> xs) => //
+      local.onUpdate(xs).then((_) => xs);
 }
 
 abstract class BaseLocal<T> {
   @Insert(onConflict: OnConflictStrategy.ignore)
-  Future<List<int>> onInsert(List<T> items);
+  Future<void> onInsert(List<T> items);
 
-  @update
+  @Update(onConflict: OnConflictStrategy.replace)
   Future<void> onUpdate(List<T> items);
 
   @delete
   Future<void> onDelete(List<T> items);
 
-  @transaction
-  Future<void> onInsertOrUpdate(List<T> items) => //
-      Future.value(items) //
-          .then(onInsert)
-          .then((_) => _.asMap().entries)
-          .then((_) => _.map((_) => _.key == -1 ? items[_.key] : null))
-          .then((_) => _.whereType<T>().toList())
-          .then(onUpdate);
+  Future<List<T>> onGetAll();
+
+  Future<T?> onGet(String query);
 }

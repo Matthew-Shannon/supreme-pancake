@@ -5,21 +5,34 @@ import 'package:mydex/src/service/repo.dart';
 import '../core/mock.dart';
 
 void main() {
-  model();
-  local();
+  tests();
 }
 
-void model() {
+void tests() {
   group('User', () {
     test('equals', () {
       expect(const User() == const User(), isTrue);
       expect(const User(id: 1) == const User(id: 2), isFalse);
     });
-  });
-}
 
-void local() {
-  group('User', () {
+    group('vm', () {
+      test('vm', () async {
+        var emptyUserVM = const UserVM(User());
+        expect(emptyUserVM.fields().length, equals(4));
+        expect(emptyUserVM.id(), 'Id: 0');
+        expect(emptyUserVM.name(), 'Name: ');
+        expect(emptyUserVM.email(), 'Email: ');
+        expect(emptyUserVM.password(), 'Password: ');
+
+        var userVM = const UserVM(mockUser);
+        expect(userVM.fields().length, equals(4));
+        expect(userVM.id(), 'Id: 1');
+        expect(userVM.name(), 'Name: a');
+        expect(userVM.email(), 'Email: b@');
+        expect(userVM.password(), 'Password: c');
+      });
+    });
+
     group('local', () {
       late AppDatabase database;
       late UserLocal local;
@@ -33,7 +46,7 @@ void local() {
 
       tearDown(() async => database.close());
 
-      test('find user by id', () async {
+      test('insert, get, getAll', () async {
         await expectLater(repo.doGet('1'), completion(const User()));
         await repo.doInsert([mockUser]);
         await expectLater(repo.doGet('1'), completion(mockUser));

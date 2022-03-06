@@ -52,7 +52,7 @@ class LoginView extends StatelessWidget with GetItMixin {
   static Widget buttonsView(LoginVM vm, Runnable onRegisterClick) => [
         const Text(Const.registerBtn).textButton(onRegisterClick),
         const Text(Const.submitBtn).elevatedButton(vm.onLoginSubmit),
-      ].reversedRow();
+      ].row(MainAxisAlignment.end);
 }
 
 class LoginMiddleware {

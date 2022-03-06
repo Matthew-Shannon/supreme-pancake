@@ -4,6 +4,7 @@ import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../core/const.dart';
+import '../../core/extensions.dart';
 import '../../service/repo.dart';
 
 part 'pair.g.dart';
@@ -35,33 +36,30 @@ class PairVM {
 @dao
 abstract class PairLocal extends BaseLocal<Pair> {
   @Query('SELECT * FROM Pair')
-  Future<List<Pair>> doGetAll();
+  Future<List<Pair>> onGetAll();
 
   @Query('SELECT * FROM Pair WHERE id = :query OR name = :query')
-  Future<Pair?> doGet(String query);
+  Future<Pair?> onGet(String query);
 }
 
 class PairRepo extends BaseRepo<Pair> {
   final Dio remote;
-  final PairLocal local;
-  const PairRepo(this.local, this.remote) : super(local);
+  const PairRepo(PairLocal local, this.remote) : super(local);
 
   @override
-  Future<Pair> doGet(String query) => Future.any([
-        local.doGet(query).then((_) => _ ?? const Pair()),
-        _doGetAll().then((xs) => xs.firstWhere((_) => _.name == query, orElse: Pair.new)).then(doCache),
-      ]);
+  Future<Pair> doGet(String query) => //
+      local.onGet(query).thenUnwrap(Pair.new);
 
   @override
   Future<List<Pair>> doGetAll() => Future.any([
-        local.doGetAll(),
-        _doGetAll().then((xs) => doCacheAll(xs).then((_) => xs)),
+        local.onGetAll(),
+        _doGetAll().then(doCacheAll),
       ]);
 
   Future<List<Pair>> _doGetAll() => remote
       .get<JSON>(Const.pokeBaseUrl + 'pokemon/?limit=898') //
       .then((res) => List<JSON>.from(res.data?['results'] ?? {}))
-      .then((xs) => xs.map((_) => {..._, 'id': withID(_)}).map(Pair.fromJson).toList());
+      .then((xs) => xs.map((_) => _.copyWith('id', withID(_))).mapList(Pair.fromJson));
 
   static int withID(JSON data) => int.parse((data['url'] as String) //
       .replaceAll(Const.pokeDataUrl, '')
