@@ -25,7 +25,6 @@ import '../view/home/features/search.dart';
 import '../view/home/features/settings.dart';
 import '../view/home/home.dart';
 import 'const.dart';
-import 'types.dart';
 
 typedef DI = GetIt;
 
@@ -55,7 +54,7 @@ class RepositoryModule {
   static DI setup(DI di) => di
     // user
     ..registerSingletonWithDependencies<UserLocal>(() => di.get<AppDatabase>().userLocal, dependsOn: [AppDatabase])
-    ..registerLazySingleton<IUserRepo>(() => UserRepo(di.get()))
+    ..registerLazySingleton<UserRepo>(() => UserRepo(di.get()))
     // pair
     ..registerSingletonWithDependencies<PairLocal>(() => di.get<AppDatabase>().pairLocal, dependsOn: [AppDatabase])
     ..registerSingletonWithDependencies<PairRepo>(() => PairRepo(di.get(), di.get()), dependsOn: [PairLocal])

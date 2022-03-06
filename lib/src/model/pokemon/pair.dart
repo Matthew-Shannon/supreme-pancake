@@ -5,7 +5,6 @@ import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../core/const.dart';
-import '../../core/types.dart';
 import '../../service/repo.dart';
 
 part 'pair.g.dart';
@@ -37,7 +36,7 @@ abstract class PairLocal extends BaseLocal<Pair> {
 class PairRepo extends BaseRepo<Pair> {
   final Dio remote;
   final PairLocal local;
-  PairRepo(this.local, this.remote) : super(local, remote);
+  PairRepo(this.local, this.remote) : super(local);
 
   @override
   Future<Pair> doGet(String query) => Future.any([

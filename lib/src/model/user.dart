@@ -1,17 +1,14 @@
 import 'package:autoequal/autoequal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-import '../core/types.dart';
 import '../service/repo.dart';
 
 part 'user.g.dart';
 
 @entity
-@autoequalMixin
-@JsonSerializable()
-class User extends Equatable with _$UserAutoequalMixin {
+@autoequal
+class User extends Equatable {
   @PrimaryKey(autoGenerate: true)
   final int id;
   final String name;
@@ -25,16 +22,8 @@ class User extends Equatable with _$UserAutoequalMixin {
     this.password = '',
   });
 
-  factory User.fromJson(JSON json) => _$UserFromJson(json);
-
-  JSON toJson() => _$UserToJson(this);
-}
-
-abstract class IUserRepo {
-  Future<void> doInsert(String name, String email, String password);
-  Future<List<User>> doGetAll();
-  Future<User> doGet(int id);
-  Future<User> doGetByEmail(String email);
+  @override
+  List<Object?> get props => _autoequalProps;
 }
 
 @dao
@@ -46,24 +35,23 @@ abstract class UserLocal extends BaseLocal<User> {
   Future<User?> onGet(int id);
 }
 
-class UserRepo implements IUserRepo {
+class UserRepo extends BaseRepo<User> {
   final UserLocal local;
-  UserRepo(this.local);
+  UserRepo(this.local) : super(local);
 
   @override
-  Future<void> doInsert(String name, String email, String password) => //
-      local.onInsert([User(id: 1, name: name, email: email, password: password)]);
+  Future<void> doInsert(List<User> users) => //
+      local.onInsert(users);
 
   @override
   Future<List<User>> doGetAll() => //
       local.onGetAll();
 
   @override
-  Future<User> doGet(int id) => local //
-      .onGet(id)
+  Future<User> doGet(String id) => local //
+      .onGet(int.tryParse(id) ?? 0)
       .then((_) => _ ?? const User());
 
-  @override
   Future<User> doGetByEmail(String email) => doGetAll() //
       .then((xs) => xs.firstWhere((_) => _.email == email, orElse: () => const User())); //
 

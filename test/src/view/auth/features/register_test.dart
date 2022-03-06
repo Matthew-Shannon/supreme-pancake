@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mydex/src/core/const.dart';
 import 'package:mydex/src/core/di.dart';
-import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
+import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/model/user.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/auth/features/register.dart';
 
 import '../../../core/util.dart';
-import '../../../service/nav_test.mocks.dart';
-import '../../../service/repo_test.mocks.dart';
+import '../../../service/nav_test.dart';
+import '../../../service/repo_test.dart';
 
 void main() {
   middlewareTest();
@@ -21,10 +21,10 @@ void main() {
 void middlewareTest() {
   late RegisterMiddleware middleware;
   late MyDexStore store;
-  late MockIUserRepo userRepo;
+  late MockUserRepo userRepo;
 
   setUp(() {
-    userRepo = MockIUserRepo();
+    userRepo = MockUserRepo();
     middleware = RegisterMiddleware(userRepo);
     store = setupStore(
       (_, c) => _.copyWith(
@@ -52,15 +52,15 @@ void middlewareTest() {
     });
 
     test('onSubmitFailPath', () async {
-      when(userRepo.doInsert(any, any, any)).thenAnswerVoidFuture();
-      when(userRepo.doGetByEmail(any)).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      when(() => userRepo.doInsert(any())).thenAnswerVoidFuture();
+      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
       await middleware.onRegisterSubmit(() {})(store);
-      verifyNever(userRepo.doInsert(any, any, any));
+      verifyNever(() => userRepo.doInsert(any()));
     });
 
     test('onSubmitHappyPath', () async {
-      when(userRepo.doInsert(any, any, any)).thenAnswerVoidFuture();
-      when(userRepo.doGetByEmail(any)).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      when(() => userRepo.doInsert(any())).thenAnswerVoidFuture();
+      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
       store.dispatch(const RegisterAction.nameTextChanged('a'));
       store.dispatch(const RegisterAction.nameErrorChanged(null));
       store.dispatch(const RegisterAction.emailTextChanged('c@'));
@@ -68,9 +68,9 @@ void middlewareTest() {
       store.dispatch(const RegisterAction.passwordTextChanged('c'));
       store.dispatch(const RegisterAction.passwordErrorChanged(null));
       var wasCalled = false;
-      when(userRepo.doGetByEmail(any)).thenAnswerFuture(const User());
+      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User());
       await middleware.onRegisterSubmit(() => wasCalled = true)(store);
-      verify(userRepo.doInsert(any, any, any)).called(1);
+      verify(() => userRepo.doInsert(any())).called(1);
       expect(wasCalled, isTrue);
     });
   });
@@ -79,18 +79,19 @@ void middlewareTest() {
 void viewTests() {
   late RegisterMiddleware middleware;
   late MyDexStore store;
-  late MockINav nav;
+  late MockNav nav;
 
   group('RegisterView', () {
     setUp(() {
-      middleware = RegisterMiddleware(MockIUserRepo());
+      registerFallbackValue(FakeContext());
+      middleware = RegisterMiddleware(MockUserRepo());
       store = setupStore(
         (_, c) => _.copyWith(
             authState: _.authState.copyWith(
           registerState: RegisterReducer.reduce(_.authState.registerState, c),
         )),
       );
-      nav = MockINav();
+      nav = MockNav();
 
       DI.instance
         ..registerLazySingleton<RegisterMiddleware>(() => middleware)
@@ -100,10 +101,10 @@ void viewTests() {
     tearDown(() async => DI.instance.reset());
 
     testWidgets('loginBtn', (tester) async {
-      when(nav.goBack(any)).thenReturn(() {});
+      when(() => nav.goBack(any())).thenReturn(() {});
       var onBackClick = false;
       var vm = RegisterVM.fromStore(store, middleware);
-      await tester.pumpWidget(TestApp(() => RegisterView.buttonsView(vm, () => onBackClick = true)));
+      await tester.pumpWidget(testApp(() => RegisterView.buttonsView(vm, () => onBackClick = true)));
       expect(find.text(Const.loginBtn), findsOneWidget);
       await tester.tap(find.text(Const.loginBtn));
       await tester.pump();
@@ -112,7 +113,7 @@ void viewTests() {
 
     testWidgets('submitBtn', (tester) async {
       var vm = RegisterVM.fromStore(store, middleware);
-      await tester.pumpWidget(TestApp(() => RegisterView.buttonsView(vm, () {})));
+      await tester.pumpWidget(testApp(() => RegisterView.buttonsView(vm, () {})));
       expect(find.text(Const.submitBtn), findsOneWidget);
       await tester.tap(find.text(Const.submitBtn));
       await tester.pump();
@@ -120,15 +121,15 @@ void viewTests() {
 
     testWidgets('fields', (tester) async {
       var vm = RegisterVM.fromStore(store, middleware);
-      await tester.pumpWidget(TestApp(() => RegisterView.fieldsView(vm)));
+      await tester.pumpWidget(testApp(() => RegisterView.fieldsView(vm).material()));
       expect(find.text(Const.nameLabel), findsOneWidget);
       expect(find.text(Const.emailLabel), findsOneWidget);
       expect(find.text(Const.passwordLabel), findsOneWidget);
     });
 
     testWidgets('build', (tester) async {
-      when(nav.goBack(any)).thenReturn(() {});
-      await tester.pumpWidget(const TestApp(RegisterView.new).storeProvider(store));
+      when(() => nav.goBack(any())).thenReturn(() {});
+      await tester.pumpWidget(testApp(RegisterView.new).storeProvider(store));
       expect(find.text(Const.loginBtn), findsOneWidget);
       expect(find.text(Const.submitBtn), findsOneWidget);
       expect(find.text(Const.registerTitle), findsOneWidget);

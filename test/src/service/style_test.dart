@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mydex/src/service/style.dart';
 
-@GenerateMocks([IStyle])
+class MockStyle extends Mock implements IStyle {}
+
 void main() {
   tests();
 }

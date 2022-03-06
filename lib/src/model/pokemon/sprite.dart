@@ -6,7 +6,7 @@ import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../core/const.dart';
-import '../../core/types.dart';
+import '../../service/repo.dart';
 
 part 'sprite.g.dart';
 

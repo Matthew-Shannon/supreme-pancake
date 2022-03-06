@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:redux/redux.dart';
 
 import '../view/auth/auth.dart';
 import '../view/home/features/search.dart';
@@ -7,6 +8,8 @@ import '../view/home/features/settings.dart';
 import '../view/home/home.dart';
 
 part 'state.freezed.dart';
+
+typedef MyDexStore = Store<MyDexState>;
 
 @freezed
 class MyDexState with _$MyDexState {

@@ -56,7 +56,7 @@ class LoginView extends StatelessWidget with GetItMixin {
 }
 
 class LoginMiddleware {
-  final IUserRepo userRepo;
+  final UserRepo userRepo;
   final IPrefs prefs;
 
   LoginMiddleware(this.prefs, this.userRepo);

@@ -5,7 +5,6 @@ import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../core/const.dart';
-import '../../core/types.dart';
 import '../../service/repo.dart';
 import 'sprite.dart';
 
@@ -52,7 +51,7 @@ abstract class PokemonLocal extends BaseLocal<Pokemon> {
 class PokemonRepo extends BaseRepo<Pokemon> {
   final Dio remote;
   final PokemonLocal local;
-  PokemonRepo(this.local, this.remote) : super(local, remote);
+  PokemonRepo(this.local, this.remote) : super(local);
 
   @override
   Future<Pokemon> doGet(String query) => Future.any([

@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mydex/src/service/prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@GenerateMocks([IPrefs])
+class MockPrefs extends Mock implements IPrefs {}
+
 void main() {
   tests();
 }

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mydex/src/core/const.dart';
-import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
+import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/view/home/features/favorites.dart';
 
 import '../../../core/util.dart';
@@ -23,7 +23,7 @@ void viewTests() {
     //tearDown(() async => DI.instance.reset());
 
     testWidgets('build', (tester) async {
-      await tester.pumpWidget(const TestApp(FavoritesView.new).storeProvider(store));
+      await tester.pumpWidget(testApp(FavoritesView.new).storeProvider(store));
       expect(find.text(Const.favoritesTitle), findsOneWidget);
       expect(find.text(Const.appName), findsOneWidget);
     });

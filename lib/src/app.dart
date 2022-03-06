@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-import 'core/types.dart';
 import 'core/const.dart';
 import 'core/view.dart';
 import 'model/state.dart';

@@ -58,7 +58,7 @@ class RegisterView extends StatelessWidget with GetItMixin {
 }
 
 class RegisterMiddleware {
-  final IUserRepo userRepo;
+  final UserRepo userRepo;
 
   RegisterMiddleware(this.userRepo);
 
@@ -93,7 +93,7 @@ class RegisterMiddleware {
         store.dispatch(RegisterAction.passwordErrorChanged(passwordError));
 
         if (nameError != null || emailError != null || passwordError != null) return;
-        await userRepo.doInsert(state.nameText, state.emailText, state.passwordText);
+        await userRepo.doInsert([User(id: 1, name: state.nameText, email: state.emailText, password: state.passwordText)]);
         onComplete();
       };
 }

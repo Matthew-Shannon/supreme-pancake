@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
@@ -11,10 +10,19 @@ import '../model/user.dart';
 
 part 'repo.g.dart';
 
+typedef JSON = Map<String, dynamic>;
+
+@TypeConverters([SpriteLocalConverter])
+@Database(version: 1, entities: [User, Pokemon, Pair])
+abstract class AppDatabase extends FloorDatabase {
+  PokemonLocal get pokemonLocal;
+  PairLocal get pairLocal;
+  UserLocal get userLocal;
+}
+
 abstract class BaseRepo<T> {
   final BaseLocal<T> local;
-  final Dio remote;
-  BaseRepo(this.local, this.remote);
+  BaseRepo(this.local);
 
   Future<T> doGet(String query);
   Future<List<T>> doGetAll();
@@ -40,12 +48,4 @@ abstract class BaseLocal<T> {
 
   @delete
   Future<void> onDelete(List<T> items);
-}
-
-@TypeConverters([SpriteLocalConverter])
-@Database(version: 1, entities: [User, Pokemon, Pair])
-abstract class AppDatabase extends FloorDatabase {
-  PokemonLocal get pokemonLocal;
-  PairLocal get pairLocal;
-  UserLocal get userLocal;
 }

@@ -434,11 +434,10 @@ class MockIUserRepo extends _i1.Mock implements _i7.IUserRepo {
   }
 
   @override
-  _i11.Future<void> doInsert(String? name, String? email, String? password) =>
-      (super.noSuchMethod(Invocation.method(#doInsert, [name, email, password]),
-              returnValue: Future<void>.value(),
-              returnValueForMissingStub: Future<void>.value())
-          as _i11.Future<void>);
+  _i11.Future<void> doInsert(_i7.User? user) => (super.noSuchMethod(
+      Invocation.method(#doInsert, [user]),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i11.Future<void>);
   @override
   _i11.Future<List<_i7.User>> doGetAll() =>
       (super.noSuchMethod(Invocation.method(#doGetAll, []),

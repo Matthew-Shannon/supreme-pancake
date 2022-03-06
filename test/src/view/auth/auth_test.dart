@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mydex/src/core/di.dart';
-import 'package:mydex/src/core/types.dart';
 import 'package:mydex/src/core/view.dart';
+import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 
 import '../../core/util.dart';
-import '../../service/nav_test.mocks.dart';
+import '../../service/nav_test.dart';
 
 void main() {
   middlewareTests();
@@ -22,13 +22,13 @@ void middlewareTests() {
 }
 
 void viewTests() {
-  late MockINav nav;
+  late MockNav nav;
   late MyDexStore store;
   late AuthMiddleware middleware;
 
   group('AuthView', () {
     setUp(() {
-      nav = MockINav();
+      nav = MockNav();
       middleware = AuthMiddleware();
       store = setupStore((_, c) => _.copyWith(authState: AuthReducer.reduce(_.authState, c)));
       DI.instance
@@ -39,8 +39,8 @@ void viewTests() {
     tearDown(() async => DI.instance.reset());
 
     testWidgets('build', (tester) async {
-      when(nav.getBy(any)).thenAnswer((_) => const Text('Foo'));
-      await tester.pumpWidget(const TestApp(AuthView.new).storeProvider(store));
+      when(() => nav.getBy(any())).thenReturn(const Text('Foo'));
+      await tester.pumpWidget(testApp(AuthView.new).storeProvider(store));
       expect(find.text('Foo'), findsOneWidget);
     });
   });
