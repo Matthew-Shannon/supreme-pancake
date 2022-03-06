@@ -21,15 +21,19 @@ class SettingsView extends StatelessWidget with GetItMixin {
   Widget build(BuildContext context) {
     final SettingsMiddleware middleware = get();
     return StoreConnector<MyDexState, SettingsVM>(
-        converter: (_) => SettingsVM.fromStore(_, middleware),
-        builder: (ctx, _) => Scaffold(
-            appBar: const Text(Const.settingsTitle).appBar(),
-            body: View.listView([
-              ...SettingsView.userView(_.userVM),
-              ...SettingsView.toggles(_),
-              ...SettingsView.buttons(_),
-            ])));
+      converter: (_) => SettingsVM.fromStore(_, middleware),
+      builder: (ctx, _) => Scaffold(
+        appBar: const Text(Const.settingsTitle).appBar(),
+        body: View.frame(body(_)),
+      ),
+    );
   }
+
+  static List<Widget> body(SettingsVM vm) => [
+        ...SettingsView.userView(vm.userVM),
+        ...SettingsView.toggles(vm),
+        ...SettingsView.buttons(vm),
+      ];
 
   static List<Widget> userView(UserVM vm) => //
       vm.fields().map(Text.new).mapList((_) => ListTile(title: _));

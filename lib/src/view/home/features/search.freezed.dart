@@ -20,13 +20,11 @@ class _$SearchStateTearOff {
   _SearchState call(
       [List<Pair> pairs = const [],
       Pokemon pokemon = const Pokemon(),
-      bool isSearching = false,
-      bool isLoading = false]) {
+      bool isSearching = false]) {
     return _SearchState(
       pairs,
       pokemon,
       isSearching,
-      isLoading,
     );
   }
 }
@@ -39,7 +37,6 @@ mixin _$SearchState {
   List<Pair> get pairs => throw _privateConstructorUsedError;
   Pokemon get pokemon => throw _privateConstructorUsedError;
   bool get isSearching => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchStateCopyWith<SearchState> get copyWith =>
@@ -51,8 +48,7 @@ abstract class $SearchStateCopyWith<$Res> {
   factory $SearchStateCopyWith(
           SearchState value, $Res Function(SearchState) then) =
       _$SearchStateCopyWithImpl<$Res>;
-  $Res call(
-      {List<Pair> pairs, Pokemon pokemon, bool isSearching, bool isLoading});
+  $Res call({List<Pair> pairs, Pokemon pokemon, bool isSearching});
 }
 
 /// @nodoc
@@ -68,7 +64,6 @@ class _$SearchStateCopyWithImpl<$Res> implements $SearchStateCopyWith<$Res> {
     Object? pairs = freezed,
     Object? pokemon = freezed,
     Object? isSearching = freezed,
-    Object? isLoading = freezed,
   }) {
     return _then(_value.copyWith(
       pairs: pairs == freezed
@@ -83,10 +78,6 @@ class _$SearchStateCopyWithImpl<$Res> implements $SearchStateCopyWith<$Res> {
           ? _value.isSearching
           : isSearching // ignore: cast_nullable_to_non_nullable
               as bool,
-      isLoading: isLoading == freezed
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -98,8 +89,7 @@ abstract class _$SearchStateCopyWith<$Res>
           _SearchState value, $Res Function(_SearchState) then) =
       __$SearchStateCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {List<Pair> pairs, Pokemon pokemon, bool isSearching, bool isLoading});
+  $Res call({List<Pair> pairs, Pokemon pokemon, bool isSearching});
 }
 
 /// @nodoc
@@ -117,7 +107,6 @@ class __$SearchStateCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
     Object? pairs = freezed,
     Object? pokemon = freezed,
     Object? isSearching = freezed,
-    Object? isLoading = freezed,
   }) {
     return _then(_SearchState(
       pairs == freezed
@@ -132,10 +121,6 @@ class __$SearchStateCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
           ? _value.isSearching
           : isSearching // ignore: cast_nullable_to_non_nullable
               as bool,
-      isLoading == freezed
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -146,8 +131,7 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
   const _$_SearchState(
       [this.pairs = const [],
       this.pokemon = const Pokemon(),
-      this.isSearching = false,
-      this.isLoading = false]);
+      this.isSearching = false]);
 
   @JsonKey()
   @override
@@ -158,13 +142,10 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
   @JsonKey()
   @override
   final bool isSearching;
-  @JsonKey()
-  @override
-  final bool isLoading;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SearchState(pairs: $pairs, pokemon: $pokemon, isSearching: $isSearching, isLoading: $isLoading)';
+    return 'SearchState(pairs: $pairs, pokemon: $pokemon, isSearching: $isSearching)';
   }
 
   @override
@@ -174,8 +155,7 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
       ..add(DiagnosticsProperty('type', 'SearchState'))
       ..add(DiagnosticsProperty('pairs', pairs))
       ..add(DiagnosticsProperty('pokemon', pokemon))
-      ..add(DiagnosticsProperty('isSearching', isSearching))
-      ..add(DiagnosticsProperty('isLoading', isLoading));
+      ..add(DiagnosticsProperty('isSearching', isSearching));
   }
 
   @override
@@ -186,8 +166,7 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
             const DeepCollectionEquality().equals(other.pairs, pairs) &&
             const DeepCollectionEquality().equals(other.pokemon, pokemon) &&
             const DeepCollectionEquality()
-                .equals(other.isSearching, isSearching) &&
-            const DeepCollectionEquality().equals(other.isLoading, isLoading));
+                .equals(other.isSearching, isSearching));
   }
 
   @override
@@ -195,8 +174,7 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
       runtimeType,
       const DeepCollectionEquality().hash(pairs),
       const DeepCollectionEquality().hash(pokemon),
-      const DeepCollectionEquality().hash(isSearching),
-      const DeepCollectionEquality().hash(isLoading));
+      const DeepCollectionEquality().hash(isSearching));
 
   @JsonKey(ignore: true)
   @override
@@ -206,10 +184,7 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
 
 abstract class _SearchState implements SearchState {
   const factory _SearchState(
-      [List<Pair> pairs,
-      Pokemon pokemon,
-      bool isSearching,
-      bool isLoading]) = _$_SearchState;
+      [List<Pair> pairs, Pokemon pokemon, bool isSearching]) = _$_SearchState;
 
   @override
   List<Pair> get pairs;
@@ -217,8 +192,6 @@ abstract class _SearchState implements SearchState {
   Pokemon get pokemon;
   @override
   bool get isSearching;
-  @override
-  bool get isLoading;
   @override
   @JsonKey(ignore: true)
   _$SearchStateCopyWith<_SearchState> get copyWith =>
@@ -228,12 +201,6 @@ abstract class _SearchState implements SearchState {
 /// @nodoc
 class _$SearchActionTearOff {
   const _$SearchActionTearOff();
-
-  IsLoading isLoading(bool status) {
-    return IsLoading(
-      status,
-    );
-  }
 
   IsSearching isSearching(bool status) {
     return IsSearching(
@@ -261,7 +228,6 @@ const $SearchAction = _$SearchActionTearOff();
 mixin _$SearchAction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool status) isLoading,
     required TResult Function(bool status) isSearching,
     required TResult Function(List<Pair> pairs) pairsChanged,
     required TResult Function(Pokemon pokemons) pokemonSelected,
@@ -269,7 +235,6 @@ mixin _$SearchAction {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -277,7 +242,6 @@ mixin _$SearchAction {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -286,7 +250,6 @@ mixin _$SearchAction {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(IsLoading value) isLoading,
     required TResult Function(IsSearching value) isSearching,
     required TResult Function(PairsChanged value) pairsChanged,
     required TResult Function(PokemonSelected value) pokemonSelected,
@@ -294,7 +257,6 @@ mixin _$SearchAction {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -302,7 +264,6 @@ mixin _$SearchAction {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -325,157 +286,6 @@ class _$SearchActionCopyWithImpl<$Res> implements $SearchActionCopyWith<$Res> {
   final SearchAction _value;
   // ignore: unused_field
   final $Res Function(SearchAction) _then;
-}
-
-/// @nodoc
-abstract class $IsLoadingCopyWith<$Res> {
-  factory $IsLoadingCopyWith(IsLoading value, $Res Function(IsLoading) then) =
-      _$IsLoadingCopyWithImpl<$Res>;
-  $Res call({bool status});
-}
-
-/// @nodoc
-class _$IsLoadingCopyWithImpl<$Res> extends _$SearchActionCopyWithImpl<$Res>
-    implements $IsLoadingCopyWith<$Res> {
-  _$IsLoadingCopyWithImpl(IsLoading _value, $Res Function(IsLoading) _then)
-      : super(_value, (v) => _then(v as IsLoading));
-
-  @override
-  IsLoading get _value => super._value as IsLoading;
-
-  @override
-  $Res call({
-    Object? status = freezed,
-  }) {
-    return _then(IsLoading(
-      status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$IsLoading with DiagnosticableTreeMixin implements IsLoading {
-  const _$IsLoading(this.status);
-
-  @override
-  final bool status;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SearchAction.isLoading(status: $status)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'SearchAction.isLoading'))
-      ..add(DiagnosticsProperty('status', status));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is IsLoading &&
-            const DeepCollectionEquality().equals(other.status, status));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(status));
-
-  @JsonKey(ignore: true)
-  @override
-  $IsLoadingCopyWith<IsLoading> get copyWith =>
-      _$IsLoadingCopyWithImpl<IsLoading>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(bool status) isLoading,
-    required TResult Function(bool status) isSearching,
-    required TResult Function(List<Pair> pairs) pairsChanged,
-    required TResult Function(Pokemon pokemons) pokemonSelected,
-  }) {
-    return isLoading(status);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
-    TResult Function(bool status)? isSearching,
-    TResult Function(List<Pair> pairs)? pairsChanged,
-    TResult Function(Pokemon pokemons)? pokemonSelected,
-  }) {
-    return isLoading?.call(status);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
-    TResult Function(bool status)? isSearching,
-    TResult Function(List<Pair> pairs)? pairsChanged,
-    TResult Function(Pokemon pokemons)? pokemonSelected,
-    required TResult orElse(),
-  }) {
-    if (isLoading != null) {
-      return isLoading(status);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(IsLoading value) isLoading,
-    required TResult Function(IsSearching value) isSearching,
-    required TResult Function(PairsChanged value) pairsChanged,
-    required TResult Function(PokemonSelected value) pokemonSelected,
-  }) {
-    return isLoading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
-    TResult Function(IsSearching value)? isSearching,
-    TResult Function(PairsChanged value)? pairsChanged,
-    TResult Function(PokemonSelected value)? pokemonSelected,
-  }) {
-    return isLoading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
-    TResult Function(IsSearching value)? isSearching,
-    TResult Function(PairsChanged value)? pairsChanged,
-    TResult Function(PokemonSelected value)? pokemonSelected,
-    required TResult orElse(),
-  }) {
-    if (isLoading != null) {
-      return isLoading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class IsLoading implements SearchAction {
-  const factory IsLoading(bool status) = _$IsLoading;
-
-  bool get status;
-  @JsonKey(ignore: true)
-  $IsLoadingCopyWith<IsLoading> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -550,7 +360,6 @@ class _$IsSearching with DiagnosticableTreeMixin implements IsSearching {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool status) isLoading,
     required TResult Function(bool status) isSearching,
     required TResult Function(List<Pair> pairs) pairsChanged,
     required TResult Function(Pokemon pokemons) pokemonSelected,
@@ -561,7 +370,6 @@ class _$IsSearching with DiagnosticableTreeMixin implements IsSearching {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -572,7 +380,6 @@ class _$IsSearching with DiagnosticableTreeMixin implements IsSearching {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -587,7 +394,6 @@ class _$IsSearching with DiagnosticableTreeMixin implements IsSearching {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(IsLoading value) isLoading,
     required TResult Function(IsSearching value) isSearching,
     required TResult Function(PairsChanged value) pairsChanged,
     required TResult Function(PokemonSelected value) pokemonSelected,
@@ -598,7 +404,6 @@ class _$IsSearching with DiagnosticableTreeMixin implements IsSearching {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -609,7 +414,6 @@ class _$IsSearching with DiagnosticableTreeMixin implements IsSearching {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -703,7 +507,6 @@ class _$PairsChanged with DiagnosticableTreeMixin implements PairsChanged {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool status) isLoading,
     required TResult Function(bool status) isSearching,
     required TResult Function(List<Pair> pairs) pairsChanged,
     required TResult Function(Pokemon pokemons) pokemonSelected,
@@ -714,7 +517,6 @@ class _$PairsChanged with DiagnosticableTreeMixin implements PairsChanged {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -725,7 +527,6 @@ class _$PairsChanged with DiagnosticableTreeMixin implements PairsChanged {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -740,7 +541,6 @@ class _$PairsChanged with DiagnosticableTreeMixin implements PairsChanged {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(IsLoading value) isLoading,
     required TResult Function(IsSearching value) isSearching,
     required TResult Function(PairsChanged value) pairsChanged,
     required TResult Function(PokemonSelected value) pokemonSelected,
@@ -751,7 +551,6 @@ class _$PairsChanged with DiagnosticableTreeMixin implements PairsChanged {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -762,7 +561,6 @@ class _$PairsChanged with DiagnosticableTreeMixin implements PairsChanged {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -859,7 +657,6 @@ class _$PokemonSelected
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool status) isLoading,
     required TResult Function(bool status) isSearching,
     required TResult Function(List<Pair> pairs) pairsChanged,
     required TResult Function(Pokemon pokemons) pokemonSelected,
@@ -870,7 +667,6 @@ class _$PokemonSelected
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -881,7 +677,6 @@ class _$PokemonSelected
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool status)? isLoading,
     TResult Function(bool status)? isSearching,
     TResult Function(List<Pair> pairs)? pairsChanged,
     TResult Function(Pokemon pokemons)? pokemonSelected,
@@ -896,7 +691,6 @@ class _$PokemonSelected
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(IsLoading value) isLoading,
     required TResult Function(IsSearching value) isSearching,
     required TResult Function(PairsChanged value) pairsChanged,
     required TResult Function(PokemonSelected value) pokemonSelected,
@@ -907,7 +701,6 @@ class _$PokemonSelected
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,
@@ -918,7 +711,6 @@ class _$PokemonSelected
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(IsLoading value)? isLoading,
     TResult Function(IsSearching value)? isSearching,
     TResult Function(PairsChanged value)? pairsChanged,
     TResult Function(PokemonSelected value)? pokemonSelected,

@@ -106,6 +106,18 @@ void viewTests() {
       expect(find.text('Password: c'), findsOneWidget);
     });
 
+    testWidgets('body', (tester) async {
+      store.dispatch(const AuthAction.ownerChanged(mockUser));
+      var vm = SettingsVM.fromStore(store, middleware);
+      await tester.pumpWidget(testApp(() => SettingsView.body(vm).column().material()));
+      await tester.pump(Duration.zero);
+      expect(find.text('Name: a'), findsOneWidget);
+      expect(find.text('Email: b@'), findsOneWidget);
+      expect(find.text('Password: c'), findsOneWidget);
+      expect(find.text(Const.logoutBtn), findsOneWidget);
+      expect(find.text(Const.darkModeBtn), findsOneWidget);
+    });
+
     testWidgets('build', (tester) async {
       await tester.pumpWidget(testApp(SettingsView.new).storeProvider(store));
       store.dispatch(const AuthAction.ownerChanged(mockUser));

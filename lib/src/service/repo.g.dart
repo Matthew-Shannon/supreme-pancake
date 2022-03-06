@@ -198,8 +198,7 @@ class _$PokemonLocal extends PokemonLocal {
 
   @override
   Future<void> onInsert(List<Pokemon> items) async {
-    await _pokemonInsertionAdapter.insertList(
-        items, OnConflictStrategy.replace);
+    await _pokemonInsertionAdapter.insertList(items, OnConflictStrategy.ignore);
   }
 
   @override
@@ -276,7 +275,7 @@ class _$PairLocal extends PairLocal {
 
   @override
   Future<void> onInsert(List<Pair> items) async {
-    await _pairInsertionAdapter.insertList(items, OnConflictStrategy.replace);
+    await _pairInsertionAdapter.insertList(items, OnConflictStrategy.ignore);
   }
 
   @override
@@ -358,7 +357,7 @@ class _$UserLocal extends UserLocal {
 
   @override
   Future<void> onInsert(List<User> items) async {
-    await _userInsertionAdapter.insertList(items, OnConflictStrategy.replace);
+    await _userInsertionAdapter.insertList(items, OnConflictStrategy.ignore);
   }
 
   @override

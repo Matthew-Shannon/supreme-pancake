@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -28,9 +27,19 @@ class SearchView extends StatelessWidget with GetItMixin {
                 title: SearchView.title(_, Theme.of(context)),
                 actions: SearchView.actions(_),
               ),
-              body: View.listView(SearchView.body(_)),
+              body: View.frame(SearchView.body(_)),
             ));
   }
+
+  static List<Widget> body(SearchVM vm) => [
+        //vm.state.isLoading
+        //? [const CircularProgressIndicator().center()]
+        vm.pokemonVm.isNotEmpty()
+            ? pokemonCardView(vm.pokemonVm)
+            : vm.state.pairs.isNotEmpty
+                ? pairListView(vm)
+                : const Text(Const.searchTitle).center()
+      ];
 
   static Widget title(SearchVM vm, ThemeData theme) => //
       vm.pokemonVm.isNotEmpty()
@@ -41,20 +50,12 @@ class SearchView extends StatelessWidget with GetItMixin {
 
   static List<Widget> actions(SearchVM vm) => [
         vm.state.isSearching || vm.pokemonVm.isNotEmpty() //
-            ? View.action(Icons.clear, vm.isSearchingChanged(false))
-            : View.action(Icons.search, vm.isSearchingChanged(true))
+            ? View.action('clear', Icons.clear, vm.isSearchingChanged(false))
+            : View.action('search', Icons.search, vm.isSearchingChanged(true))
       ];
 
-  static List<Widget> body(SearchVM vm) => //
-      vm.state.isLoading
-          ? [const CircularProgressIndicator().center()]
-          : vm.pokemonVm.isNotEmpty()
-              ? pokemonCardView(vm.pokemonVm)
-              : vm.state.pairs.isNotEmpty
-                  ? pairListView(vm)
-                  : [const Center(child: Text(Const.searchTitle))];
-
   static Widget searchEditText(SearchVM vm, ThemeData theme) => TextField(
+      key: const Key('searchEditText'),
       onChanged: vm.onSearchQueryChanged,
       autofocus: true,
       //style: theme.invert().textTheme.titleLarge,
@@ -67,20 +68,23 @@ class SearchView extends StatelessWidget with GetItMixin {
         //filled: true,
       ));
 
-  static List<Widget> pairListView(SearchVM vm) => vm.pairsVM.mapList((_) => //
-      ListTile(onTap: vm.onPairSelected(_.pair), title: Text(_.title())));
+  static Widget pairListView(SearchVM vm) => Column(
+        key: const Key('pairListView'),
+        children: vm.pairsVM.mapList((_) => //
+            ListTile(onTap: vm.onPairSelected(_.pair), title: Text(_.title()))),
+      );
 
   static Widget pokemonTitle(PokemonVM vm) => //
-      Text(vm.pokemon.name);
+      Text(vm.pokemon.name, key: const Key('pokemonTitle'));
 
-  static List<Widget> pokemonCardView(PokemonVM vm) => [
+  static Widget pokemonCardView(PokemonVM vm) => [
         View.card([
           Row(mainAxisSize: MainAxisSize.min, children: [
             //Image.network(vm.sprites.frontSprite())
             //vm.sprites.normal().mapList(Image.network)
           ]),
           //Row(children: vm.sprites.shiny().mapList(Image.network)),
-        ], 2),
+        ]),
         View.card(
           [
             View.listView(
@@ -89,7 +93,7 @@ class SearchView extends StatelessWidget with GetItMixin {
             ),
           ],
         )
-      ];
+      ].column().container(key: const Key('pokemonCardView'));
 }
 
 class SearchVM {
@@ -124,26 +128,24 @@ class SearchMiddleware {
 
   SearchMiddleware(this.pokemonRepo, this.pairRepo);
 
-  Future<List<Pair>> getPairs(String query) => (pairRepo.doGetAll()) //
-      .then((xs) => xs.where((x) => x.toString().contains(query)))
-      .then((xs) => xs.sorted((a, b) => a.name.length - b.name.length));
+  Func<MyDexStore, Future<void>> searchTextChanged(String query) => (store) async {
+        if (query.isEmpty) return; //|| (query.length < 2 && int.tryParse(query) == null)) return;
 
-  ThunkAction<MyDexState> searchTextChanged(String query) => (store) async {
-        // if (query.isEmpty || (query.length < 3 && int.tryParse(query) == null)) {
-        //   store.dispatch(const SearchAction.pairsChanged([]));
-        //   return;
-        // }
-        var pairs = await getPairs(query);
+        var pairs = await pairRepo //
+            .doGetAll()
+            .then((xs) => xs.where((_) => _.id == query || _.name.contains(query)).toList())
+            .then((xs) => xs.sorted((a, b) => a.name.length - b.name.length));
+
         store.dispatch(SearchAction.pairsChanged(pairs));
       };
 
-  ThunkAction<MyDexState> pairSelected(Pair pair) => (store) async {
+  Func<MyDexStore, Future<void>> pairSelected(Pair pair) => (store) async {
         store.dispatch(const SearchAction.isSearching(false));
         var res = await pokemonRepo.doGet(pair.name);
         store.dispatch(SearchAction.pokemonSelected(res));
       };
 
-  ThunkAction<MyDexState> searchStatusChanged(bool res) => (store) async {
+  Func<MyDexStore, Future<void>> searchStatusChanged(bool res) => (store) async {
         if (res == false) {
           store.dispatch(const SearchAction.pairsChanged([]));
           store.dispatch(const SearchAction.pokemonSelected(Pokemon()));
@@ -156,7 +158,6 @@ class SearchReducer {
   static SearchState reduce(SearchState prev, dynamic action) => !(action is SearchAction)
       ? prev
       : action.when(
-          isLoading: (_) => prev.copyWith(isLoading: _),
           isSearching: (_) => prev.copyWith(isSearching: _),
           pairsChanged: (_) => prev.copyWith(pairs: _),
           pokemonSelected: (_) => prev.copyWith(pokemon: _),
@@ -169,13 +170,11 @@ class SearchState with _$SearchState {
     @Default([]) List<Pair> pairs,
     @Default(Pokemon()) Pokemon pokemon,
     @Default(false) bool isSearching,
-    @Default(false) bool isLoading,
   ]) = _SearchState;
 }
 
 @freezed
 class SearchAction with _$SearchAction {
-  const factory SearchAction.isLoading(bool status) = IsLoading;
   const factory SearchAction.isSearching(bool status) = IsSearching;
   const factory SearchAction.pairsChanged(List<Pair> pairs) = PairsChanged;
   const factory SearchAction.pokemonSelected(Pokemon pokemons) = PokemonSelected;

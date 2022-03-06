@@ -28,18 +28,12 @@ class MockPairRepo extends Mock implements PairRepo {}
 
 Future<AppDatabase> testDb() => $FloorAppDatabase.inMemoryDatabaseBuilder().build();
 
-const mockPair = Pair(
-  id: 1,
-  name: 'a',
-  url: 'b',
-);
+const mockPair = Pair(id: 1, name: 'a', url: 'b');
+const mockPairB = Pair(id: 2, name: 'c', url: 'd');
+const mockPairC = Pair(id: 3, name: 'e', url: 'f');
 
-const mockUser = User(
-  id: 1,
-  name: 'a',
-  email: 'b@',
-  password: 'c',
-);
+const mockUser = User(id: 1, name: 'a', email: 'b@', password: 'c');
+const mockUserB = User(id: 2, name: 'd', email: 'e@', password: 'f');
 
 const mockSpriteMale = Sprite(
   front_default: 'a',

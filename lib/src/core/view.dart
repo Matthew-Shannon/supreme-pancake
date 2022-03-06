@@ -7,26 +7,24 @@ import 'package:redux/redux.dart';
 import 'types.dart';
 
 class View {
-  static Widget card(List<Widget> children, [double magnitude = 1]) => //
-      Card(
-        margin: (12 * magnitude).all(),
-        elevation: 10 * magnitude,
-        child: Wrap(children: children) //
-            .padding((8 * magnitude).all()),
-      );
+  static Widget card(List<Widget> children) => children //
+      .column()
+      .paddingN(l: 24.r, t: 24.r, r: 24.r, b: 12.r)
+      .card()
+      .padding(0.04.sh.onlyTop());
 
-  static Widget action(IconData icon, void onClick()) => //
-      Icon(icon) //
+  static Widget action(String id, IconData icon, void onClick()) => //
+      Icon(icon, key: Key(id)) //
           .onTap(onClick)
           .padding(12.w.onlyEnd());
 
-  static ListView listView(List<Widget> children) => //
+  static Widget listView(List<Widget> children) => //
       ListView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: 16.r.all(),
         shrinkWrap: true,
         children: children,
-      );
+      ).safeArea();
 
   static Widget singleCard(List<Widget> children) => children //
       .column()
@@ -59,8 +57,8 @@ extension WidgetEx on Widget {
   Widget sizedBox({double? width, double? height}) => //
       SizedBox(width: width, height: height, child: this);
 
-  Widget container({double? width, double? height}) => //
-      Container(width: width, child: this);
+  Widget container({double? width, double? height, Key? key}) => //
+      Container(key: key, width: width, child: this);
 
   Widget material() => //
       Material(child: this);
@@ -77,7 +75,7 @@ extension WidgetEx on Widget {
   Widget elevatedButton(Runnable onClick) => //
       ElevatedButton(onPressed: onClick, child: this);
 
-  Widget card({z = 8.0}) => //
+  Widget card([z = 8.0]) => //
       Card(elevation: z, child: this);
 
   PreferredSizeWidget appBar() => //
@@ -108,7 +106,7 @@ extension WidgetExT on List<Widget> {
 
 extension doubleEx on double {
   EdgeInsets all() => EdgeInsets.all(this);
-  EdgeInsets onlyStart() => EdgeInsets.only(left: this);
+  //EdgeInsets onlyStart() => EdgeInsets.only(left: this);
   EdgeInsets onlyTop() => EdgeInsets.only(top: this);
   EdgeInsets onlyEnd() => EdgeInsets.only(right: this);
   EdgeInsets onlyBottom() => EdgeInsets.only(bottom: this);
