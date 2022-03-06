@@ -29,20 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
-  autoequal:
-    dependency: "direct main"
-    description:
-      name: autoequal
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
-  autoequal_gen:
-    dependency: "direct dev"
-    description:
-      name: autoequal_gen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -298,13 +284,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.2"
-  flutter_redux_dev_tools:
-    dependency: "direct main"
-    description:
-      name: flutter_redux_dev_tools
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.1"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -609,13 +588,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  redux_dev_tools:
-    dependency: "direct main"
-    description:
-      name: redux_dev_tools
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   redux_logging:
     dependency: "direct main"
     description:

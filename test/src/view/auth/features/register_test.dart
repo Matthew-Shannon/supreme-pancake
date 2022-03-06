@@ -9,9 +9,8 @@ import 'package:mydex/src/model/user.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/auth/features/register.dart';
 
+import '../../../core/mock.dart';
 import '../../../core/util.dart';
-import '../../../service/nav_test.dart';
-import '../../../service/repo_test.dart';
 
 void main() {
   middlewareTest();
@@ -52,15 +51,17 @@ void middlewareTest() {
     });
 
     test('onSubmitFailPath', () async {
-      when(() => userRepo.doInsert(any())).thenAnswerVoidFuture();
-      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      when(() => userRepo.doInsert(any())).thenCall();
+      when(() => userRepo.doGet(any())).thenReply(mockUser);
+      var wasCalled = false;
       await middleware.onRegisterSubmit(() {})(store);
       verifyNever(() => userRepo.doInsert(any()));
+      expect(wasCalled, isFalse);
     });
 
     test('onSubmitHappyPath', () async {
-      when(() => userRepo.doInsert(any())).thenAnswerVoidFuture();
-      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      when(() => userRepo.doInsert(any())).thenCall();
+      when(() => userRepo.doGet(any())).thenReply(mockUser);
       store.dispatch(const RegisterAction.nameTextChanged('a'));
       store.dispatch(const RegisterAction.nameErrorChanged(null));
       store.dispatch(const RegisterAction.emailTextChanged('c@'));
@@ -68,7 +69,7 @@ void middlewareTest() {
       store.dispatch(const RegisterAction.passwordTextChanged('c'));
       store.dispatch(const RegisterAction.passwordErrorChanged(null));
       var wasCalled = false;
-      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User());
+      when(() => userRepo.doGet(any())).thenReply(const User());
       await middleware.onRegisterSubmit(() => wasCalled = true)(store);
       verify(() => userRepo.doInsert(any())).called(1);
       expect(wasCalled, isTrue);

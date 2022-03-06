@@ -26,14 +26,9 @@ dependencies:
   equatable: ^2.0.3
   get_it_mixin:
   pretty_dio_logger:
-  flutter_redux_dev_tools: ^0.5.1
-  redux_dev_tools: ^0.7.0
-  autoequal:
   device_preview:
   flutter_screenutil: 5.3.1
   material_design_icons_flutter: 5.0.6595
-
-
 
 dev_dependencies:
   flutter_test:
@@ -48,8 +43,6 @@ dev_dependencies:
   json_serializable: ^6.1.4
   test_cov: ^1.0.1
   freezed: ^1.1.0
-  autoequal_gen:
-
 
 flutter:
   uses-material-design: true

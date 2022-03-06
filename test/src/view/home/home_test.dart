@@ -8,9 +8,8 @@ import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/home/home.dart';
 
+import '../../core/mock.dart';
 import '../../core/util.dart';
-import '../../service/nav_test.dart';
-import '../../service/prefs_test.dart';
 
 void main() {
   middlewareTests();
@@ -30,7 +29,7 @@ void middlewareTests() {
     });
 
     test('onPosChange', () async {
-      when(() => prefs.setPos(any())).thenAnswer((_) => Future.value(''));
+      when(() => prefs.setPos(any())).thenCall();
       await middleware.changePos(1)(store);
       verify(() => prefs.setPos(any())).called(1);
       expect(store.state.homeState.pos, 1);

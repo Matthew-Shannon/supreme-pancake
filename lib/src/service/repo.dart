@@ -22,30 +22,38 @@ abstract class AppDatabase extends FloorDatabase {
 
 abstract class BaseRepo<T> {
   final BaseLocal<T> local;
-  BaseRepo(this.local);
+  const BaseRepo(this.local);
 
   Future<T> doGet(String query);
+
   Future<List<T>> doGetAll();
 
-  Future doInsert(List<T> xs) => //
-      local.onInsert(xs);
+  Future<void> doInsert(List<T> xs) => //
+      local.onInsertOrUpdate(xs);
 
   Future<T> doCache(T x) => //
       doCacheAll([x]).then((_) => x);
 
-  Future<List<T>> doCacheAll(List<T> xs) => Future.value(xs)
-      .then((_) => local.onDelete(xs)) //
-      .then((_) => local.onInsert(xs))
-      .then((_) => xs);
+  Future<void> doCacheAll(List<T> xs) => //
+      local.onInsertOrUpdate(xs);
 }
 
 abstract class BaseLocal<T> {
-  @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> onInsert(List<T> items);
+  @Insert(onConflict: OnConflictStrategy.ignore)
+  Future<List<int>> onInsert(List<T> items);
 
-  @Update(onConflict: OnConflictStrategy.replace)
+  @update
   Future<void> onUpdate(List<T> items);
 
   @delete
   Future<void> onDelete(List<T> items);
+
+  @transaction
+  Future<void> onInsertOrUpdate(List<T> items) => //
+      Future.value(items) //
+          .then(onInsert)
+          .then((_) => _.asMap().entries)
+          .then((_) => _.map((_) => _.key == -1 ? items[_.key] : null))
+          .then((_) => _.whereType<T>().toList())
+          .then(onUpdate);
 }

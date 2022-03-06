@@ -11,9 +11,8 @@ import 'package:mydex/src/service/style.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 import 'package:mydex/src/view/home/features/settings.dart';
 
+import 'core/mock.dart';
 import 'core/util.dart';
-import 'service/nav_test.dart';
-import 'service/style_test.dart';
 
 void main() {
   viewTests();

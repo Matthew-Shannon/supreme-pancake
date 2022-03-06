@@ -1,4 +1,3 @@
-import 'package:autoequal/autoequal.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
@@ -11,10 +10,9 @@ import 'sprite.dart';
 part 'pokemon.g.dart';
 
 @entity
-@autoequalMixin
 @JsonSerializable()
 @SpriteRemoteConverter()
-class Pokemon extends Equatable with _$PokemonAutoequalMixin {
+class Pokemon extends Equatable {
   @primaryKey
   final int id;
   final String name;
@@ -34,40 +32,12 @@ class Pokemon extends Equatable with _$PokemonAutoequalMixin {
     this.sprites = const Sprite(),
   });
 
+  @override
+  List<Object?> get props => [id, name, height, weight, order, base_experience, sprites];
+
   factory Pokemon.fromJson(JSON json) => _$PokemonFromJson(json);
 
   JSON toJson() => _$PokemonToJson(this);
-}
-
-@dao
-abstract class PokemonLocal extends BaseLocal<Pokemon> {
-  @Query('SELECT * FROM Pokemon')
-  Future<List<Pokemon>> doGetAll();
-
-  @Query('SELECT * FROM Pokemon WHERE id = :query OR name = :query')
-  Future<Pokemon?> doGet(String query);
-}
-
-class PokemonRepo extends BaseRepo<Pokemon> {
-  final Dio remote;
-  final PokemonLocal local;
-  PokemonRepo(this.local, this.remote) : super(local);
-
-  @override
-  Future<Pokemon> doGet(String query) => Future.any([
-        //local.doGet(query).then((_) => _ ?? const Pokemon.empty()),
-        _doGet(query),
-      ]);
-
-  @override
-  Future<List<Pokemon>> doGetAll() => Future.any([
-        local.doGetAll(),
-        //remote.doGetAll().then(onCacheAll),
-      ]);
-
-  Future<Pokemon> _doGet(String query) => remote //
-      .get<JSON>(Const.pokeBaseUrl + 'pokemon/$query')
-      .then((_) => Pokemon.fromJson(_.data ?? {}));
 }
 
 class PokemonVM {
@@ -85,4 +55,35 @@ class PokemonVM {
   String baseExp() => 'BaseExp: ${pokemon.base_experience}';
 
   List<String> fields() => [id(), name(), order(), height(), weight(), baseExp()];
+}
+
+@dao
+abstract class PokemonLocal extends BaseLocal<Pokemon> {
+  @Query('SELECT * FROM Pokemon')
+  Future<List<Pokemon>> doGetAll();
+
+  @Query('SELECT * FROM Pokemon WHERE id = :query OR name = :query')
+  Future<Pokemon?> doGet(String query);
+}
+
+class PokemonRepo extends BaseRepo<Pokemon> {
+  final Dio remote;
+  final PokemonLocal local;
+  const PokemonRepo(this.local, this.remote) : super(local);
+
+  @override
+  Future<Pokemon> doGet(String query) => Future.any([
+    //local.doGet(query).then((_) => _ ?? const Pokemon.empty()),
+    _doGet(query),
+  ]);
+
+  @override
+  Future<List<Pokemon>> doGetAll() => Future.any([
+    local.doGetAll(),
+    //remote.doGetAll().then(onCacheAll),
+  ]);
+
+  Future<Pokemon> _doGet(String query) => remote //
+      .get<JSON>(Const.pokeBaseUrl + 'pokemon/$query')
+      .then((_) => Pokemon.fromJson(_.data ?? {}));
 }

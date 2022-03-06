@@ -40,12 +40,12 @@ class Graph {
 
 class ServiceModule {
   static DI setup(DI di) => di
+    // prefs
     ..registerSingletonAsync<SharedPreferences>(SharedPreferences.getInstance)
-    ..registerSingletonWithDependencies<IPrefs>(
-      () => Prefs(di.get()),
-      dependsOn: [SharedPreferences],
-    )
+    ..registerSingletonWithDependencies<IPrefs>(() => Prefs(di.get()), dependsOn: [SharedPreferences])
+    // local
     ..registerSingletonAsync<AppDatabase>($FloorAppDatabase.databaseBuilder(Const.databaseName).build)
+    // remote
     ..registerLazySingleton<PrettyDioLogger>(PrettyDioLogger.new)
     ..registerLazySingleton<Dio>(Dio.new); //..interceptors.add(di.get<PrettyDioLogger>()));
 }

@@ -3,28 +3,6 @@
 part of 'sprite.dart';
 
 // **************************************************************************
-// AutoequalGenerator
-// **************************************************************************
-
-mixin _$SpriteAutoequalMixin on Equatable {
-  @override
-  List<Object?> get props => _$SpriteAutoequal(this as Sprite)._autoequalProps;
-}
-
-extension _$SpriteAutoequal on Sprite {
-  List<Object?> get _autoequalProps => [
-        back_default,
-        back_female,
-        back_shiny,
-        back_shiny_female,
-        front_default,
-        front_female,
-        front_shiny,
-        front_shiny_female
-      ];
-}
-
-// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

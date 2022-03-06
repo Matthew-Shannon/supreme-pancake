@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:autoequal/autoequal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,9 +9,8 @@ import '../../service/repo.dart';
 
 part 'sprite.g.dart';
 
-@autoequalMixin
 @JsonSerializable()
-class Sprite extends Equatable with _$SpriteAutoequalMixin {
+class Sprite extends Equatable {
   final String? back_default;
   final String? back_female;
   final String? back_shiny;
@@ -32,9 +30,35 @@ class Sprite extends Equatable with _$SpriteAutoequalMixin {
     this.front_shiny_female = null,
   });
 
+  @override
+  List<Object?> get props => [
+        back_default,
+        back_female,
+        back_shiny,
+        back_shiny_female,
+        front_default,
+        front_female,
+        front_shiny,
+        front_shiny_female,
+      ];
+
   factory Sprite.fromJson(JSON json) => _$SpriteFromJson(json);
 
   JSON toJson() => _$SpriteToJson(this);
+}
+
+class SpriteVM {
+  final Sprite sprites;
+  const SpriteVM(this.sprites);
+
+  String frontSprite() => sprites.front_default ?? sprites.front_female ?? Const.defImage;
+  String backSprite() => sprites.back_default ?? sprites.back_female ?? Const.defImage;
+  String frontShinySprite() => sprites.front_shiny ?? sprites.front_shiny_female ?? Const.defImage;
+  String backShinySprite() => sprites.back_shiny ?? sprites.back_shiny_female ?? Const.defImage;
+
+  List<String> normal() => [frontSprite(), backSprite()];
+
+  List<String> shiny() => [frontShinySprite(), backShinySprite()];
 }
 
 class SpriteLocalConverter extends TypeConverter<Sprite, String> {
@@ -52,28 +76,4 @@ class SpriteRemoteConverter implements JsonConverter<Sprite, JSON> {
   Sprite fromJson(JSON json) => Sprite.fromJson(json);
 
   JSON toJson(Sprite sprite) => sprite.toJson();
-}
-
-// @dao
-//
-// abstract class SpriteLocal extends BaseLocal<Sprite> {
-//   @Query('SELECT * FROM Sprite')
-//   Future<List<Sprite>> doGetAll();
-//
-//   @Query('SELECT * FROM Sprite WHERE id = :query')
-//   Future<Sprite?> doGet(String query);
-// }
-
-class SpriteVM {
-  final Sprite sprites;
-  const SpriteVM(this.sprites);
-
-  String frontSprite() => sprites.front_default ?? sprites.front_female ?? Const.defImage;
-  String backSprite() => sprites.back_default ?? sprites.back_female ?? Const.defImage;
-  String frontShinySprite() => sprites.front_shiny ?? sprites.front_shiny_female ?? Const.defImage;
-  String backShinySprite() => sprites.back_shiny ?? sprites.back_shiny_female ?? Const.defImage;
-
-  List<String> normal() => [frontSprite(), backSprite()];
-
-  List<String> shiny() => [frontShinySprite(), backShinySprite()];
 }

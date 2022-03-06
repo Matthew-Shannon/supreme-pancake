@@ -76,7 +76,7 @@ class LoginMiddleware {
 
   Func<MyDexStore, Future<void>> onLoginSubmit() => (store) async {
         LoginState state = store.state.authState.loginState;
-        var cached = await userRepo.doGetByEmail(state.emailText);
+        var cached = await userRepo.doGet(state.emailText);
 
         var emailError = validateEmail(state.emailText, cached.email);
         store.dispatch(LoginAction.emailErrorChanged(emailError));

@@ -3,19 +3,6 @@
 part of 'pair.dart';
 
 // **************************************************************************
-// AutoequalGenerator
-// **************************************************************************
-
-mixin _$PairAutoequalMixin on Equatable {
-  @override
-  List<Object?> get props => _$PairAutoequal(this as Pair)._autoequalProps;
-}
-
-extension _$PairAutoequal on Pair {
-  List<Object?> get _autoequalProps => [id, name, url];
-}
-
-// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

@@ -6,14 +6,11 @@ import 'package:mydex/src/core/const.dart';
 import 'package:mydex/src/core/di.dart';
 import 'package:mydex/src/core/view.dart';
 import 'package:mydex/src/model/state.dart';
-import 'package:mydex/src/model/user.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/auth/features/login.dart';
 
+import '../../../core/mock.dart';
 import '../../../core/util.dart';
-import '../../../service/nav_test.dart';
-import '../../../service/prefs_test.dart';
-import '../../../service/repo_test.dart';
 
 void main() {
   middlewareTests();
@@ -53,18 +50,18 @@ void middlewareTests() {
     });
 
     test('onSubmitFailPath', () async {
-      when(() => prefs.setAuth(any())).thenAnswerVoidFuture();
-      when(() => prefs.setId(any())).thenAnswerVoidFuture();
-      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      when(() => prefs.setAuth(any())).thenCall();
+      when(() => prefs.setId(any())).thenCall();
+      when(() => userRepo.doGet(any())).thenReply(mockUser);
       await middleware.onLoginSubmit()(store);
       verifyNever(() => prefs.setAuth(any()));
       verifyNever(() => prefs.setId(any()));
     });
 
     test('onSubmitHappyPath', () async {
-      when(() => prefs.setAuth(any())).thenAnswerVoidFuture();
-      when(() => prefs.setId(any())).thenAnswerVoidFuture();
-      when(() => userRepo.doGetByEmail(any())).thenAnswerFuture(const User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      when(() => prefs.setAuth(any())).thenCall();
+      when(() => prefs.setId(any())).thenCall();
+      when(() => userRepo.doGet(any())).thenReply(mockUser);
 
       store.dispatch(const LoginAction.emailTextChanged('b@'));
       store.dispatch(const LoginAction.emailErrorChanged(null));
@@ -129,7 +126,7 @@ void viewTests() {
     testWidgets('build', (tester) async {
       when(() => nav.goTo(any(), any())).thenReturn(() => const Text(''));
       await tester.pumpWidget(testApp(LoginView.new).storeProvider(store));
-      expectAllExist([
+      expectAllText([
         Const.registerBtn,
         Const.submitBtn,
         Const.loginTitle,

@@ -3,21 +3,6 @@
 part of 'pokemon.dart';
 
 // **************************************************************************
-// AutoequalGenerator
-// **************************************************************************
-
-mixin _$PokemonAutoequalMixin on Equatable {
-  @override
-  List<Object?> get props =>
-      _$PokemonAutoequal(this as Pokemon)._autoequalProps;
-}
-
-extension _$PokemonAutoequal on Pokemon {
-  List<Object?> get _autoequalProps =>
-      [id, name, height, weight, order, base_experience, sprites];
-}
-
-// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

@@ -7,8 +7,8 @@ import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/service/nav.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 
+import '../../core/mock.dart';
 import '../../core/util.dart';
-import '../../service/nav_test.dart';
 
 void main() {
   middlewareTests();

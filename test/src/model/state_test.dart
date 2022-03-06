@@ -9,6 +9,7 @@ void tests() {
   group('State', () {
     test('initial', () {
       expect(const MyDexState().toString().isNotEmpty, isTrue);
+      expect(MyDexReducer.reduce(const MyDexState(), null), const MyDexState());
     });
   });
 }

@@ -81,7 +81,7 @@ class RegisterMiddleware {
 
   Func<MyDexStore, Future<void>> onRegisterSubmit(Runnable onComplete) => (store) async {
         RegisterState state = store.state.authState.registerState;
-        var cached = await userRepo.doGetByEmail(state.emailText);
+        var cached = await userRepo.doGet(state.emailText);
 
         var nameError = validateName(state.nameText);
         store.dispatch(RegisterAction.nameErrorChanged(nameError));

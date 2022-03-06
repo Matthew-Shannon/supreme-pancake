@@ -8,8 +8,8 @@ import 'package:mydex/src/model/user.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 import 'package:mydex/src/view/home/features/settings.dart';
 
+import '../../../core/mock.dart';
 import '../../../core/util.dart';
-import '../../../service/prefs_test.dart';
 
 void main() {
   middlewareTests();
@@ -32,7 +32,7 @@ void middlewareTests() {
     });
 
     test('toggleTheme', () async {
-      when(() => prefs.setTheme(any())).thenAnswerVoidFuture();
+      when(() => prefs.setTheme(any())).thenCall();
       expect(store.state.settingsState.isDarkMode, false);
 
       await middleware.toggleTheme(true)(store);
@@ -43,7 +43,7 @@ void middlewareTests() {
     });
 
     test('logout', () async {
-      when(() => prefs.setAuth(any())).thenAnswerVoidFuture();
+      when(() => prefs.setAuth(any())).thenCall();
       expect(store.state.authState.isAuthed, false);
 
       store.dispatch(const AuthAction.authChanged(true));
@@ -59,10 +59,11 @@ void middlewareTests() {
 void viewTests() {
   late SettingsMiddleware middleware;
   late MyDexStore store;
+  late MockPrefs prefs;
 
   group('SettingsView', () {
     setUp(() {
-      var prefs = MockPrefs();
+      prefs = MockPrefs();
       middleware = SettingsMiddleware(prefs);
       store = setupStore((_, c) => _.copyWith(
             authState: AuthReducer.reduce(_.authState, c),
@@ -76,21 +77,29 @@ void viewTests() {
     tearDown(() async => DI.instance.reset());
 
     testWidgets('buttons', (tester) async {
+      when(() => prefs.setAuth(any())).thenCall();
+
       var vm = SettingsVM.fromStore(store, middleware);
       await tester.pumpWidget(testApp(() => SettingsView.buttons(vm).column()));
+
+      store.dispatch(const AuthAction.authChanged(true));
+      expect(store.state.authState.isAuthed, true);
+
       expect(find.text(Const.logoutBtn), findsOneWidget);
-      // TODO?
+      await tester.tap(find.text(Const.logoutBtn));
+      await tester.pump();
     });
 
     testWidgets('toggles', (tester) async {
       var vm = SettingsVM.fromStore(store, middleware);
       await tester.pumpWidget(testApp(() => SettingsView.toggles(vm).column().material()));
       expect(find.text(Const.darkModeBtn), findsOneWidget);
-      // TODO?
+      await tester.tap(find.text(Const.darkModeBtn));
+      await tester.pump();
     });
 
     testWidgets('userView', (tester) async {
-      var vm = const UserVM(User(id: 1, name: 'a', email: 'b@', password: 'c'));
+      var vm = const UserVM(mockUser);
       await tester.pumpWidget(testApp(() => SettingsView.userView(vm).column().material()));
       expect(find.text('Name: a'), findsOneWidget);
       expect(find.text('Email: b@'), findsOneWidget);
@@ -99,7 +108,7 @@ void viewTests() {
 
     testWidgets('build', (tester) async {
       await tester.pumpWidget(testApp(SettingsView.new).storeProvider(store));
-      store.dispatch(const AuthAction.ownerChanged(User(id: 1, name: 'a', email: 'b@', password: 'c')));
+      store.dispatch(const AuthAction.ownerChanged(mockUser));
       await tester.pump(Duration.zero);
       expect(find.text('Name: a'), findsOneWidget);
       expect(find.text('Email: b@'), findsOneWidget);

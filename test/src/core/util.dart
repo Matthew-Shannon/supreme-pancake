@@ -9,12 +9,15 @@ import 'package:redux/redux.dart';
 
 class FakeContext extends Fake implements BuildContext {}
 
-void expectAllExist(List<String> items) => //
+void expectText(String) => //
+    expectAllText([String]);
+
+void expectAllText(List<String> items) => //
     items.map(find.text).forEach((_) => expect(_, findsOneWidget));
 
 extension WhenExpectationEx on When {
-  void thenAnswerVoidFuture<T>() => thenAnswer((_) => Future.value());
-  void thenAnswerFuture<T>(T t) => thenAnswer((_) => Future.value(t));
+  void thenCall<T>() => thenAnswer((_) => Future.value());
+  void thenReply<T>(T t) => thenAnswer((_) => Future.value(t));
 }
 
 Widget testApp(Supplier<Widget> onReady) => //

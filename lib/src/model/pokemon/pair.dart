@@ -1,4 +1,3 @@
-import 'package:autoequal/autoequal.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
@@ -10,18 +9,27 @@ import '../../service/repo.dart';
 part 'pair.g.dart';
 
 @entity
-@autoequalMixin
 @JsonSerializable()
-class Pair extends Equatable with _$PairAutoequalMixin {
+class Pair extends Equatable {
   @primaryKey
   final int id;
   final String name;
   final String url;
   const Pair({this.id = 0, this.name = '', this.url = ''});
 
+  @override
+  List<Object?> get props => [id, name, url];
+
   factory Pair.fromJson(JSON json) => _$PairFromJson(json);
 
   JSON toJson() => _$PairToJson(this);
+}
+
+class PairVM {
+  final Pair pair;
+  const PairVM(this.pair);
+
+  String title() => pair.name + ' (${pair.id}';
 }
 
 @dao
@@ -36,7 +44,7 @@ abstract class PairLocal extends BaseLocal<Pair> {
 class PairRepo extends BaseRepo<Pair> {
   final Dio remote;
   final PairLocal local;
-  PairRepo(this.local, this.remote) : super(local);
+  const PairRepo(this.local, this.remote) : super(local);
 
   @override
   Future<Pair> doGet(String query) => Future.any([
@@ -47,7 +55,7 @@ class PairRepo extends BaseRepo<Pair> {
   @override
   Future<List<Pair>> doGetAll() => Future.any([
         local.doGetAll(),
-        _doGetAll().then(doCacheAll),
+        _doGetAll().then((xs) => doCacheAll(xs).then((_) => xs)),
       ]);
 
   Future<List<Pair>> _doGetAll() => remote
@@ -59,11 +67,4 @@ class PairRepo extends BaseRepo<Pair> {
       .replaceAll(Const.pokeDataUrl, '')
       .split('/')
       .first);
-}
-
-class PairVM {
-  final Pair pair;
-  const PairVM(this.pair);
-
-  String title() => pair.name + ' (${pair.id}';
 }
