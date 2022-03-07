@@ -3,16 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mydex/src/service/style.dart';
 
 void main() {
-  tests();
-}
-
-void tests() {
-  late IStyle style;
-
   group('Style', () {
-    setUp(() {
-      style = Style();
-    });
+    late IStyle style;
+
+    setUp(() => style = Style());
 
     test('darkTheme', () {
       expect(style.darkTheme().brightness, Brightness.dark);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:redux/redux.dart';
 
 import '../../core/const.dart';
 import '../../core/types.dart';
@@ -64,11 +65,9 @@ class HomeMiddleware {
 }
 
 class HomeReducer {
-  static HomeState reduce(HomeState prev, dynamic action) => !(action is HomeAction)
-      ? prev
-      : action.when(
-          posChanged: (_) => prev.copyWith(pos: _),
-        );
+  static Reducer<HomeState> reduce = combineReducers<HomeState>([
+    TypedReducer<HomeState, PosChanged>((s, _) => s.copyWith(pos: _.pos)),
+  ]);
 }
 
 @freezed

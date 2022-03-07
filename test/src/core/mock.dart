@@ -26,6 +26,8 @@ class MockPokemonRepo extends Mock implements PokemonRepo {}
 
 class MockPairRepo extends Mock implements PairRepo {}
 
+class MockAppDatabase extends Mock implements AppDatabase {}
+
 Future<AppDatabase> testDb() => $FloorAppDatabase.inMemoryDatabaseBuilder().build();
 
 const mockPair = Pair(id: 1, name: 'a', url: 'b');

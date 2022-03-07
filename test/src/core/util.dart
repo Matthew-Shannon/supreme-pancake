@@ -8,14 +8,14 @@ import 'package:mydex/src/core/view.dart';
 import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/service/repo.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_logging/redux_logging%202.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 class FakeContext extends Fake implements BuildContext {}
 
-void expectText(String) => //
-    expectAllText([String]);
-
-void expectAllText(List<String> items) => //
-    items.map(find.text).forEach((_) => expect(_, findsOneWidget));
+void expectAllExist(List<String> xs) => xs.forEach((x) => expect(find.text(x), findsOneWidget));
+void expectKeysNotExist(List<String> xs) => xs.forEach((x) => expect(find.byKey(Key(x)), findsNothing));
+void expectKeysExist(List<String> xs) => xs.forEach((x) => expect(find.byKey(Key(x)), findsOneWidget));
 
 extension WhenExpectationEx on When {
   void thenCall<T>() => thenAnswer((_) => Future.value());
@@ -25,7 +25,10 @@ extension WhenExpectationEx on When {
 Widget testApp(Supplier<Widget> onReady) => //
     ScreenUtilInit(builder: () => onReady().app());
 
-MyDexStore setupStore(BiFunc<MyDexState, dynamic, MyDexState> onApply) => //
-    Store(onApply, initialState: const MyDexState());
+MyDexStore setupStore(List<Reducer<MyDexState>> reducers) => //
+    Store(combineReducers(reducers), initialState: const MyDexState(), middleware: [
+      LoggingMiddleware.printer(),
+      thunkMiddleware,
+    ]);
 
 Response<JSON> remoteResponse(JSON data) => Response(data: data, requestOptions: RequestOptions(path: ''));

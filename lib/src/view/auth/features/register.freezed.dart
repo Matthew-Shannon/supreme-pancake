@@ -23,21 +23,9 @@ class _$RegisterActionTearOff {
     );
   }
 
-  NameErrorChanged nameErrorChanged(String? nameError) {
-    return NameErrorChanged(
-      nameError,
-    );
-  }
-
   EmailTextChanged emailTextChanged(String email) {
     return EmailTextChanged(
       email,
-    );
-  }
-
-  EmailErrorChanged emailErrorChanged(String? emailError) {
-    return EmailErrorChanged(
-      emailError,
     );
   }
 
@@ -47,9 +35,10 @@ class _$RegisterActionTearOff {
     );
   }
 
-  PasswordErrorChanged passwordErrorChanged(String? passwordError) {
-    return PasswordErrorChanged(
-      passwordError,
+  ErrorsChanged errorsChanged(String key, String? error) {
+    return ErrorsChanged(
+      key,
+      error,
     );
   }
 }
@@ -62,62 +51,50 @@ mixin _$RegisterAction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -216,11 +193,9 @@ class _$NameTextChanged
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
     return nameTextChanged(name);
   }
@@ -229,11 +204,9 @@ class _$NameTextChanged
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
     return nameTextChanged?.call(name);
   }
@@ -242,11 +215,9 @@ class _$NameTextChanged
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
     if (nameTextChanged != null) {
@@ -259,11 +230,9 @@ class _$NameTextChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
     return nameTextChanged(this);
   }
@@ -272,11 +241,9 @@ class _$NameTextChanged
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
     return nameTextChanged?.call(this);
   }
@@ -285,11 +252,9 @@ class _$NameTextChanged
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
     if (nameTextChanged != null) {
@@ -305,174 +270,6 @@ abstract class NameTextChanged implements RegisterAction {
   String get name;
   @JsonKey(ignore: true)
   $NameTextChangedCopyWith<NameTextChanged> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $NameErrorChangedCopyWith<$Res> {
-  factory $NameErrorChangedCopyWith(
-          NameErrorChanged value, $Res Function(NameErrorChanged) then) =
-      _$NameErrorChangedCopyWithImpl<$Res>;
-  $Res call({String? nameError});
-}
-
-/// @nodoc
-class _$NameErrorChangedCopyWithImpl<$Res>
-    extends _$RegisterActionCopyWithImpl<$Res>
-    implements $NameErrorChangedCopyWith<$Res> {
-  _$NameErrorChangedCopyWithImpl(
-      NameErrorChanged _value, $Res Function(NameErrorChanged) _then)
-      : super(_value, (v) => _then(v as NameErrorChanged));
-
-  @override
-  NameErrorChanged get _value => super._value as NameErrorChanged;
-
-  @override
-  $Res call({
-    Object? nameError = freezed,
-  }) {
-    return _then(NameErrorChanged(
-      nameError == freezed
-          ? _value.nameError
-          : nameError // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$NameErrorChanged
-    with DiagnosticableTreeMixin
-    implements NameErrorChanged {
-  const _$NameErrorChanged(this.nameError);
-
-  @override
-  final String? nameError;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RegisterAction.nameErrorChanged(nameError: $nameError)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'RegisterAction.nameErrorChanged'))
-      ..add(DiagnosticsProperty('nameError', nameError));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is NameErrorChanged &&
-            const DeepCollectionEquality().equals(other.nameError, nameError));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(nameError));
-
-  @JsonKey(ignore: true)
-  @override
-  $NameErrorChangedCopyWith<NameErrorChanged> get copyWith =>
-      _$NameErrorChangedCopyWithImpl<NameErrorChanged>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
-    required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
-    required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
-  }) {
-    return nameErrorChanged(nameError);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
-    TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
-    TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
-  }) {
-    return nameErrorChanged?.call(nameError);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
-    TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
-    TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
-    required TResult orElse(),
-  }) {
-    if (nameErrorChanged != null) {
-      return nameErrorChanged(nameError);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
-    required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
-    required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
-  }) {
-    return nameErrorChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
-    TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
-    TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
-  }) {
-    return nameErrorChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
-    TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
-    TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
-    required TResult orElse(),
-  }) {
-    if (nameErrorChanged != null) {
-      return nameErrorChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class NameErrorChanged implements RegisterAction {
-  const factory NameErrorChanged(String? nameError) = _$NameErrorChanged;
-
-  String? get nameError;
-  @JsonKey(ignore: true)
-  $NameErrorChangedCopyWith<NameErrorChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -552,11 +349,9 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
     return emailTextChanged(email);
   }
@@ -565,11 +360,9 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
     return emailTextChanged?.call(email);
   }
@@ -578,11 +371,9 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
     if (emailTextChanged != null) {
@@ -595,11 +386,9 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
     return emailTextChanged(this);
   }
@@ -608,11 +397,9 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
     return emailTextChanged?.call(this);
   }
@@ -621,11 +408,9 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
     if (emailTextChanged != null) {
@@ -641,175 +426,6 @@ abstract class EmailTextChanged implements RegisterAction {
   String get email;
   @JsonKey(ignore: true)
   $EmailTextChangedCopyWith<EmailTextChanged> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $EmailErrorChangedCopyWith<$Res> {
-  factory $EmailErrorChangedCopyWith(
-          EmailErrorChanged value, $Res Function(EmailErrorChanged) then) =
-      _$EmailErrorChangedCopyWithImpl<$Res>;
-  $Res call({String? emailError});
-}
-
-/// @nodoc
-class _$EmailErrorChangedCopyWithImpl<$Res>
-    extends _$RegisterActionCopyWithImpl<$Res>
-    implements $EmailErrorChangedCopyWith<$Res> {
-  _$EmailErrorChangedCopyWithImpl(
-      EmailErrorChanged _value, $Res Function(EmailErrorChanged) _then)
-      : super(_value, (v) => _then(v as EmailErrorChanged));
-
-  @override
-  EmailErrorChanged get _value => super._value as EmailErrorChanged;
-
-  @override
-  $Res call({
-    Object? emailError = freezed,
-  }) {
-    return _then(EmailErrorChanged(
-      emailError == freezed
-          ? _value.emailError
-          : emailError // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$EmailErrorChanged
-    with DiagnosticableTreeMixin
-    implements EmailErrorChanged {
-  const _$EmailErrorChanged(this.emailError);
-
-  @override
-  final String? emailError;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RegisterAction.emailErrorChanged(emailError: $emailError)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'RegisterAction.emailErrorChanged'))
-      ..add(DiagnosticsProperty('emailError', emailError));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is EmailErrorChanged &&
-            const DeepCollectionEquality()
-                .equals(other.emailError, emailError));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(emailError));
-
-  @JsonKey(ignore: true)
-  @override
-  $EmailErrorChangedCopyWith<EmailErrorChanged> get copyWith =>
-      _$EmailErrorChangedCopyWithImpl<EmailErrorChanged>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
-    required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
-    required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
-  }) {
-    return emailErrorChanged(emailError);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
-    TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
-    TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
-  }) {
-    return emailErrorChanged?.call(emailError);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
-    TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
-    TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
-    required TResult orElse(),
-  }) {
-    if (emailErrorChanged != null) {
-      return emailErrorChanged(emailError);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
-    required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
-    required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
-  }) {
-    return emailErrorChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
-    TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
-    TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
-  }) {
-    return emailErrorChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
-    TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
-    TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
-    required TResult orElse(),
-  }) {
-    if (emailErrorChanged != null) {
-      return emailErrorChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class EmailErrorChanged implements RegisterAction {
-  const factory EmailErrorChanged(String? emailError) = _$EmailErrorChanged;
-
-  String? get emailError;
-  @JsonKey(ignore: true)
-  $EmailErrorChangedCopyWith<EmailErrorChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -889,11 +505,9 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
     return passwordTextChanged(password);
   }
@@ -902,11 +516,9 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
     return passwordTextChanged?.call(password);
   }
@@ -915,11 +527,9 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
     if (passwordTextChanged != null) {
@@ -932,11 +542,9 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
     return passwordTextChanged(this);
   }
@@ -945,11 +553,9 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
     return passwordTextChanged?.call(this);
   }
@@ -958,11 +564,9 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
     if (passwordTextChanged != null) {
@@ -982,32 +586,37 @@ abstract class PasswordTextChanged implements RegisterAction {
 }
 
 /// @nodoc
-abstract class $PasswordErrorChangedCopyWith<$Res> {
-  factory $PasswordErrorChangedCopyWith(PasswordErrorChanged value,
-          $Res Function(PasswordErrorChanged) then) =
-      _$PasswordErrorChangedCopyWithImpl<$Res>;
-  $Res call({String? passwordError});
+abstract class $ErrorsChangedCopyWith<$Res> {
+  factory $ErrorsChangedCopyWith(
+          ErrorsChanged value, $Res Function(ErrorsChanged) then) =
+      _$ErrorsChangedCopyWithImpl<$Res>;
+  $Res call({String key, String? error});
 }
 
 /// @nodoc
-class _$PasswordErrorChangedCopyWithImpl<$Res>
+class _$ErrorsChangedCopyWithImpl<$Res>
     extends _$RegisterActionCopyWithImpl<$Res>
-    implements $PasswordErrorChangedCopyWith<$Res> {
-  _$PasswordErrorChangedCopyWithImpl(
-      PasswordErrorChanged _value, $Res Function(PasswordErrorChanged) _then)
-      : super(_value, (v) => _then(v as PasswordErrorChanged));
+    implements $ErrorsChangedCopyWith<$Res> {
+  _$ErrorsChangedCopyWithImpl(
+      ErrorsChanged _value, $Res Function(ErrorsChanged) _then)
+      : super(_value, (v) => _then(v as ErrorsChanged));
 
   @override
-  PasswordErrorChanged get _value => super._value as PasswordErrorChanged;
+  ErrorsChanged get _value => super._value as ErrorsChanged;
 
   @override
   $Res call({
-    Object? passwordError = freezed,
+    Object? key = freezed,
+    Object? error = freezed,
   }) {
-    return _then(PasswordErrorChanged(
-      passwordError == freezed
-          ? _value.passwordError
-          : passwordError // ignore: cast_nullable_to_non_nullable
+    return _then(ErrorsChanged(
+      key == freezed
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -1015,85 +624,81 @@ class _$PasswordErrorChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PasswordErrorChanged
-    with DiagnosticableTreeMixin
-    implements PasswordErrorChanged {
-  const _$PasswordErrorChanged(this.passwordError);
+class _$ErrorsChanged with DiagnosticableTreeMixin implements ErrorsChanged {
+  const _$ErrorsChanged(this.key, this.error);
 
   @override
-  final String? passwordError;
+  final String key;
+  @override
+  final String? error;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RegisterAction.passwordErrorChanged(passwordError: $passwordError)';
+    return 'RegisterAction.errorsChanged(key: $key, error: $error)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'RegisterAction.passwordErrorChanged'))
-      ..add(DiagnosticsProperty('passwordError', passwordError));
+      ..add(DiagnosticsProperty('type', 'RegisterAction.errorsChanged'))
+      ..add(DiagnosticsProperty('key', key))
+      ..add(DiagnosticsProperty('error', error));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is PasswordErrorChanged &&
-            const DeepCollectionEquality()
-                .equals(other.passwordError, passwordError));
+            other is ErrorsChanged &&
+            const DeepCollectionEquality().equals(other.key, key) &&
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(passwordError));
+      runtimeType,
+      const DeepCollectionEquality().hash(key),
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
-  $PasswordErrorChangedCopyWith<PasswordErrorChanged> get copyWith =>
-      _$PasswordErrorChangedCopyWithImpl<PasswordErrorChanged>(
-          this, _$identity);
+  $ErrorsChangedCopyWith<ErrorsChanged> get copyWith =>
+      _$ErrorsChangedCopyWithImpl<ErrorsChanged>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String name) nameTextChanged,
-    required TResult Function(String? nameError) nameErrorChanged,
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
-    return passwordErrorChanged(passwordError);
+    return errorsChanged(key, error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
-    return passwordErrorChanged?.call(passwordError);
+    return errorsChanged?.call(key, error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String name)? nameTextChanged,
-    TResult Function(String? nameError)? nameErrorChanged,
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
-    if (passwordErrorChanged != null) {
-      return passwordErrorChanged(passwordError);
+    if (errorsChanged != null) {
+      return errorsChanged(key, error);
     }
     return orElse();
   }
@@ -1102,53 +707,47 @@ class _$PasswordErrorChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NameTextChanged value) nameTextChanged,
-    required TResult Function(NameErrorChanged value) nameErrorChanged,
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
-    return passwordErrorChanged(this);
+    return errorsChanged(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
-    return passwordErrorChanged?.call(this);
+    return errorsChanged?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NameTextChanged value)? nameTextChanged,
-    TResult Function(NameErrorChanged value)? nameErrorChanged,
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
-    if (passwordErrorChanged != null) {
-      return passwordErrorChanged(this);
+    if (errorsChanged != null) {
+      return errorsChanged(this);
     }
     return orElse();
   }
 }
 
-abstract class PasswordErrorChanged implements RegisterAction {
-  const factory PasswordErrorChanged(String? passwordError) =
-      _$PasswordErrorChanged;
+abstract class ErrorsChanged implements RegisterAction {
+  const factory ErrorsChanged(String key, String? error) = _$ErrorsChanged;
 
-  String? get passwordError;
+  String get key;
+  String? get error;
   @JsonKey(ignore: true)
-  $PasswordErrorChangedCopyWith<PasswordErrorChanged> get copyWith =>
+  $ErrorsChangedCopyWith<ErrorsChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1157,15 +756,15 @@ class _$RegisterStateTearOff {
   const _$RegisterStateTearOff();
 
   _RegisterState call(
-      [String nameText = '',
+      {String nameText = '',
       String emailText = '',
       String passwordText = '',
-      Map<String, String?> inputErrors = const {}]) {
+      Map<String, String?> errors = const {}}) {
     return _RegisterState(
-      nameText,
-      emailText,
-      passwordText,
-      inputErrors,
+      nameText: nameText,
+      emailText: emailText,
+      passwordText: passwordText,
+      errors: errors,
     );
   }
 }
@@ -1178,7 +777,7 @@ mixin _$RegisterState {
   String get nameText => throw _privateConstructorUsedError;
   String get emailText => throw _privateConstructorUsedError;
   String get passwordText => throw _privateConstructorUsedError;
-  Map<String, String?> get inputErrors => throw _privateConstructorUsedError;
+  Map<String, String?> get errors => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RegisterStateCopyWith<RegisterState> get copyWith =>
@@ -1194,7 +793,7 @@ abstract class $RegisterStateCopyWith<$Res> {
       {String nameText,
       String emailText,
       String passwordText,
-      Map<String, String?> inputErrors});
+      Map<String, String?> errors});
 }
 
 /// @nodoc
@@ -1211,7 +810,7 @@ class _$RegisterStateCopyWithImpl<$Res>
     Object? nameText = freezed,
     Object? emailText = freezed,
     Object? passwordText = freezed,
-    Object? inputErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_value.copyWith(
       nameText: nameText == freezed
@@ -1226,9 +825,9 @@ class _$RegisterStateCopyWithImpl<$Res>
           ? _value.passwordText
           : passwordText // ignore: cast_nullable_to_non_nullable
               as String,
-      inputErrors: inputErrors == freezed
-          ? _value.inputErrors
-          : inputErrors // ignore: cast_nullable_to_non_nullable
+      errors: errors == freezed
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
               as Map<String, String?>,
     ));
   }
@@ -1245,7 +844,7 @@ abstract class _$RegisterStateCopyWith<$Res>
       {String nameText,
       String emailText,
       String passwordText,
-      Map<String, String?> inputErrors});
+      Map<String, String?> errors});
 }
 
 /// @nodoc
@@ -1264,24 +863,24 @@ class __$RegisterStateCopyWithImpl<$Res>
     Object? nameText = freezed,
     Object? emailText = freezed,
     Object? passwordText = freezed,
-    Object? inputErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_RegisterState(
-      nameText == freezed
+      nameText: nameText == freezed
           ? _value.nameText
           : nameText // ignore: cast_nullable_to_non_nullable
               as String,
-      emailText == freezed
+      emailText: emailText == freezed
           ? _value.emailText
           : emailText // ignore: cast_nullable_to_non_nullable
               as String,
-      passwordText == freezed
+      passwordText: passwordText == freezed
           ? _value.passwordText
           : passwordText // ignore: cast_nullable_to_non_nullable
               as String,
-      inputErrors == freezed
-          ? _value.inputErrors
-          : inputErrors // ignore: cast_nullable_to_non_nullable
+      errors: errors == freezed
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
               as Map<String, String?>,
     ));
   }
@@ -1291,10 +890,10 @@ class __$RegisterStateCopyWithImpl<$Res>
 
 class _$_RegisterState with DiagnosticableTreeMixin implements _RegisterState {
   const _$_RegisterState(
-      [this.nameText = '',
+      {this.nameText = '',
       this.emailText = '',
       this.passwordText = '',
-      this.inputErrors = const {}]);
+      this.errors = const {}});
 
   @JsonKey()
   @override
@@ -1307,11 +906,11 @@ class _$_RegisterState with DiagnosticableTreeMixin implements _RegisterState {
   final String passwordText;
   @JsonKey()
   @override
-  final Map<String, String?> inputErrors;
+  final Map<String, String?> errors;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RegisterState(nameText: $nameText, emailText: $emailText, passwordText: $passwordText, inputErrors: $inputErrors)';
+    return 'RegisterState(nameText: $nameText, emailText: $emailText, passwordText: $passwordText, errors: $errors)';
   }
 
   @override
@@ -1322,7 +921,7 @@ class _$_RegisterState with DiagnosticableTreeMixin implements _RegisterState {
       ..add(DiagnosticsProperty('nameText', nameText))
       ..add(DiagnosticsProperty('emailText', emailText))
       ..add(DiagnosticsProperty('passwordText', passwordText))
-      ..add(DiagnosticsProperty('inputErrors', inputErrors));
+      ..add(DiagnosticsProperty('errors', errors));
   }
 
   @override
@@ -1334,8 +933,7 @@ class _$_RegisterState with DiagnosticableTreeMixin implements _RegisterState {
             const DeepCollectionEquality().equals(other.emailText, emailText) &&
             const DeepCollectionEquality()
                 .equals(other.passwordText, passwordText) &&
-            const DeepCollectionEquality()
-                .equals(other.inputErrors, inputErrors));
+            const DeepCollectionEquality().equals(other.errors, errors));
   }
 
   @override
@@ -1344,7 +942,7 @@ class _$_RegisterState with DiagnosticableTreeMixin implements _RegisterState {
       const DeepCollectionEquality().hash(nameText),
       const DeepCollectionEquality().hash(emailText),
       const DeepCollectionEquality().hash(passwordText),
-      const DeepCollectionEquality().hash(inputErrors));
+      const DeepCollectionEquality().hash(errors));
 
   @JsonKey(ignore: true)
   @override
@@ -1354,10 +952,10 @@ class _$_RegisterState with DiagnosticableTreeMixin implements _RegisterState {
 
 abstract class _RegisterState implements RegisterState {
   const factory _RegisterState(
-      [String nameText,
+      {String nameText,
       String emailText,
       String passwordText,
-      Map<String, String?> inputErrors]) = _$_RegisterState;
+      Map<String, String?> errors}) = _$_RegisterState;
 
   @override
   String get nameText;
@@ -1366,7 +964,7 @@ abstract class _RegisterState implements RegisterState {
   @override
   String get passwordText;
   @override
-  Map<String, String?> get inputErrors;
+  Map<String, String?> get errors;
   @override
   @JsonKey(ignore: true)
   _$RegisterStateCopyWith<_RegisterState> get copyWith =>

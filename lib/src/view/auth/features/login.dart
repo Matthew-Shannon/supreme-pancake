@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:redux/redux.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -40,11 +41,11 @@ class LoginView extends StatelessWidget with GetItMixin {
 
   static Widget fieldsView(LoginVM vm) => [
         const Text(Const.emailLabel) //
-            .inputDecor(vm.state.inputErrors[Const.emailLabel])
+            .inputDecor(vm.state.errors[Const.emailLabel])
             .textField(vm.onEmailChanged)
             .padding(24.h.onlyBottom()),
         const Text(Const.passwordLabel) //
-            .inputDecor(vm.state.inputErrors[Const.passwordLabel])
+            .inputDecor(vm.state.errors[Const.passwordLabel])
             .textField(vm.onPasswordChanged)
             .padding(12.h.onlyBottom()),
       ].column();
@@ -79,10 +80,10 @@ class LoginMiddleware {
         var cached = await userRepo.doGet(state.emailText);
 
         var emailError = validateEmail(state.emailText, cached.email);
-        store.dispatch(LoginAction.emailErrorChanged(emailError));
+        store.dispatch(LoginAction.errorsChanged(Const.emailLabel, emailError));
 
         var passwordError = validatePassword(state.passwordText, cached.password);
-        store.dispatch(LoginAction.passwordErrorChanged(passwordError));
+        store.dispatch(LoginAction.errorsChanged(Const.passwordLabel, passwordError));
 
         if (emailError != null || passwordError != null) return;
 
@@ -99,7 +100,12 @@ class LoginVM {
   final Consumer<String> onPasswordChanged;
   final Runnable onLoginSubmit;
 
-  LoginVM({required this.state, required this.onEmailChanged, required this.onPasswordChanged, required this.onLoginSubmit});
+  LoginVM({
+    required this.state,
+    required this.onEmailChanged,
+    required this.onPasswordChanged,
+    required this.onLoginSubmit,
+  });
 
   factory LoginVM.fromStore(MyDexStore store, LoginMiddleware middleware) => LoginVM(
         state: store.state.authState.loginState,
@@ -110,29 +116,25 @@ class LoginVM {
 }
 
 class LoginReducer {
-  static LoginState reduce(LoginState prev, action) => action is LoginAction
-      ? action.when(
-          emailTextChanged: (_) => prev.copyWith(emailText: _),
-          emailErrorChanged: (_) => prev.copyWith(inputErrors: prev.inputErrors.copyWith(Const.emailLabel, _)),
-          passwordTextChanged: (_) => prev.copyWith(passwordText: _),
-          passwordErrorChanged: (_) => prev.copyWith(inputErrors: prev.inputErrors.copyWith(Const.passwordLabel, _)),
-        )
-      : prev;
+  static Reducer<LoginState> reduce = combineReducers<LoginState>([
+    TypedReducer<LoginState, EmailTextChanged>((s, _) => s.copyWith(emailText: _.email)),
+    TypedReducer<LoginState, PasswordTextChanged>((s, _) => s.copyWith(passwordText: _.password)),
+    TypedReducer<LoginState, ErrorsChanged>((s, _) => s.copyWith(errors: s.errors.copyWith(_.key, _.error))),
+  ]);
 }
 
 @freezed
-class LoginAction with _$LoginAction {
+class LoginAction with _$LoginAction implements AuthActions {
   const factory LoginAction.emailTextChanged(String email) = EmailTextChanged;
-  const factory LoginAction.emailErrorChanged(String? emailError) = EmailErrorChanged;
   const factory LoginAction.passwordTextChanged(String password) = PasswordTextChanged;
-  const factory LoginAction.passwordErrorChanged(String? passwordError) = PasswordErrorChanged;
+  const factory LoginAction.errorsChanged(String key, String? error) = ErrorsChanged;
 }
 
 @freezed
 class LoginState with _$LoginState {
-  const factory LoginState([
+  const factory LoginState({
     @Default('') String emailText,
     @Default('') String passwordText,
-    @Default({}) Map<String, String?> inputErrors,
-  ]) = _LoginState;
+    @Default({}) Map<String, String?> errors,
+  }) = _LoginState;
 }

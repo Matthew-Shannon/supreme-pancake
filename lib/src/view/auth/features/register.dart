@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:redux/redux.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -12,6 +13,7 @@ import '../../../core/view.dart';
 import '../../../model/state.dart';
 import '../../../model/user.dart';
 import '../../../service/nav.dart';
+import '../auth.dart';
 
 part 'register.freezed.dart';
 
@@ -38,15 +40,15 @@ class RegisterView extends StatelessWidget with GetItMixin {
 
   static Widget fieldsView(RegisterVM vm) => Column(children: [
         const Text(Const.nameLabel) //
-            .inputDecor(vm.state.inputErrors[Const.nameLabel])
+            .inputDecor(vm.state.errors[Const.nameLabel])
             .textField(vm.onNameChanged)
             .padding(24.h.onlyBottom()),
         const Text(Const.emailLabel) //
-            .inputDecor(vm.state.inputErrors[Const.emailLabel])
+            .inputDecor(vm.state.errors[Const.emailLabel])
             .textField(vm.onEmailChanged)
             .padding(24.h.onlyBottom()),
         const Text(Const.passwordLabel) //
-            .inputDecor(vm.state.inputErrors[Const.passwordLabel])
+            .inputDecor(vm.state.errors[Const.passwordLabel])
             .textField(vm.onPasswordChanged)
             .padding(12.h.onlyBottom()),
       ]);
@@ -84,13 +86,13 @@ class RegisterMiddleware {
         var cached = await userRepo.doGet(state.emailText);
 
         var nameError = validateName(state.nameText);
-        store.dispatch(RegisterAction.nameErrorChanged(nameError));
+        store.dispatch(RegisterAction.errorsChanged(Const.nameLabel, nameError));
 
         var emailError = validateEmail(state.emailText, cached.email);
-        store.dispatch(RegisterAction.emailErrorChanged(emailError));
+        store.dispatch(RegisterAction.errorsChanged(Const.emailLabel, emailError));
 
         var passwordError = validatePassword(state.passwordText);
-        store.dispatch(RegisterAction.passwordErrorChanged(passwordError));
+        store.dispatch(RegisterAction.errorsChanged(Const.passwordLabel, passwordError));
 
         if (nameError != null || emailError != null || passwordError != null) return;
         await userRepo.doInsert([User(id: 1, name: state.nameText, email: state.emailText, password: state.passwordText)]);
@@ -122,34 +124,28 @@ class RegisterVM {
 }
 
 class RegisterReducer {
-  static RegisterState reduce(RegisterState prev, action) => action is RegisterAction
-      ? action.when(
-          nameTextChanged: (_) => prev.copyWith(nameText: _),
-          nameErrorChanged: (_) => prev.copyWith(inputErrors: prev.inputErrors.copyWith(Const.nameLabel, _)),
-          emailTextChanged: (_) => prev.copyWith(emailText: _),
-          emailErrorChanged: (_) => prev.copyWith(inputErrors: prev.inputErrors.copyWith(Const.emailLabel, _)),
-          passwordTextChanged: (_) => prev.copyWith(passwordText: _),
-          passwordErrorChanged: (_) => prev.copyWith(inputErrors: prev.inputErrors.copyWith(Const.passwordLabel, _)),
-        )
-      : prev;
+  static Reducer<RegisterState> reduce = combineReducers<RegisterState>([
+    TypedReducer<RegisterState, NameTextChanged>((s, _) => s.copyWith(nameText: _.name)),
+    TypedReducer<RegisterState, EmailTextChanged>((s, _) => s.copyWith(emailText: _.email)),
+    TypedReducer<RegisterState, PasswordTextChanged>((s, _) => s.copyWith(passwordText: _.password)),
+    TypedReducer<RegisterState, ErrorsChanged>((s, _) => s.copyWith(errors: s.errors.copyWith(_.key, _.error))),
+  ]);
 }
 
 @freezed
-class RegisterAction with _$RegisterAction {
+class RegisterAction with _$RegisterAction implements AuthActions {
   const factory RegisterAction.nameTextChanged(String name) = NameTextChanged;
-  const factory RegisterAction.nameErrorChanged(String? nameError) = NameErrorChanged;
   const factory RegisterAction.emailTextChanged(String email) = EmailTextChanged;
-  const factory RegisterAction.emailErrorChanged(String? emailError) = EmailErrorChanged;
   const factory RegisterAction.passwordTextChanged(String password) = PasswordTextChanged;
-  const factory RegisterAction.passwordErrorChanged(String? passwordError) = PasswordErrorChanged;
+  const factory RegisterAction.errorsChanged(String key, String? error) = ErrorsChanged;
 }
 
 @freezed
 class RegisterState with _$RegisterState {
-  const factory RegisterState([
+  const factory RegisterState({
     @Default('') String nameText,
     @Default('') String emailText,
     @Default('') String passwordText,
-    @Default({}) Map<String, String?> inputErrors,
-  ]) = _RegisterState;
+    @Default({}) Map<String, String?> errors,
+  }) = _RegisterState;
 }

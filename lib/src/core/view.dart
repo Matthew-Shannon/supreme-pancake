@@ -66,8 +66,8 @@ extension WidgetEx on Widget {
   Widget onTap(Runnable onTap) => //
       GestureDetector(onTap: onTap, child: this);
 
-  Widget outlinedButton(Runnable onClick) => //
-      OutlinedButton(onPressed: onClick, child: this);
+  Widget outlinedButton(String id, Runnable onClick) => //
+      OutlinedButton(key: Key(id), onPressed: onClick, child: this);
 
   Widget textButton(Runnable onClick) => //
       TextButton(onPressed: onClick, child: this);

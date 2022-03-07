@@ -78,7 +78,7 @@ class ReduxModule {
 class MiddlewareModule {
   static DI setup(DI di) => di
     ..registerLazySingleton<HomeMiddleware>(() => HomeMiddleware(di.get()))
-    ..registerLazySingleton<SettingsMiddleware>(() => SettingsMiddleware(di.get()))
+    ..registerLazySingleton<SettingsMiddleware>(() => SettingsMiddleware(di.get(), di.get()))
     ..registerLazySingleton<LoginMiddleware>(() => LoginMiddleware(di.get(), di.get()))
     ..registerLazySingleton<SearchMiddleware>(() => SearchMiddleware(di.get(), di.get()))
     ..registerLazySingleton<RegisterMiddleware>(() => RegisterMiddleware(di.get()));

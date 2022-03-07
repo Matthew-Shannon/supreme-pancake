@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:redux/redux.dart';
 
 import '../../../core/const.dart';
 import '../../../core/extensions.dart';
@@ -155,22 +156,20 @@ class SearchMiddleware {
 }
 
 class SearchReducer {
-  static SearchState reduce(SearchState prev, dynamic action) => !(action is SearchAction)
-      ? prev
-      : action.when(
-          isSearching: (_) => prev.copyWith(isSearching: _),
-          pairsChanged: (_) => prev.copyWith(pairs: _),
-          pokemonSelected: (_) => prev.copyWith(pokemon: _),
-        );
+  static Reducer<SearchState> reduce = combineReducers<SearchState>([
+    TypedReducer<SearchState, IsSearching>((s, _) => s.copyWith(isSearching: _.status)),
+    TypedReducer<SearchState, PairsChanged>((s, _) => s.copyWith(pairs: _.pairs)),
+    TypedReducer<SearchState, PokemonSelected>((s, _) => s.copyWith(pokemon: _.pokemons)),
+  ]);
 }
 
 @freezed
 class SearchState with _$SearchState {
-  const factory SearchState([
+  const factory SearchState({
     @Default([]) List<Pair> pairs,
     @Default(Pokemon()) Pokemon pokemon,
     @Default(false) bool isSearching,
-  ]) = _SearchState;
+  }) = _SearchState;
 }
 
 @freezed

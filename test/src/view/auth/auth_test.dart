@@ -11,37 +11,27 @@ import '../../core/mock.dart';
 import '../../core/util.dart';
 
 void main() {
-  middlewareTests();
-  viewTests();
-}
+  group('Auth', () {
+    late AuthMiddleware middleware;
+    late MyDexStore store;
+    late INav nav;
 
-void middlewareTests() {
-  group('AuthMiddleware', () {
-    //setUp(() {});
-  });
-}
+    group('view', () {
+      setUp(() {
+        middleware = AuthMiddleware();
+        store = setupStore([MyDexReducer.authSelector]);
 
-void viewTests() {
-  late MockNav nav;
-  late MyDexStore store;
-  late AuthMiddleware middleware;
+        nav = MockNav();
+        when(() => nav.getBy(any())).thenReturn(const Text('Foo'));
+      });
 
-  group('AuthView', () {
-    setUp(() {
-      nav = MockNav();
-      middleware = AuthMiddleware();
-      store = setupStore((_, c) => _.copyWith(authState: AuthReducer.reduce(_.authState, c)));
-      DI.instance
-        ..registerLazySingleton<AuthMiddleware>(() => middleware)
-        ..registerLazySingleton<INav>(() => nav);
-    });
-
-    tearDown(() async => DI.instance.reset());
-
-    testWidgets('build', (tester) async {
-      when(() => nav.getBy(any())).thenReturn(const Text('Foo'));
-      await tester.pumpWidget(testApp(AuthView.new).storeProvider(store));
-      expect(find.text('Foo'), findsOneWidget);
+      testWidgets('build', (tester) async {
+        DI.instance.registerLazySingleton<AuthMiddleware>(() => middleware);
+        DI.instance.registerLazySingleton<INav>(() => nav);
+        await tester.pumpWidget(testApp(AuthView.new).storeProvider(store));
+        expect(find.text('Foo'), findsOneWidget);
+        await DI.instance.reset();
+      });
     });
   });
 }

@@ -22,9 +22,32 @@ class MyDexState with _$MyDexState {
 }
 
 class MyDexReducer {
-  static MyDexState reduce(MyDexState state, action) => MyDexState(
-      authState: AuthReducer.reduce(state.authState, action),
-      homeState: HomeReducer.reduce(state.homeState, action),
-      searchState: SearchReducer.reduce(state.searchState, action),
-      settingsState: SettingsReducer.reduce(state.settingsState, action));
+  static Reducer<MyDexState> reduce = combineReducers<MyDexState>([
+    clearSelector,
+    authSelector,
+    homeSelector,
+    searchSelector,
+    settingsSelector,
+  ]);
+
+  static var clearSelector = TypedReducer<MyDexState, ClearAction>((state, action) => //
+      const MyDexState());
+
+  static var authSelector = TypedReducer<MyDexState, AuthActions>((state, action) => //
+      state.copyWith(authState: AuthReducer.reduce(state.authState, action)));
+
+  static var homeSelector = TypedReducer<MyDexState, HomeAction>((state, action) => //
+      state.copyWith(homeState: HomeReducer.reduce(state.homeState, action)));
+
+  static var searchSelector = TypedReducer<MyDexState, SearchAction>((state, action) => //
+      state.copyWith(searchState: SearchReducer.reduce(state.searchState, action)));
+
+  static var settingsSelector = TypedReducer<MyDexState, SettingsAction>((state, action) => //
+      state.copyWith(settingsState: SettingsReducer.reduce(state.settingsState, action)));
+}
+
+class ClearAction {}
+
+extension StoreExt on Store<MyDexState> {
+  void dispatchAll(List<dynamic> actions) => actions.forEach(this.dispatch);
 }

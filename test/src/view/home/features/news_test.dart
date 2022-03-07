@@ -18,15 +18,14 @@ void viewTests() {
     late MyDexStore store;
 
     setUp(() {
-      store = setupStore((_, c) => _);
+      store = setupStore([(_, c) => _]);
     });
 
     //tearDown(() async => DI.instance.reset());
 
     testWidgets('build', (tester) async {
       await tester.pumpWidget(testApp(NewsView.new).storeProvider(store));
-      expect(find.text(Const.newsTitle), findsOneWidget);
-      expect(find.text(Const.appName), findsOneWidget);
+      expectAllExist([Const.newsTitle, Const.appName]);
     });
   });
 }

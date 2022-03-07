@@ -4,13 +4,9 @@ import 'package:mydex/src/service/prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  tests();
-}
-
-void tests() {
-  late Prefs prefs;
-
   group('Prefs', () {
+    late Prefs prefs;
+
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       var shared = await SharedPreferences.getInstance();

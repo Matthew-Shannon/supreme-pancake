@@ -7,134 +7,104 @@ import 'package:mydex/src/core/di.dart';
 import 'package:mydex/src/core/view.dart';
 import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/service/nav.dart';
+import 'package:mydex/src/service/prefs.dart';
 import 'package:mydex/src/view/auth/features/login.dart';
 
 import '../../../core/mock.dart';
 import '../../../core/util.dart';
 
 void main() {
-  middlewareTests();
-  viewTests();
-}
+  group('login', () {
+    late LoginMiddleware middleware;
+    late MyDexStore store;
+    late IPrefs prefs;
+    late LoginVM vm;
 
-void middlewareTests() {
-  late LoginMiddleware middleware;
-  late MockUserRepo userRepo;
-  late MyDexStore store;
-  late MockPrefs prefs;
-
-  group('LoginMiddleware', () {
     setUp(() {
       prefs = MockPrefs();
-      userRepo = MockUserRepo();
-      middleware = LoginMiddleware(prefs, userRepo);
-      store = setupStore(
-        (_, c) => _.copyWith(
-            authState: _.authState.copyWith(
-          loginState: LoginReducer.reduce(_.authState.loginState, c),
-        )),
-      );
-    });
-
-    test('validateEmail', () {
-      expect(middleware.validateEmail('', ''), Const.emailBlankTxt);
-      expect(middleware.validateEmail('a', ''), Const.emailInvalidTxt);
-      expect(middleware.validateEmail('a@', ''), Const.emailNotFound);
-      expect(middleware.validateEmail('a@', 'a@'), null);
-    });
-
-    test('validatePassword', () {
-      expect(middleware.validatePassword('', ''), Const.passwordBlankTxt);
-      expect(middleware.validatePassword('a', 'b'), Const.passwordIncorrect);
-      expect(middleware.validatePassword('a', 'a'), null);
-    });
-
-    test('onSubmitFailPath', () async {
       when(() => prefs.setAuth(any())).thenCall();
       when(() => prefs.setId(any())).thenCall();
-      when(() => userRepo.doGet(any())).thenReply(mockUser);
-      await middleware.onLoginSubmit()(store);
-      verifyNever(() => prefs.setAuth(any()));
-      verifyNever(() => prefs.setId(any()));
-    });
 
-    test('onSubmitHappyPath', () async {
-      when(() => prefs.setAuth(any())).thenCall();
-      when(() => prefs.setId(any())).thenCall();
-      when(() => userRepo.doGet(any())).thenReply(mockUser);
-
-      store.dispatch(const LoginAction.emailTextChanged('b@'));
-      store.dispatch(const LoginAction.emailErrorChanged(null));
-      store.dispatch(const LoginAction.passwordTextChanged('c'));
-      store.dispatch(const LoginAction.passwordErrorChanged(null));
-      await middleware.onLoginSubmit()(store);
-      verify(() => prefs.setAuth(any())).called(1);
-      verify(() => prefs.setId(any())).called(1);
-    });
-  });
-}
-
-void viewTests() {
-  late MyDexStore store;
-  late MockNav nav;
-  late LoginVM vm;
-
-  group('LoginView', () {
-    setUp(() {
-      registerFallbackValue(FakeContext());
-      var prefs = MockPrefs();
       var userRepo = MockUserRepo();
-      var middleware = LoginMiddleware(prefs, userRepo);
-      store = setupStore(
-        (_, c) => _.copyWith(
-            authState: _.authState.copyWith(
-          loginState: LoginReducer.reduce(_.authState.loginState, c),
-        )),
-      );
+      when(() => userRepo.doGet(any())).thenReply(mockUser);
+
+      middleware = LoginMiddleware(prefs, userRepo);
+      store = setupStore([MyDexReducer.authSelector]);
       vm = LoginVM.fromStore(store, middleware);
-      nav = MockNav();
-
-      DI.instance
-        ..registerLazySingleton<LoginMiddleware>(() => middleware)
-        ..registerLazySingleton<INav>(() => nav);
     });
 
-    tearDown(() async => DI.instance.reset());
+    group('middleware', () {
+      test('validateEmail', () {
+        expect(middleware.validateEmail('', ''), Const.emailBlankTxt);
+        expect(middleware.validateEmail('a', ''), Const.emailInvalidTxt);
+        expect(middleware.validateEmail('a@', ''), Const.emailNotFound);
+        expect(middleware.validateEmail('a@', 'a@'), null);
+      });
 
-    testWidgets('registerBtn', (tester) async {
-      var registerClicked = false;
-      await tester.pumpWidget(testApp(() => LoginView.buttonsView(vm, () => registerClicked = true)));
-      expect(find.text(Const.registerBtn), findsOneWidget);
-      await tester.tap(find.text(Const.registerBtn));
-      await tester.pump();
-      expect(registerClicked, isTrue);
+      test('validatePassword', () {
+        expect(middleware.validatePassword('', ''), Const.passwordBlankTxt);
+        expect(middleware.validatePassword('a', 'b'), Const.passwordIncorrect);
+        expect(middleware.validatePassword('a', 'a'), null);
+      });
+
+      test('onSubmitFailPath', () async {
+        await middleware.onLoginSubmit()(store);
+        verifyNever(() => prefs.setAuth(any()));
+        verifyNever(() => prefs.setId(any()));
+      });
+
+      test('onSubmitHappyPath', () async {
+        store.dispatchAll(const [
+          LoginAction.emailTextChanged('b@'),
+          LoginAction.passwordTextChanged('c'),
+          LoginAction.errorsChanged('email', null),
+          LoginAction.errorsChanged('password', null),
+        ]);
+        await middleware.onLoginSubmit()(store);
+        verify(() => prefs.setAuth(any())).called(1);
+        verify(() => prefs.setId(any())).called(1);
+      });
     });
 
-    testWidgets('submitBtn', (tester) async {
-      await tester.pumpWidget(testApp(() => LoginView.buttonsView(vm, () {})));
-      expect(find.text(Const.submitBtn), findsOneWidget);
-      await tester.tap(find.text(Const.submitBtn));
-      await tester.pump();
-    });
+    group('view', () {
+      testWidgets('registerBtn', (tester) async {
+        var onBack = false;
+        await tester.pumpWidget(testApp(() => LoginView.buttonsView(vm, () => onBack = true)));
+        await tester.tap(find.text(Const.registerBtn));
+        expectAllExist([Const.registerBtn]);
+        expect(onBack, isTrue);
+      });
 
-    testWidgets('fields', (tester) async {
-      await tester.pumpWidget(testApp(() => LoginView.fieldsView(vm).material()));
-      expect(find.text(Const.emailLabel), findsOneWidget);
-      expect(find.text(Const.passwordLabel), findsOneWidget);
-    });
+      testWidgets('submitBtn', (tester) async {
+        var onBack = false;
+        await tester.pumpWidget(testApp(() => LoginView.buttonsView(vm, () => onBack = true)));
+        await tester.tap(find.text(Const.submitBtn));
+        expectAllExist([Const.submitBtn]);
+        expect(onBack, isFalse);
+      });
 
-    testWidgets('build', (tester) async {
-      when(() => nav.goTo(any(), any())).thenReturn(() => const Text(''));
-      await tester.pumpWidget(testApp(LoginView.new).storeProvider(store));
-      expectAllText([
-        Const.registerBtn,
-        Const.submitBtn,
-        Const.loginTitle,
-        Const.emailLabel,
-        Const.passwordLabel,
-      ]);
-      await tester.enterText(find.byType(TextField).at(0), 'b@');
-      await tester.enterText(find.byType(TextField).at(1), 'ac');
+      testWidgets('fields', (tester) async {
+        await tester.pumpWidget(testApp(() => LoginView.fieldsView(vm).material()));
+        await tester.enterText(find.byType(TextField).at(0), 'b@');
+        await tester.enterText(find.byType(TextField).at(1), 'c');
+
+        var state = store.state.authState.loginState;
+        expect(state.emailText, equals('b@'));
+        expect(state.passwordText, equals('c'));
+        expectAllExist([Const.emailLabel, Const.passwordLabel]);
+      });
+
+      testWidgets('build', (tester) async {
+        registerFallbackValue(FakeContext());
+        var nav = MockNav();
+        when(() => nav.goTo(any(), any())).thenReturn(() => const Text(''));
+        DI.instance.registerLazySingleton<LoginMiddleware>(() => middleware);
+        DI.instance.registerLazySingleton<INav>(() => nav);
+        await tester.pumpWidget(testApp(LoginView.new).storeProvider(store));
+        expectAllExist([Const.registerBtn, Const.submitBtn, Const.loginTitle, Const.emailLabel, Const.passwordLabel]);
+        await DI.instance.reset();
+      });
     });
   });
 }
+//

@@ -23,21 +23,16 @@ class _$LoginActionTearOff {
     );
   }
 
-  EmailErrorChanged emailErrorChanged(String? emailError) {
-    return EmailErrorChanged(
-      emailError,
-    );
-  }
-
   PasswordTextChanged passwordTextChanged(String password) {
     return PasswordTextChanged(
       password,
     );
   }
 
-  PasswordErrorChanged passwordErrorChanged(String? passwordError) {
-    return PasswordErrorChanged(
-      passwordError,
+  ErrorsChanged errorsChanged(String key, String? error) {
+    return ErrorsChanged(
+      key,
+      error,
     );
   }
 }
@@ -50,50 +45,44 @@ mixin _$LoginAction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -191,9 +180,8 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
     return emailTextChanged(email);
   }
@@ -202,9 +190,8 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
     return emailTextChanged?.call(email);
   }
@@ -213,9 +200,8 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
     if (emailTextChanged != null) {
@@ -228,9 +214,8 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
     return emailTextChanged(this);
   }
@@ -239,9 +224,8 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
     return emailTextChanged?.call(this);
   }
@@ -250,9 +234,8 @@ class _$EmailTextChanged
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
     if (emailTextChanged != null) {
@@ -268,163 +251,6 @@ abstract class EmailTextChanged implements LoginAction {
   String get email;
   @JsonKey(ignore: true)
   $EmailTextChangedCopyWith<EmailTextChanged> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $EmailErrorChangedCopyWith<$Res> {
-  factory $EmailErrorChangedCopyWith(
-          EmailErrorChanged value, $Res Function(EmailErrorChanged) then) =
-      _$EmailErrorChangedCopyWithImpl<$Res>;
-  $Res call({String? emailError});
-}
-
-/// @nodoc
-class _$EmailErrorChangedCopyWithImpl<$Res>
-    extends _$LoginActionCopyWithImpl<$Res>
-    implements $EmailErrorChangedCopyWith<$Res> {
-  _$EmailErrorChangedCopyWithImpl(
-      EmailErrorChanged _value, $Res Function(EmailErrorChanged) _then)
-      : super(_value, (v) => _then(v as EmailErrorChanged));
-
-  @override
-  EmailErrorChanged get _value => super._value as EmailErrorChanged;
-
-  @override
-  $Res call({
-    Object? emailError = freezed,
-  }) {
-    return _then(EmailErrorChanged(
-      emailError == freezed
-          ? _value.emailError
-          : emailError // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$EmailErrorChanged
-    with DiagnosticableTreeMixin
-    implements EmailErrorChanged {
-  const _$EmailErrorChanged(this.emailError);
-
-  @override
-  final String? emailError;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LoginAction.emailErrorChanged(emailError: $emailError)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'LoginAction.emailErrorChanged'))
-      ..add(DiagnosticsProperty('emailError', emailError));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is EmailErrorChanged &&
-            const DeepCollectionEquality()
-                .equals(other.emailError, emailError));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(emailError));
-
-  @JsonKey(ignore: true)
-  @override
-  $EmailErrorChangedCopyWith<EmailErrorChanged> get copyWith =>
-      _$EmailErrorChangedCopyWithImpl<EmailErrorChanged>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
-    required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
-  }) {
-    return emailErrorChanged(emailError);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
-    TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
-  }) {
-    return emailErrorChanged?.call(emailError);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
-    TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
-    required TResult orElse(),
-  }) {
-    if (emailErrorChanged != null) {
-      return emailErrorChanged(emailError);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
-    required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
-  }) {
-    return emailErrorChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
-    TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
-  }) {
-    return emailErrorChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
-    TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
-    required TResult orElse(),
-  }) {
-    if (emailErrorChanged != null) {
-      return emailErrorChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class EmailErrorChanged implements LoginAction {
-  const factory EmailErrorChanged(String? emailError) = _$EmailErrorChanged;
-
-  String? get emailError;
-  @JsonKey(ignore: true)
-  $EmailErrorChangedCopyWith<EmailErrorChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -504,9 +330,8 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
     return passwordTextChanged(password);
   }
@@ -515,9 +340,8 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
     return passwordTextChanged?.call(password);
   }
@@ -526,9 +350,8 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
     if (passwordTextChanged != null) {
@@ -541,9 +364,8 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
     return passwordTextChanged(this);
   }
@@ -552,9 +374,8 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
     return passwordTextChanged?.call(this);
   }
@@ -563,9 +384,8 @@ class _$PasswordTextChanged
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
     if (passwordTextChanged != null) {
@@ -585,32 +405,36 @@ abstract class PasswordTextChanged implements LoginAction {
 }
 
 /// @nodoc
-abstract class $PasswordErrorChangedCopyWith<$Res> {
-  factory $PasswordErrorChangedCopyWith(PasswordErrorChanged value,
-          $Res Function(PasswordErrorChanged) then) =
-      _$PasswordErrorChangedCopyWithImpl<$Res>;
-  $Res call({String? passwordError});
+abstract class $ErrorsChangedCopyWith<$Res> {
+  factory $ErrorsChangedCopyWith(
+          ErrorsChanged value, $Res Function(ErrorsChanged) then) =
+      _$ErrorsChangedCopyWithImpl<$Res>;
+  $Res call({String key, String? error});
 }
 
 /// @nodoc
-class _$PasswordErrorChangedCopyWithImpl<$Res>
-    extends _$LoginActionCopyWithImpl<$Res>
-    implements $PasswordErrorChangedCopyWith<$Res> {
-  _$PasswordErrorChangedCopyWithImpl(
-      PasswordErrorChanged _value, $Res Function(PasswordErrorChanged) _then)
-      : super(_value, (v) => _then(v as PasswordErrorChanged));
+class _$ErrorsChangedCopyWithImpl<$Res> extends _$LoginActionCopyWithImpl<$Res>
+    implements $ErrorsChangedCopyWith<$Res> {
+  _$ErrorsChangedCopyWithImpl(
+      ErrorsChanged _value, $Res Function(ErrorsChanged) _then)
+      : super(_value, (v) => _then(v as ErrorsChanged));
 
   @override
-  PasswordErrorChanged get _value => super._value as PasswordErrorChanged;
+  ErrorsChanged get _value => super._value as ErrorsChanged;
 
   @override
   $Res call({
-    Object? passwordError = freezed,
+    Object? key = freezed,
+    Object? error = freezed,
   }) {
-    return _then(PasswordErrorChanged(
-      passwordError == freezed
-          ? _value.passwordError
-          : passwordError // ignore: cast_nullable_to_non_nullable
+    return _then(ErrorsChanged(
+      key == freezed
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -618,79 +442,78 @@ class _$PasswordErrorChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PasswordErrorChanged
-    with DiagnosticableTreeMixin
-    implements PasswordErrorChanged {
-  const _$PasswordErrorChanged(this.passwordError);
+class _$ErrorsChanged with DiagnosticableTreeMixin implements ErrorsChanged {
+  const _$ErrorsChanged(this.key, this.error);
 
   @override
-  final String? passwordError;
+  final String key;
+  @override
+  final String? error;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LoginAction.passwordErrorChanged(passwordError: $passwordError)';
+    return 'LoginAction.errorsChanged(key: $key, error: $error)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'LoginAction.passwordErrorChanged'))
-      ..add(DiagnosticsProperty('passwordError', passwordError));
+      ..add(DiagnosticsProperty('type', 'LoginAction.errorsChanged'))
+      ..add(DiagnosticsProperty('key', key))
+      ..add(DiagnosticsProperty('error', error));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is PasswordErrorChanged &&
-            const DeepCollectionEquality()
-                .equals(other.passwordError, passwordError));
+            other is ErrorsChanged &&
+            const DeepCollectionEquality().equals(other.key, key) &&
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(passwordError));
+      runtimeType,
+      const DeepCollectionEquality().hash(key),
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
-  $PasswordErrorChangedCopyWith<PasswordErrorChanged> get copyWith =>
-      _$PasswordErrorChangedCopyWithImpl<PasswordErrorChanged>(
-          this, _$identity);
+  $ErrorsChangedCopyWith<ErrorsChanged> get copyWith =>
+      _$ErrorsChangedCopyWithImpl<ErrorsChanged>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email) emailTextChanged,
-    required TResult Function(String? emailError) emailErrorChanged,
     required TResult Function(String password) passwordTextChanged,
-    required TResult Function(String? passwordError) passwordErrorChanged,
+    required TResult Function(String key, String? error) errorsChanged,
   }) {
-    return passwordErrorChanged(passwordError);
+    return errorsChanged(key, error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
   }) {
-    return passwordErrorChanged?.call(passwordError);
+    return errorsChanged?.call(key, error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email)? emailTextChanged,
-    TResult Function(String? emailError)? emailErrorChanged,
     TResult Function(String password)? passwordTextChanged,
-    TResult Function(String? passwordError)? passwordErrorChanged,
+    TResult Function(String key, String? error)? errorsChanged,
     required TResult orElse(),
   }) {
-    if (passwordErrorChanged != null) {
-      return passwordErrorChanged(passwordError);
+    if (errorsChanged != null) {
+      return errorsChanged(key, error);
     }
     return orElse();
   }
@@ -699,47 +522,44 @@ class _$PasswordErrorChanged
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(EmailTextChanged value) emailTextChanged,
-    required TResult Function(EmailErrorChanged value) emailErrorChanged,
     required TResult Function(PasswordTextChanged value) passwordTextChanged,
-    required TResult Function(PasswordErrorChanged value) passwordErrorChanged,
+    required TResult Function(ErrorsChanged value) errorsChanged,
   }) {
-    return passwordErrorChanged(this);
+    return errorsChanged(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
   }) {
-    return passwordErrorChanged?.call(this);
+    return errorsChanged?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(EmailTextChanged value)? emailTextChanged,
-    TResult Function(EmailErrorChanged value)? emailErrorChanged,
     TResult Function(PasswordTextChanged value)? passwordTextChanged,
-    TResult Function(PasswordErrorChanged value)? passwordErrorChanged,
+    TResult Function(ErrorsChanged value)? errorsChanged,
     required TResult orElse(),
   }) {
-    if (passwordErrorChanged != null) {
-      return passwordErrorChanged(this);
+    if (errorsChanged != null) {
+      return errorsChanged(this);
     }
     return orElse();
   }
 }
 
-abstract class PasswordErrorChanged implements LoginAction {
-  const factory PasswordErrorChanged(String? passwordError) =
-      _$PasswordErrorChanged;
+abstract class ErrorsChanged implements LoginAction {
+  const factory ErrorsChanged(String key, String? error) = _$ErrorsChanged;
 
-  String? get passwordError;
+  String get key;
+  String? get error;
   @JsonKey(ignore: true)
-  $PasswordErrorChangedCopyWith<PasswordErrorChanged> get copyWith =>
+  $ErrorsChangedCopyWith<ErrorsChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -748,13 +568,13 @@ class _$LoginStateTearOff {
   const _$LoginStateTearOff();
 
   _LoginState call(
-      [String emailText = '',
+      {String emailText = '',
       String passwordText = '',
-      Map<String, String?> inputErrors = const {}]) {
+      Map<String, String?> errors = const {}}) {
     return _LoginState(
-      emailText,
-      passwordText,
-      inputErrors,
+      emailText: emailText,
+      passwordText: passwordText,
+      errors: errors,
     );
   }
 }
@@ -766,7 +586,7 @@ const $LoginState = _$LoginStateTearOff();
 mixin _$LoginState {
   String get emailText => throw _privateConstructorUsedError;
   String get passwordText => throw _privateConstructorUsedError;
-  Map<String, String?> get inputErrors => throw _privateConstructorUsedError;
+  Map<String, String?> get errors => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
@@ -779,9 +599,7 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res>;
   $Res call(
-      {String emailText,
-      String passwordText,
-      Map<String, String?> inputErrors});
+      {String emailText, String passwordText, Map<String, String?> errors});
 }
 
 /// @nodoc
@@ -796,7 +614,7 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
   $Res call({
     Object? emailText = freezed,
     Object? passwordText = freezed,
-    Object? inputErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_value.copyWith(
       emailText: emailText == freezed
@@ -807,9 +625,9 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
           ? _value.passwordText
           : passwordText // ignore: cast_nullable_to_non_nullable
               as String,
-      inputErrors: inputErrors == freezed
-          ? _value.inputErrors
-          : inputErrors // ignore: cast_nullable_to_non_nullable
+      errors: errors == freezed
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
               as Map<String, String?>,
     ));
   }
@@ -822,9 +640,7 @@ abstract class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
       __$LoginStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String emailText,
-      String passwordText,
-      Map<String, String?> inputErrors});
+      {String emailText, String passwordText, Map<String, String?> errors});
 }
 
 /// @nodoc
@@ -841,20 +657,20 @@ class __$LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
   $Res call({
     Object? emailText = freezed,
     Object? passwordText = freezed,
-    Object? inputErrors = freezed,
+    Object? errors = freezed,
   }) {
     return _then(_LoginState(
-      emailText == freezed
+      emailText: emailText == freezed
           ? _value.emailText
           : emailText // ignore: cast_nullable_to_non_nullable
               as String,
-      passwordText == freezed
+      passwordText: passwordText == freezed
           ? _value.passwordText
           : passwordText // ignore: cast_nullable_to_non_nullable
               as String,
-      inputErrors == freezed
-          ? _value.inputErrors
-          : inputErrors // ignore: cast_nullable_to_non_nullable
+      errors: errors == freezed
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
               as Map<String, String?>,
     ));
   }
@@ -864,9 +680,7 @@ class __$LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
 
 class _$_LoginState with DiagnosticableTreeMixin implements _LoginState {
   const _$_LoginState(
-      [this.emailText = '',
-      this.passwordText = '',
-      this.inputErrors = const {}]);
+      {this.emailText = '', this.passwordText = '', this.errors = const {}});
 
   @JsonKey()
   @override
@@ -876,11 +690,11 @@ class _$_LoginState with DiagnosticableTreeMixin implements _LoginState {
   final String passwordText;
   @JsonKey()
   @override
-  final Map<String, String?> inputErrors;
+  final Map<String, String?> errors;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LoginState(emailText: $emailText, passwordText: $passwordText, inputErrors: $inputErrors)';
+    return 'LoginState(emailText: $emailText, passwordText: $passwordText, errors: $errors)';
   }
 
   @override
@@ -890,7 +704,7 @@ class _$_LoginState with DiagnosticableTreeMixin implements _LoginState {
       ..add(DiagnosticsProperty('type', 'LoginState'))
       ..add(DiagnosticsProperty('emailText', emailText))
       ..add(DiagnosticsProperty('passwordText', passwordText))
-      ..add(DiagnosticsProperty('inputErrors', inputErrors));
+      ..add(DiagnosticsProperty('errors', errors));
   }
 
   @override
@@ -901,8 +715,7 @@ class _$_LoginState with DiagnosticableTreeMixin implements _LoginState {
             const DeepCollectionEquality().equals(other.emailText, emailText) &&
             const DeepCollectionEquality()
                 .equals(other.passwordText, passwordText) &&
-            const DeepCollectionEquality()
-                .equals(other.inputErrors, inputErrors));
+            const DeepCollectionEquality().equals(other.errors, errors));
   }
 
   @override
@@ -910,7 +723,7 @@ class _$_LoginState with DiagnosticableTreeMixin implements _LoginState {
       runtimeType,
       const DeepCollectionEquality().hash(emailText),
       const DeepCollectionEquality().hash(passwordText),
-      const DeepCollectionEquality().hash(inputErrors));
+      const DeepCollectionEquality().hash(errors));
 
   @JsonKey(ignore: true)
   @override
@@ -920,16 +733,16 @@ class _$_LoginState with DiagnosticableTreeMixin implements _LoginState {
 
 abstract class _LoginState implements LoginState {
   const factory _LoginState(
-      [String emailText,
+      {String emailText,
       String passwordText,
-      Map<String, String?> inputErrors]) = _$_LoginState;
+      Map<String, String?> errors}) = _$_LoginState;
 
   @override
   String get emailText;
   @override
   String get passwordText;
   @override
-  Map<String, String?> get inputErrors;
+  Map<String, String?> get errors;
   @override
   @JsonKey(ignore: true)
   _$LoginStateCopyWith<_LoginState> get copyWith =>

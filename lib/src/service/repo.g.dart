@@ -88,9 +88,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `User` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Pokemon` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `height` INTEGER NOT NULL, `weight` INTEGER NOT NULL, `order` INTEGER NOT NULL, `base_experience` INTEGER NOT NULL, `sprites` TEXT NOT NULL, PRIMARY KEY (`id`))');
-        await database.execute(
             'CREATE TABLE IF NOT EXISTS `Pair` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Pokemon` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `height` INTEGER NOT NULL, `weight` INTEGER NOT NULL, `order` INTEGER NOT NULL, `base_experience` INTEGER NOT NULL, `sprites` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },

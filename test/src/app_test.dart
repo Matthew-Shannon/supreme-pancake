@@ -15,59 +15,54 @@ import 'core/mock.dart';
 import 'core/util.dart';
 
 void main() {
-  viewTests();
-}
+  group('Auth', () {
+    late MockNav nav;
+    late IStyle skin;
+    late MyDexStore store;
 
-void viewTests() {
-  late MockNav nav;
-  late MockStyle skin;
-  late MyDexStore store;
+    group('view', () {
+      setUp(() {
+        nav = MockNav();
+        when(() => nav.getBy(any())).thenReturn(const Text(''));
 
-  group('AppView', () {
-    setUp(() {
-      nav = MockNav();
-      skin = MockStyle();
-      store = setupStore((_, c) => _.copyWith(
-            authState: AuthReducer.reduce(_.authState, c),
-            settingsState: SettingsReducer.reduce(_.settingsState, c),
-          ));
-      DI.instance
-        ..registerLazySingleton<MyDexStore>(() => store)
-        ..registerLazySingleton<IStyle>(() => skin)
-        ..registerLazySingleton<INav>(() => nav);
-    });
+        skin = MockStyle();
+        when(skin.lightTheme).thenReturn(ThemeData.fallback());
+        when(skin.darkTheme).thenReturn(ThemeData.fallback());
 
-    tearDown(() async => DI.instance.reset());
+        store = setupStore([MyDexReducer.authSelector, MyDexReducer.settingsSelector]);
 
-    testWidgets('auth', (tester) async {
-      when(() => nav.getBy(any())).thenReturn(const Text(''));
-      when(skin.lightTheme).thenReturn(ThemeData.fallback());
-      await tester.pumpWidget(testApp(AppView.new).storeProvider(store));
-      verify(() => nav.getBy(Const.authView)).called(1);
+        DI.instance.registerLazySingleton<MyDexStore>(() => store);
+        DI.instance.registerLazySingleton<IStyle>(() => skin);
+        DI.instance.registerLazySingleton<INav>(() => nav);
+      });
 
-      store.dispatch(const AuthAction.authChanged(false));
-      await tester.pump(Duration.zero);
-      verify(() => nav.getBy(Const.authView)).called(1);
+      tearDown(() async => DI.instance.reset());
 
-      store.dispatch(const AuthAction.authChanged(true));
-      await tester.pump(Duration.zero);
-      verify(() => nav.getBy(Const.homeView)).called(1);
-    });
+      testWidgets('auth', (tester) async {
+        await tester.pumpWidget(testApp(AppView.new).storeProvider(store));
+        verify(() => nav.getBy(Const.authView)).called(1);
 
-    testWidgets('style', (tester) async {
-      when(() => nav.getBy(any())).thenReturn(const Text(''));
-      when(skin.lightTheme).thenReturn(ThemeData.fallback());
-      when(skin.darkTheme).thenReturn(ThemeData.fallback());
-      await tester.pumpWidget(testApp(AppView.new).storeProvider(store));
-      verify(() => skin.lightTheme()).called(1);
+        store.dispatch(const AuthAction.authChanged(false));
+        await tester.pump(Duration.zero);
+        verify(() => nav.getBy(Const.authView)).called(1);
 
-      store.dispatch(const SettingsAction.themeChanged(false));
-      await tester.pump(Duration.zero);
-      verify(() => skin.lightTheme()).called(1);
+        store.dispatch(const AuthAction.authChanged(true));
+        await tester.pump(Duration.zero);
+        verify(() => nav.getBy(Const.homeView)).called(1);
+      });
 
-      store.dispatch(const SettingsAction.themeChanged(true));
-      await tester.pump(Duration.zero);
-      verify(() => skin.darkTheme()).called(1);
+      testWidgets('style', (tester) async {
+        await tester.pumpWidget(testApp(AppView.new).storeProvider(store));
+        verify(() => skin.lightTheme()).called(1);
+
+        store.dispatch(const SettingsAction.themeChanged(false));
+        await tester.pump(Duration.zero);
+        verify(() => skin.lightTheme()).called(1);
+
+        store.dispatch(const SettingsAction.themeChanged(true));
+        await tester.pump(Duration.zero);
+        verify(() => skin.darkTheme()).called(1);
+      });
     });
   });
 }

@@ -5,6 +5,8 @@ import 'package:mydex/src/core/di.dart';
 import 'package:mydex/src/core/view.dart';
 import 'package:mydex/src/model/state.dart';
 import 'package:mydex/src/model/user.dart';
+import 'package:mydex/src/service/prefs.dart';
+import 'package:mydex/src/service/repo.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 import 'package:mydex/src/view/home/features/settings.dart';
 
@@ -12,121 +14,102 @@ import '../../../core/mock.dart';
 import '../../../core/util.dart';
 
 void main() {
-  middlewareTests();
-  viewTests();
-}
+  group('Settings', () {
+    late SettingsMiddleware middleware;
+    late AppDatabase database;
+    late MyDexStore store;
+    late SettingsVM vm;
+    late IPrefs prefs;
 
-void middlewareTests() {
-  late SettingsMiddleware middleware;
-  late MyDexStore store;
-  late MockPrefs prefs;
-
-  group('SettingsMiddleware', () {
     setUp(() {
       prefs = MockPrefs();
-      middleware = SettingsMiddleware(prefs);
-      store = setupStore((_, c) => _.copyWith(
-            authState: AuthReducer.reduce(_.authState, c),
-            settingsState: SettingsReducer.reduce(_.settingsState, c),
-          ));
-    });
-
-    test('toggleTheme', () async {
       when(() => prefs.setTheme(any())).thenCall();
-      expect(store.state.settingsState.isDarkMode, false);
-
-      await middleware.toggleTheme(true)(store);
-      expect(store.state.settingsState.isDarkMode, true);
-
-      await middleware.toggleTheme(false)(store);
-      expect(store.state.settingsState.isDarkMode, false);
-    });
-
-    test('logout', () async {
       when(() => prefs.setAuth(any())).thenCall();
-      expect(store.state.authState.isAuthed, false);
+      when(() => prefs.clear()).thenCall();
 
-      store.dispatch(const AuthAction.authChanged(true));
-      expect(store.state.authState.isAuthed, true);
+      database = MockAppDatabase();
+      when(() => database.clear()).thenCall();
 
-      await middleware.logout()(store);
-      expect(store.state.authState.isAuthed, false);
-      verify(() => prefs.setAuth(any())).called(1);
-    });
-  });
-}
-
-void viewTests() {
-  late SettingsMiddleware middleware;
-  late MyDexStore store;
-  late MockPrefs prefs;
-
-  group('SettingsView', () {
-    setUp(() {
-      prefs = MockPrefs();
-      middleware = SettingsMiddleware(prefs);
-      store = setupStore((_, c) => _.copyWith(
-            authState: AuthReducer.reduce(_.authState, c),
-            settingsState: SettingsReducer.reduce(_.settingsState, c),
-          ));
-      DI.instance
-        ..registerLazySingleton<MyDexStore>(() => store)
-        ..registerLazySingleton<SettingsMiddleware>(() => middleware);
+      middleware = SettingsMiddleware(prefs, database);
+      store = setupStore([
+        MyDexReducer.clearSelector,
+        MyDexReducer.authSelector,
+        MyDexReducer.settingsSelector,
+      ]);
+      vm = SettingsVM.fromStore(store, middleware);
     });
 
-    tearDown(() async => DI.instance.reset());
+    group('middleware', () {
+      test('toggleTheme', () async {
+        expect(store.state.settingsState.isDarkMode, false);
+        await middleware.toggleTheme(true)(store);
+        expect(store.state.settingsState.isDarkMode, true);
+        await middleware.toggleTheme(false)(store);
+        expect(store.state.settingsState.isDarkMode, false);
+      });
 
-    testWidgets('buttons', (tester) async {
-      when(() => prefs.setAuth(any())).thenCall();
+      test('logout', () async {
+        expect(store.state.authState.isAuthed, false);
+        store.dispatch(const AuthAction.authChanged(true));
+        expect(store.state.authState.isAuthed, true);
+        await middleware.logout()(store);
+        expect(store.state.authState.isAuthed, false);
+        verify(() => prefs.setAuth(any())).called(1);
+      });
 
-      var vm = SettingsVM.fromStore(store, middleware);
-      await tester.pumpWidget(testApp(() => SettingsView.buttons(vm).column()));
-
-      store.dispatch(const AuthAction.authChanged(true));
-      expect(store.state.authState.isAuthed, true);
-
-      expect(find.text(Const.logoutBtn), findsOneWidget);
-      await tester.tap(find.text(Const.logoutBtn));
-      await tester.pump();
+      test('wipe', () async {
+        expect(store.state.authState.isAuthed, false);
+        expect(store.state.authState.owner == const User(), true);
+        store.dispatch(const AuthAction.authChanged(true));
+        store.dispatch(const AuthAction.ownerChanged(mockUser));
+        expect(store.state != const MyDexState(), equals(true));
+        await middleware.wipeData()(store);
+        expect(store.state == const MyDexState(), equals(true));
+      });
     });
 
-    testWidgets('toggles', (tester) async {
-      var vm = SettingsVM.fromStore(store, middleware);
-      await tester.pumpWidget(testApp(() => SettingsView.toggles(vm).column().material()));
-      expect(find.text(Const.darkModeBtn), findsOneWidget);
-      await tester.tap(find.text(Const.darkModeBtn));
-      await tester.pump();
-    });
+    group('view', () {
+      testWidgets('logoutBtn', (tester) async {
+        await tester.pumpWidget(testApp(() => SettingsView.buttons(vm).column()));
+        store.dispatch(const AuthAction.authChanged(true));
+        expect(store.state.authState.isAuthed, equals(true));
+        expectAllExist([
+          Const.logoutBtn,
+        ]);
+        await tester.tap(find.text(Const.logoutBtn));
+        expect(store.state.authState.isAuthed, equals(false));
+      });
 
-    testWidgets('userView', (tester) async {
-      var vm = const UserVM(mockUser);
-      await tester.pumpWidget(testApp(() => SettingsView.userView(vm).column().material()));
-      expect(find.text('Name: a'), findsOneWidget);
-      expect(find.text('Email: b@'), findsOneWidget);
-      expect(find.text('Password: c'), findsOneWidget);
-    });
+      testWidgets('wipeBtn', (tester) async {
+        store.dispatch(const AuthAction.authChanged(true));
+        store.dispatch(const AuthAction.ownerChanged(mockUser));
+        await tester.pumpWidget(testApp(() => SettingsView.buttons(vm).column()));
+        expect(store.state != const MyDexState(), equals(true));
+        expectAllExist([
+          Const.wipeBtn,
+        ]);
+        await tester.tap(find.text(Const.wipeBtn));
+        expect(store.state == const MyDexState(), equals(true));
+      });
 
-    testWidgets('body', (tester) async {
-      store.dispatch(const AuthAction.ownerChanged(mockUser));
-      var vm = SettingsVM.fromStore(store, middleware);
-      await tester.pumpWidget(testApp(() => SettingsView.body(vm).column().material()));
-      await tester.pump(Duration.zero);
-      expect(find.text('Name: a'), findsOneWidget);
-      expect(find.text('Email: b@'), findsOneWidget);
-      expect(find.text('Password: c'), findsOneWidget);
-      expect(find.text(Const.logoutBtn), findsOneWidget);
-      expect(find.text(Const.darkModeBtn), findsOneWidget);
-    });
+      testWidgets('toggles', (tester) async {
+        await tester.pumpWidget(testApp(() => SettingsView.toggles(vm).column().material()));
+        expectAllExist([Const.darkModeBtn]);
+        await tester.tap(find.text(Const.darkModeBtn));
+      });
 
-    testWidgets('build', (tester) async {
-      await tester.pumpWidget(testApp(SettingsView.new).storeProvider(store));
-      store.dispatch(const AuthAction.ownerChanged(mockUser));
-      await tester.pump(Duration.zero);
-      expect(find.text('Name: a'), findsOneWidget);
-      expect(find.text('Email: b@'), findsOneWidget);
-      expect(find.text('Password: c'), findsOneWidget);
-      expect(find.text(Const.logoutBtn), findsOneWidget);
-      expect(find.text(Const.darkModeBtn), findsOneWidget);
+      testWidgets('userView', (tester) async {
+        await tester.pumpWidget(testApp(() => SettingsView.userView(const UserVM(mockUser)).column().material()));
+        expectAllExist(['Name: a', 'Email: b@', 'Password: c']);
+      });
+
+      testWidgets('build', (tester) async {
+        DI.instance.registerLazySingleton<SettingsMiddleware>(() => middleware);
+        store.dispatch(const AuthAction.ownerChanged(mockUser));
+        await tester.pumpWidget(testApp(SettingsView.new).storeProvider(store));
+        expectAllExist(['Name: a', 'Email: b@', 'Password: c', Const.logoutBtn, Const.darkModeBtn, Const.wipeBtn]);
+        await DI.instance.reset();
+      });
     });
   });
 }

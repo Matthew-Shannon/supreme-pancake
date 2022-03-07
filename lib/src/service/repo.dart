@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
+import '../core/extensions.dart';
 import '../model/pokemon/pair.dart';
 import '../model/pokemon/pokemon.dart';
 import '../model/pokemon/sprite.dart';
@@ -13,11 +14,16 @@ part 'repo.g.dart';
 typedef JSON = Map<String, dynamic>;
 
 @TypeConverters([SpriteLocalConverter])
-@Database(version: 1, entities: [User, Pokemon, Pair])
+@Database(version: 1, entities: [User, Pair, Pokemon])
 abstract class AppDatabase extends FloorDatabase {
   PokemonLocal get pokemonLocal;
   PairLocal get pairLocal;
   UserLocal get userLocal;
+
+  Future<void> clear() => Future.value() //
+      .thenDo(() => database.delete('User'))
+      .thenDo(() => database.delete('Pair'))
+      .thenDo(() => database.delete('Pokemon'));
 }
 
 abstract class BaseRepo<T> {

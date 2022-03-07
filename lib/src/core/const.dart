@@ -20,6 +20,7 @@ class Const {
   static const String loginBtn = 'LOGIN';
   static const String registerBtn = 'REGISTER';
   static const String logoutBtn = 'LOGOUT';
+  static const String wipeBtn = 'WIPE';
   static const String darkModeBtn = 'Dark Mode';
   static const String osStyleBtn = 'OS Style';
 

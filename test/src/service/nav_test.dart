@@ -6,46 +6,41 @@ import 'package:mydex/src/service/nav.dart';
 import '../core/util.dart';
 
 void main() {
-  tests();
-}
-
-void tests() {
-  late INav nav;
-
   group('Nav', () {
+    late Nav nav;
+
     setUp(() => nav = Nav({'a': () => const Text('1')}));
 
     testWidgets('getBy', (tester) async {
       await tester.pumpWidget(nav.getBy('').app());
-      expectText('View Not Found');
+      expectAllExist([nav.msg]);
 
       await tester.pumpWidget(nav.getBy('a').app());
-      expectText('1');
+      expectAllExist(['1']);
     });
 
     testWidgets('goTo', (tester) async {
       await tester.pumpWidget(const Text('initial').container().app());
       final BuildContext context = tester.element(find.byType(Container));
-
-      expectText('initial');
+      expectAllExist(['initial']);
 
       nav.goTo(context, 'a')();
       await tester.pumpAndSettle();
-      expectText('1');
+      expectAllExist(['1']);
     });
 
     testWidgets('goBack', (tester) async {
       await tester.pumpWidget(const Text('initial').container().app());
       final BuildContext context = tester.element(find.byType(Container));
-      expectText('initial');
+      expectAllExist(['initial']);
 
       nav.goTo(context, 'a')();
       await tester.pumpAndSettle();
-      expectText('1');
+      expectAllExist(['1']);
 
       nav.goBack(context)();
       await tester.pumpAndSettle();
-      expectText('initial');
+      expectAllExist(['initial']);
     });
   });
 }

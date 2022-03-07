@@ -18,13 +18,13 @@ class _$SearchStateTearOff {
   const _$SearchStateTearOff();
 
   _SearchState call(
-      [List<Pair> pairs = const [],
+      {List<Pair> pairs = const [],
       Pokemon pokemon = const Pokemon(),
-      bool isSearching = false]) {
+      bool isSearching = false}) {
     return _SearchState(
-      pairs,
-      pokemon,
-      isSearching,
+      pairs: pairs,
+      pokemon: pokemon,
+      isSearching: isSearching,
     );
   }
 }
@@ -109,15 +109,15 @@ class __$SearchStateCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
     Object? isSearching = freezed,
   }) {
     return _then(_SearchState(
-      pairs == freezed
+      pairs: pairs == freezed
           ? _value.pairs
           : pairs // ignore: cast_nullable_to_non_nullable
               as List<Pair>,
-      pokemon == freezed
+      pokemon: pokemon == freezed
           ? _value.pokemon
           : pokemon // ignore: cast_nullable_to_non_nullable
               as Pokemon,
-      isSearching == freezed
+      isSearching: isSearching == freezed
           ? _value.isSearching
           : isSearching // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -129,9 +129,9 @@ class __$SearchStateCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
 
 class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
   const _$_SearchState(
-      [this.pairs = const [],
+      {this.pairs = const [],
       this.pokemon = const Pokemon(),
-      this.isSearching = false]);
+      this.isSearching = false});
 
   @JsonKey()
   @override
@@ -184,7 +184,7 @@ class _$_SearchState with DiagnosticableTreeMixin implements _SearchState {
 
 abstract class _SearchState implements SearchState {
   const factory _SearchState(
-      [List<Pair> pairs, Pokemon pokemon, bool isSearching]) = _$_SearchState;
+      {List<Pair> pairs, Pokemon pokemon, bool isSearching}) = _$_SearchState;
 
   @override
   List<Pair> get pairs;
