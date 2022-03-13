@@ -14,356 +14,195 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$HomeStateTearOff {
-  const _$HomeStateTearOff();
+class _$BottomItemTearOff {
+  const _$BottomItemTearOff();
 
-  _HomeState call([int pos = 0]) {
-    return _HomeState(
-      pos,
+  _BottomItem call(String title, String viewName, IconData normalIcon,
+      IconData selectedIcon) {
+    return _BottomItem(
+      title,
+      viewName,
+      normalIcon,
+      selectedIcon,
     );
   }
 }
 
 /// @nodoc
-const $HomeState = _$HomeStateTearOff();
+const $BottomItem = _$BottomItemTearOff();
 
 /// @nodoc
-mixin _$HomeState {
-  int get pos => throw _privateConstructorUsedError;
+mixin _$BottomItem {
+  String get title => throw _privateConstructorUsedError;
+  String get viewName => throw _privateConstructorUsedError;
+  IconData get normalIcon => throw _privateConstructorUsedError;
+  IconData get selectedIcon => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $HomeStateCopyWith<HomeState> get copyWith =>
+  $BottomItemCopyWith<BottomItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $HomeStateCopyWith<$Res> {
-  factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
-      _$HomeStateCopyWithImpl<$Res>;
-  $Res call({int pos});
+abstract class $BottomItemCopyWith<$Res> {
+  factory $BottomItemCopyWith(
+          BottomItem value, $Res Function(BottomItem) then) =
+      _$BottomItemCopyWithImpl<$Res>;
+  $Res call(
+      {String title,
+      String viewName,
+      IconData normalIcon,
+      IconData selectedIcon});
 }
 
 /// @nodoc
-class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
-  _$HomeStateCopyWithImpl(this._value, this._then);
+class _$BottomItemCopyWithImpl<$Res> implements $BottomItemCopyWith<$Res> {
+  _$BottomItemCopyWithImpl(this._value, this._then);
 
-  final HomeState _value;
+  final BottomItem _value;
   // ignore: unused_field
-  final $Res Function(HomeState) _then;
+  final $Res Function(BottomItem) _then;
 
   @override
   $Res call({
-    Object? pos = freezed,
+    Object? title = freezed,
+    Object? viewName = freezed,
+    Object? normalIcon = freezed,
+    Object? selectedIcon = freezed,
   }) {
     return _then(_value.copyWith(
-      pos: pos == freezed
-          ? _value.pos
-          : pos // ignore: cast_nullable_to_non_nullable
-              as int,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      viewName: viewName == freezed
+          ? _value.viewName
+          : viewName // ignore: cast_nullable_to_non_nullable
+              as String,
+      normalIcon: normalIcon == freezed
+          ? _value.normalIcon
+          : normalIcon // ignore: cast_nullable_to_non_nullable
+              as IconData,
+      selectedIcon: selectedIcon == freezed
+          ? _value.selectedIcon
+          : selectedIcon // ignore: cast_nullable_to_non_nullable
+              as IconData,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
-  factory _$HomeStateCopyWith(
-          _HomeState value, $Res Function(_HomeState) then) =
-      __$HomeStateCopyWithImpl<$Res>;
+abstract class _$BottomItemCopyWith<$Res> implements $BottomItemCopyWith<$Res> {
+  factory _$BottomItemCopyWith(
+          _BottomItem value, $Res Function(_BottomItem) then) =
+      __$BottomItemCopyWithImpl<$Res>;
   @override
-  $Res call({int pos});
+  $Res call(
+      {String title,
+      String viewName,
+      IconData normalIcon,
+      IconData selectedIcon});
 }
 
 /// @nodoc
-class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
-    implements _$HomeStateCopyWith<$Res> {
-  __$HomeStateCopyWithImpl(_HomeState _value, $Res Function(_HomeState) _then)
-      : super(_value, (v) => _then(v as _HomeState));
+class __$BottomItemCopyWithImpl<$Res> extends _$BottomItemCopyWithImpl<$Res>
+    implements _$BottomItemCopyWith<$Res> {
+  __$BottomItemCopyWithImpl(
+      _BottomItem _value, $Res Function(_BottomItem) _then)
+      : super(_value, (v) => _then(v as _BottomItem));
 
   @override
-  _HomeState get _value => super._value as _HomeState;
+  _BottomItem get _value => super._value as _BottomItem;
 
   @override
   $Res call({
-    Object? pos = freezed,
+    Object? title = freezed,
+    Object? viewName = freezed,
+    Object? normalIcon = freezed,
+    Object? selectedIcon = freezed,
   }) {
-    return _then(_HomeState(
-      pos == freezed
-          ? _value.pos
-          : pos // ignore: cast_nullable_to_non_nullable
-              as int,
+    return _then(_BottomItem(
+      title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      viewName == freezed
+          ? _value.viewName
+          : viewName // ignore: cast_nullable_to_non_nullable
+              as String,
+      normalIcon == freezed
+          ? _value.normalIcon
+          : normalIcon // ignore: cast_nullable_to_non_nullable
+              as IconData,
+      selectedIcon == freezed
+          ? _value.selectedIcon
+          : selectedIcon // ignore: cast_nullable_to_non_nullable
+              as IconData,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_HomeState with DiagnosticableTreeMixin implements _HomeState {
-  const _$_HomeState([this.pos = 0]);
-
-  @JsonKey()
-  @override
-  final int pos;
+class _$_BottomItem implements _BottomItem {
+  const _$_BottomItem(
+      this.title, this.viewName, this.normalIcon, this.selectedIcon);
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'HomeState(pos: $pos)';
-  }
+  final String title;
+  @override
+  final String viewName;
+  @override
+  final IconData normalIcon;
+  @override
+  final IconData selectedIcon;
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'HomeState'))
-      ..add(DiagnosticsProperty('pos', pos));
+  String toString() {
+    return 'BottomItem(title: $title, viewName: $viewName, normalIcon: $normalIcon, selectedIcon: $selectedIcon)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _HomeState &&
-            const DeepCollectionEquality().equals(other.pos, pos));
+            other is _BottomItem &&
+            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.viewName, viewName) &&
+            const DeepCollectionEquality()
+                .equals(other.normalIcon, normalIcon) &&
+            const DeepCollectionEquality()
+                .equals(other.selectedIcon, selectedIcon));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(pos));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(viewName),
+      const DeepCollectionEquality().hash(normalIcon),
+      const DeepCollectionEquality().hash(selectedIcon));
 
   @JsonKey(ignore: true)
   @override
-  _$HomeStateCopyWith<_HomeState> get copyWith =>
-      __$HomeStateCopyWithImpl<_HomeState>(this, _$identity);
+  _$BottomItemCopyWith<_BottomItem> get copyWith =>
+      __$BottomItemCopyWithImpl<_BottomItem>(this, _$identity);
 }
 
-abstract class _HomeState implements HomeState {
-  const factory _HomeState([int pos]) = _$_HomeState;
+abstract class _BottomItem implements BottomItem {
+  const factory _BottomItem(String title, String viewName, IconData normalIcon,
+      IconData selectedIcon) = _$_BottomItem;
 
   @override
-  int get pos;
+  String get title;
+  @override
+  String get viewName;
+  @override
+  IconData get normalIcon;
+  @override
+  IconData get selectedIcon;
   @override
   @JsonKey(ignore: true)
-  _$HomeStateCopyWith<_HomeState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-class _$HomeActionTearOff {
-  const _$HomeActionTearOff();
-
-  PosChanged posChanged(int pos) {
-    return PosChanged(
-      pos,
-    );
-  }
-}
-
-/// @nodoc
-const $HomeAction = _$HomeActionTearOff();
-
-/// @nodoc
-mixin _$HomeAction {
-  int get pos => throw _privateConstructorUsedError;
-
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int pos) posChanged,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int pos)? posChanged,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int pos)? posChanged,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(PosChanged value) posChanged,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(PosChanged value)? posChanged,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(PosChanged value)? posChanged,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $HomeActionCopyWith<HomeAction> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $HomeActionCopyWith<$Res> {
-  factory $HomeActionCopyWith(
-          HomeAction value, $Res Function(HomeAction) then) =
-      _$HomeActionCopyWithImpl<$Res>;
-  $Res call({int pos});
-}
-
-/// @nodoc
-class _$HomeActionCopyWithImpl<$Res> implements $HomeActionCopyWith<$Res> {
-  _$HomeActionCopyWithImpl(this._value, this._then);
-
-  final HomeAction _value;
-  // ignore: unused_field
-  final $Res Function(HomeAction) _then;
-
-  @override
-  $Res call({
-    Object? pos = freezed,
-  }) {
-    return _then(_value.copyWith(
-      pos: pos == freezed
-          ? _value.pos
-          : pos // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-abstract class $PosChangedCopyWith<$Res> implements $HomeActionCopyWith<$Res> {
-  factory $PosChangedCopyWith(
-          PosChanged value, $Res Function(PosChanged) then) =
-      _$PosChangedCopyWithImpl<$Res>;
-  @override
-  $Res call({int pos});
-}
-
-/// @nodoc
-class _$PosChangedCopyWithImpl<$Res> extends _$HomeActionCopyWithImpl<$Res>
-    implements $PosChangedCopyWith<$Res> {
-  _$PosChangedCopyWithImpl(PosChanged _value, $Res Function(PosChanged) _then)
-      : super(_value, (v) => _then(v as PosChanged));
-
-  @override
-  PosChanged get _value => super._value as PosChanged;
-
-  @override
-  $Res call({
-    Object? pos = freezed,
-  }) {
-    return _then(PosChanged(
-      pos == freezed
-          ? _value.pos
-          : pos // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$PosChanged with DiagnosticableTreeMixin implements PosChanged {
-  const _$PosChanged(this.pos);
-
-  @override
-  final int pos;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'HomeAction.posChanged(pos: $pos)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'HomeAction.posChanged'))
-      ..add(DiagnosticsProperty('pos', pos));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is PosChanged &&
-            const DeepCollectionEquality().equals(other.pos, pos));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(pos));
-
-  @JsonKey(ignore: true)
-  @override
-  $PosChangedCopyWith<PosChanged> get copyWith =>
-      _$PosChangedCopyWithImpl<PosChanged>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int pos) posChanged,
-  }) {
-    return posChanged(pos);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int pos)? posChanged,
-  }) {
-    return posChanged?.call(pos);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int pos)? posChanged,
-    required TResult orElse(),
-  }) {
-    if (posChanged != null) {
-      return posChanged(pos);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(PosChanged value) posChanged,
-  }) {
-    return posChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(PosChanged value)? posChanged,
-  }) {
-    return posChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(PosChanged value)? posChanged,
-    required TResult orElse(),
-  }) {
-    if (posChanged != null) {
-      return posChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class PosChanged implements HomeAction {
-  const factory PosChanged(int pos) = _$PosChanged;
-
-  @override
-  int get pos;
-  @override
-  @JsonKey(ignore: true)
-  $PosChangedCopyWith<PosChanged> get copyWith =>
+  _$BottomItemCopyWith<_BottomItem> get copyWith =>
       throw _privateConstructorUsedError;
 }

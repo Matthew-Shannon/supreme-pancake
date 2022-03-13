@@ -1,43 +1,31 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
-
 import '../../core/const.dart';
-import '../../core/types.dart';
-import '../../model/state.dart';
-import '../../service/nav.dart';
-import '../../service/prefs.dart';
-import '../../service/style.dart';
+import '../../core/view.dart';
+import '../../service/service.dart';
 
 part 'home.freezed.dart';
+part 'home.g.dart';
 
 class HomeView extends StatelessWidget with GetItMixin {
   HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final HomeMiddleware middleware = get();
+    final HomeStore store = get();
     final INav nav = get();
-    return StoreConnector<MyDexState, HomeState>(
-        converter: (_) => _.state.homeState,
-        builder: (ctx, _) => Scaffold(
-              body: nav.getBy(bottomItems()[_.pos].viewName),
-              bottomNavigationBar: bottomNav(bottomItems(), middleware, _.pos),
-            ));
+    return Observer(
+      builder: (_) => Scaffold(
+        body: nav.getBy(bottomItems()[store.pos.value].viewName),
+        bottomNavigationBar: bottomNav(bottomItems(), store),
+      ),
+    );
   }
 
-  static Widget bottomNav(List<BottomItem> items, HomeMiddleware middleware, int i) => //
-      StoreConnector<MyDexState, Consumer<int>>(
-          converter: (_) => (res) => _.dispatch(middleware.changePos(res)),
-          builder: (ctx, _) => BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                items: items.map(barItem).toList(),
-                currentIndex: i,
-                onTap: _,
-              ));
+  static Widget bottomNav(List<BottomItem> items, HomeStore store) => BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: items.map(barItem).toList(),
+        currentIndex: store.pos.value,
+        onTap: store.onPosChanged,
+      );
 
   static BottomNavigationBarItem barItem(BottomItem item) => BottomNavigationBarItem(
         label: item.title,
@@ -46,38 +34,37 @@ class HomeView extends StatelessWidget with GetItMixin {
       );
 
   static List<BottomItem> bottomItems() => const [
-        BottomItem(Const.newsTitle, Const.newsView, Icons.newspaper_outlined, Icons.feed),
-        BottomItem(Const.searchTitle, Const.searchView, Icons.search_outlined, Icons.search),
+        BottomItem(Const.newsTitle, Const.newsView, MdiIcons.viewStreamOutline, MdiIcons.viewStream),
+        BottomItem(Const.searchTitle, Const.searchView, MdiIcons.archiveSearchOutline, MdiIcons.archiveSearch),
         BottomItem(Const.favoritesTitle, Const.favoritesView, Icons.favorite_outline, Icons.favorite),
-        BottomItem(Const.settingsTitle, Const.settingsView, Icons.settings_outlined, Icons.settings),
+        BottomItem(Const.settingsTitle, Const.settingsView, MdiIcons.cogOutline, MdiIcons.cog),
       ];
 }
 
-class HomeMiddleware {
+@freezed
+class BottomItem with _$BottomItem {
+  const factory BottomItem(
+    String title,
+    String viewName,
+    IconData normalIcon,
+    IconData selectedIcon,
+  ) = _BottomItem;
+}
+
+class HomeStore = HomeBase with _$HomeStore;
+
+abstract class HomeBase with Store {
+  final Observable<int> pos = Observable(0);
   final IPrefs prefs;
 
-  HomeMiddleware(this.prefs);
+  HomeBase(this.prefs);
 
-  Func<MyDexStore, Future<void>> changePos(int i) => (store) async {
-        await prefs.setPos(i);
-        store.dispatch(HomeAction.posChanged(i));
-      };
-}
+  @action
+  void posChanged(int _) => pos.value = _;
 
-class HomeReducer {
-  static Reducer<HomeState> reduce = combineReducers<HomeState>([
-    TypedReducer<HomeState, PosChanged>((s, _) => s.copyWith(pos: _.pos)),
-  ]);
-}
-
-@freezed
-class HomeState with _$HomeState {
-  const factory HomeState([
-    @Default(0) int pos,
-  ]) = _HomeState;
-}
-
-@freezed
-class HomeAction with _$HomeAction {
-  const factory HomeAction.posChanged(int pos) = PosChanged;
+  @action
+  Future<void> onPosChanged(int _) async {
+    await prefs.setPos(_);
+    posChanged(_);
+  }
 }

@@ -108,7 +108,8 @@ unlinked_spec.ds
 # Coverage
 coverage/
 vizualize/
-
+*.freezed.dart
+*.g.dart
 # Symbols
 app.*.symbols
 

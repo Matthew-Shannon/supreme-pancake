@@ -1,180 +1,179 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
+import 'dart:developer';
 
 import '../../../core/const.dart';
-import '../../../core/extensions.dart';
-import '../../../core/types.dart';
 import '../../../core/view.dart';
-import '../../../model/pokemon/pair.dart';
-import '../../../model/pokemon/pokemon.dart';
-import '../../../model/state.dart';
+import '../../../model/model.dart';
+import '../../../service/service.dart';
 
-part 'search.freezed.dart';
+part 'search.g.dart';
 
 class SearchView extends StatelessWidget with GetItMixin {
   SearchView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final SearchMiddleware middleware = get();
-    return StoreConnector<MyDexState, SearchVM>(
-        converter: (_) => SearchVM.fromStore(_, middleware),
-        builder: (ctx, _) => Scaffold(
-              appBar: AppBar(
-                title: SearchView.title(_, Theme.of(context)),
-                actions: SearchView.actions(_),
-              ),
-              body: View.frame(SearchView.body(_)),
-            ));
+    final SearchStore store = get();
+    return Observer(
+      builder: (_) => Scaffold(
+        appBar: AppBar(
+          title: SearchView.title(store, Theme.of(_)),
+          actions: SearchView.actions(store),
+        ),
+        body: View.frame(SearchView.body(store)),
+      ),
+    );
   }
 
-  static List<Widget> body(SearchVM vm) => [
-        //vm.state.isLoading
-        //? [const CircularProgressIndicator().center()]
-        vm.pokemonVm.isNotEmpty()
-            ? pokemonCardView(vm.pokemonVm)
-            : vm.state.pairs.isNotEmpty
-                ? pairListView(vm)
-                : const Text(Const.searchTitle).center()
+  static List<Widget> body(SearchStore store) => [
+        store.pokemon.value.cata(
+            () => store.namedRes.value.isNotEmpty //
+                ? pairListView(store)
+                : const Text(Const.searchTip),
+            (_) => [
+                  pokemonCardView(_),
+                  abilityView(_.abilities),
+                ].column()),
       ];
 
-  static Widget title(SearchVM vm, ThemeData theme) => //
-      vm.pokemonVm.isNotEmpty()
-          ? SearchView.pokemonTitle(vm.pokemonVm)
-          : vm.state.isSearching
-              ? SearchView.searchEditText(vm, theme)
-              : const Text(Const.appName);
+  static Widget title(SearchStore store, ThemeData theme) => //
+      store.pokemon.value.fold(
+        () => store.isSearching.value ? SearchView.searchEditText(store, theme) : const Text(Const.appName),
+        SearchView.pokemonTitle,
+      );
 
-  static List<Widget> actions(SearchVM vm) => [
-        vm.state.isSearching || vm.pokemonVm.isNotEmpty() //
-            ? View.action('clear', Icons.clear, vm.isSearchingChanged(false))
-            : View.action('search', Icons.search, vm.isSearchingChanged(true))
+  static List<Widget> actions(SearchStore store) => [
+        store.pokemon.value.fold(
+          () => store.isSearching.value //
+              ? View.action('clear', Icons.clear, () => store.searchStatusChanged(false))
+              : View.action('search', Icons.search, () => store.searchStatusChanged(true)),
+          (_) => View.action('back', Icons.arrow_back, store.onBack),
+        ),
       ];
 
-  static Widget searchEditText(SearchVM vm, ThemeData theme) => TextField(
-      key: const Key('searchEditText'),
-      onChanged: vm.onSearchQueryChanged,
+  static Widget searchEditText(SearchStore store, ThemeData theme) => TextFormField(
       autofocus: true,
-      //style: theme.invert().textTheme.titleLarge,
+      showCursor: false,
+      key: const Key('searchEditText'),
+      onChanged: store.searchTextChanged,
+      style: const TextStyle(color: Colors.white),
+      initialValue: store.query.value.toNullable(),
       decoration: const InputDecoration(
-        border: OutlineInputBorder(borderSide: BorderSide.none),
-        prefixIcon: Icon(Icons.search), //, color: Colors.white),
-        //hintStyle: TextStyle(color: theme.invert().hintColor),
         hintText: 'Search...',
-        //fillColor: Colors.white,
-        //filled: true,
+        hintStyle: TextStyle(color: Colors.white),
+        prefixIcon: Icon(MdiIcons.magnify, color: Colors.white),
+        border: OutlineInputBorder(borderSide: BorderSide.none),
       ));
 
-  static Widget pairListView(SearchVM vm) => Column(
+  static Widget pairListView(SearchStore store) => Column(
         key: const Key('pairListView'),
-        children: vm.pairsVM.mapList((_) => //
-            ListTile(onTap: vm.onPairSelected(_.pair), title: Text(_.title()))),
+        children: store.namedRes.value //
+            .map(NamedApiResourceVM.new)
+            .map(
+              (_) => ListTile(
+                key: Key(_.res.name),
+                onTap: () => store.pairSelected(_.res.name),
+                title: Text(_.title),
+              ),
+            )
+            .toList(),
       );
 
   static Widget pokemonTitle(PokemonVM vm) => //
-      Text(vm.pokemon.name, key: const Key('pokemonTitle'));
+      Text(vm.name.split(':').last, key: const Key('pokemonTitle'));
+
+  static Widget spriteView(SpriteVM vm) => //
+      [...vm.normal(), ...vm.shiny()] //
+          .map(Image.network)
+          .toList()
+          .column()
+          .container(color: Colors.blue, width: 0.5.sw);
+
+  static Widget abilityView(List<AbilityVM> abilities) => Column(
+        key: const Key('abilityListView'),
+        children: abilities //
+            .map(
+              (_) => ListTile(
+                key: Key(_.name),
+                title: Text('${_.name} -${_.id} - ${_.category}'),
+                subtitle: Text(_.url),
+              ),
+            )
+            .toList(),
+      );
 
   static Widget pokemonCardView(PokemonVM vm) => [
-        View.card([
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            //Image.network(vm.sprites.frontSprite())
-            //vm.sprites.normal().mapList(Image.network)
-          ]),
-          //Row(children: vm.sprites.shiny().mapList(Image.network)),
-        ]),
-        View.card(
-          [
-            View.listView(
-              vm.fields().mapList((_) => //
-                  Text(_, textAlign: TextAlign.start)),
-            ),
-          ],
-        )
-      ].column().container(key: const Key('pokemonCardView'));
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: vm.fields().length,
+          itemBuilder: (_, i) => ListTile(
+            dense: true,
+            tileColor: Colors.purpleAccent,
+            title: Text(vm.fields()[i].split(':')[0]),
+            subtitle: Text(vm.fields()[i].split(':')[1]),
+          ),
+        ).container(width: 0.4.sw),
+        spriteView(vm.sprites)
+      ] //
+          .row(size: MainAxisSize.min)
+          .container(key: const Key('pokemonCardView'));
 }
 
-class SearchVM {
-  final SearchState state;
-  final PokemonVM pokemonVm;
-  final List<PairVM> pairsVM;
-  final Func<Pair, Runnable> onPairSelected;
-  final Func<bool, Runnable> isSearchingChanged;
-  final Consumer<String> onSearchQueryChanged;
+class SearchStore = SearchBase with _$SearchStore;
 
-  SearchVM({
-    required this.state,
-    required this.pairsVM,
-    required this.pokemonVm,
-    required this.onPairSelected,
-    required this.isSearchingChanged,
-    required this.onSearchQueryChanged,
-  });
-
-  factory SearchVM.fromStore(MyDexStore store, SearchMiddleware middleware) => SearchVM(
-      state: store.state.searchState,
-      pairsVM: store.state.searchState.pairs.mapList(PairVM.new),
-      pokemonVm: PokemonVM.def(store.state.searchState.pokemon),
-      onPairSelected: (_) => () => store.dispatch(middleware.pairSelected(_)),
-      isSearchingChanged: (_) => () => store.dispatch(middleware.searchStatusChanged(_)),
-      onSearchQueryChanged: (_) => store.dispatch(middleware.searchTextChanged(_)));
-}
-
-class SearchMiddleware {
+abstract class SearchBase with Store {
+  final Observable<List<NamedApiResource>> namedRes = Observable([])..observe((x) => log('namedRes: ${x.newValue}'));
+  final Observable<Option<PokemonVM>> pokemon = Observable(none())..observe((x) => log('onPokemonChange: ${x.newValue}'));
+  final Observable<Option<String>> query = Observable(none())..observe((x) => log('onQueryChange: ${x.newValue}'));
+  final Observable<bool> isSearching = Observable(false)..observe((x) => log('isSearching: ${x.newValue}'));
   final PokemonRepo pokemonRepo;
-  final PairRepo pairRepo;
+  final ResourceRepo pairRepo;
 
-  SearchMiddleware(this.pokemonRepo, this.pairRepo);
+  SearchBase(this.pokemonRepo, this.pairRepo);
 
-  Func<MyDexStore, Future<void>> searchTextChanged(String query) => (store) async {
-        if (query.isEmpty) return; //|| (query.length < 2 && int.tryParse(query) == null)) return;
+  @action
+  void namedResChanged([List<NamedApiResource> _ = const []]) => namedRes.value = _;
 
-        var pairs = await pairRepo //
-            .doGetAll()
-            .then((xs) => xs.where((_) => _.id == query || _.name.contains(query)).toList())
-            .then((xs) => xs.sorted((a, b) => a.name.length - b.name.length));
+  @action
+  void pokemonChanged([Option<PokemonVM> _ = const None()]) => pokemon.value = _;
 
-        store.dispatch(SearchAction.pairsChanged(pairs));
-      };
+  @action
+  void queryChanged([Option<String> _ = const None()]) => query.value = _;
 
-  Func<MyDexStore, Future<void>> pairSelected(Pair pair) => (store) async {
-        store.dispatch(const SearchAction.isSearching(false));
-        var res = await pokemonRepo.doGet(pair.name);
-        store.dispatch(SearchAction.pokemonSelected(res));
-      };
+  @action
+  void isSearchingChanged([bool _ = false]) => isSearching.value = _;
 
-  Func<MyDexStore, Future<void>> searchStatusChanged(bool res) => (store) async {
-        if (res == false) {
-          store.dispatch(const SearchAction.pairsChanged([]));
-          store.dispatch(const SearchAction.pokemonSelected(Pokemon()));
+  @action
+  Future<void> pairSelected(String res) async => //
+      Future.value(res) //
+          .then(pokemonRepo.doGet)
+          .then((_) => _.map(PokemonVM.def))
+          .then(pokemonChanged)
+          .then((_) => isSearchingChanged());
+
+  @action
+  Future<void> onBack() async => //
+      Future.value(true) //
+          .then(isSearchingChanged)
+          .then((_) => pokemonChanged());
+
+  @action
+  Future<void> searchStatusChanged(bool searching) async => //
+      Future.value(searching) //
+          .then(isSearchingChanged)
+          .then((_) {
+        if (searching == false) {
+          pokemonChanged();
+          queryChanged();
+          namedResChanged();
         }
-        store.dispatch(SearchAction.isSearching(res));
-      };
-}
+      });
 
-class SearchReducer {
-  static Reducer<SearchState> reduce = combineReducers<SearchState>([
-    TypedReducer<SearchState, IsSearching>((s, _) => s.copyWith(isSearching: _.status)),
-    TypedReducer<SearchState, PairsChanged>((s, _) => s.copyWith(pairs: _.pairs)),
-    TypedReducer<SearchState, PokemonSelected>((s, _) => s.copyWith(pokemon: _.pokemons)),
-  ]);
-}
-
-@freezed
-class SearchState with _$SearchState {
-  const factory SearchState({
-    @Default([]) List<Pair> pairs,
-    @Default(Pokemon()) Pokemon pokemon,
-    @Default(false) bool isSearching,
-  }) = _SearchState;
-}
-
-@freezed
-class SearchAction with _$SearchAction {
-  const factory SearchAction.isSearching(bool status) = IsSearching;
-  const factory SearchAction.pairsChanged(List<Pair> pairs) = PairsChanged;
-  const factory SearchAction.pokemonSelected(Pokemon pokemons) = PokemonSelected;
+  @action
+  Future<void> searchTextChanged(String query) async => //
+      Future.value(query) //
+          .then(pairRepo.doGetAll)
+          .then(namedResChanged)
+          .then((_) => query)
+          .then(some)
+          .then(queryChanged);
 }

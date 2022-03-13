@@ -1,6 +1,4 @@
 class Const {
-  static const String databaseName = 'lisa20.db';
-
   static const String loginTitle = 'Login';
   static const String registerTitle = 'Register';
 
@@ -8,7 +6,7 @@ class Const {
   static const String emailLabel = 'Email';
   static const String passwordLabel = 'Password';
 
-  static const String nameIsBlankTxt = 'Name is blank';
+  static const String nameBlankTxt = 'Name is blank';
   static const String emailBlankTxt = 'Email is blank';
   static const String emailInvalidTxt = 'Email is invalid';
   static const String emailAlreadyExistTxt = 'Email already exists';
@@ -35,6 +33,7 @@ class Const {
 
   static const String newsTitle = 'News';
   static const String searchTitle = 'Search';
+  static const String searchTip = 'Search for a Pokemon';
   static const String favoritesTitle = 'Favorites';
   static const String settingsTitle = 'Settings';
 
@@ -45,8 +44,8 @@ class Const {
   static const String noPokemonFound = 'No Pokemon Found';
 
   static const String pokeBaseUrl = 'https://pokeapi.co/api/v2/';
-  static const String pokeDataUrl = pokeBaseUrl + 'pokemon/';
   static const String defImage = 'https://icon-library.com/images/small-pokeball-icon/small-pokeball-icon-11.jpg';
 
-  static const bool useDevicePreview = true;
+  static const bool isDev = true;
+  static const bool useDevicePreview = isDev;
 }

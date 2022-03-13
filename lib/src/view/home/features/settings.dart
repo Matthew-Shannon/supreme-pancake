@@ -1,114 +1,73 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
-
 import '../../../core/const.dart';
-import '../../../core/extensions.dart';
-import '../../../core/types.dart';
 import '../../../core/view.dart';
-import '../../../model/state.dart';
-import '../../../model/user.dart';
-import '../../../service/prefs.dart';
-import '../../../service/repo.dart';
+import '../../../model/model.dart';
+import '../../../service/service.dart';
 import '../../auth/auth.dart';
 
-part 'settings.freezed.dart';
+part 'settings.g.dart';
 
 class SettingsView extends StatelessWidget with GetItMixin {
   SettingsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final SettingsMiddleware middleware = get();
-    return StoreConnector<MyDexState, SettingsVM>(
-      converter: (_) => SettingsVM.fromStore(_, middleware),
-      builder: (ctx, _) => Scaffold(
+    final SettingsStore settingsStore = get();
+    final AuthStore authStore = get();
+    return Observer(
+      builder: (_) => Scaffold(
         appBar: const Text(Const.settingsTitle).appBar(),
-        body: View.frame(body(_)),
+        body: View.frame([
+          SettingsView.userView(UserVM(authStore.owner.value)),
+          SettingsView.toggles(settingsStore),
+          SettingsView.buttons(settingsStore),
+        ]),
       ),
     );
   }
 
-  static List<Widget> body(SettingsVM vm) => [
-        ...SettingsView.userView(vm.userVM),
-        ...SettingsView.toggles(vm),
-        ...SettingsView.buttons(vm),
-      ];
+  static Widget userView(UserVM vm) => vm //
+      .fields()
+      .map(Text.new)
+      .map((_) => ListTile(title: _))
+      .toList()
+      .column();
 
-  static List<Widget> userView(UserVM vm) => //
-      vm.fields().map(Text.new).mapList((_) => ListTile(title: _));
+  static Widget toggles(SettingsStore store) => [
+        const Text(Const.darkModeBtn).switchListCell(store.isDarkMode.value, store.themeChanged),
+      ].column();
 
-  static List<Widget> toggles(SettingsVM vm) => [
-        SwitchListTile(
-          title: const Text(Const.darkModeBtn),
-          onChanged: vm.onToggleTheme,
-          value: vm.settingsState.isDarkMode,
-        ),
-      ];
-
-  static List<Widget> buttons(SettingsVM vm) => [
-        const Text(Const.logoutBtn).outlinedButton(Const.logoutBtn, vm.onLogout),
-        const Text(Const.wipeBtn).outlinedButton(Const.wipeBtn, vm.onWipe),
-      ];
+  static Widget buttons(SettingsStore store) => [
+        const Text(Const.logoutBtn).outlinedButton(Const.logoutBtn, store.logout),
+        const Text(Const.wipeBtn).outlinedButton(Const.wipeBtn, store.wipeData),
+      ].column();
 }
 
-class SettingsVM {
-  final SettingsState settingsState;
-  final UserVM userVM;
-  final Runnable onLogout;
-  final Consumer<bool> onToggleTheme;
-  final Runnable onWipe;
+class SettingsStore = SettingsBase with _$SettingsStore;
 
-  const SettingsVM({required this.settingsState, required this.userVM, required this.onLogout, required this.onToggleTheme, required this.onWipe});
-
-  factory SettingsVM.fromStore(MyDexStore store, SettingsMiddleware middleware) => SettingsVM(
-      settingsState: store.state.settingsState,
-      userVM: UserVM(store.state.authState.owner),
-      onLogout: () => store.dispatch(middleware.logout()),
-      onToggleTheme: (_) => store.dispatch(middleware.toggleTheme(_)),
-      onWipe: () => store.dispatch(middleware.wipeData()));
-}
-
-class SettingsMiddleware {
+abstract class SettingsBase with Store {
+  SettingsBase(this.prefs, this.authStore);
+  final AuthStore authStore;
   final IPrefs prefs;
-  final AppDatabase database;
-  SettingsMiddleware(this.prefs, this.database);
 
-  Func<MyDexStore, Future<void>> toggleTheme(bool status) => (store) async {
-        await prefs.setTheme(status);
-        store.dispatch(SettingsAction.themeChanged(status));
-      };
+  Observable<bool> isDarkMode = Observable(false);
+  Observable<bool> isiOS = Observable(false);
 
-  Func<MyDexStore, Future<void>> logout() => (store) async {
-        await prefs.setAuth(false);
-        store.dispatch(const AuthAction.authChanged(false));
-      };
+  @action
+  Future<void> themeChanged(bool _) async {
+    await prefs.setTheme(_);
+    isDarkMode.value = _;
+  }
 
-  ThunkAction<MyDexState> wipeData() => (store) async {
-        await store.dispatch(ClearAction());
-        await prefs.clear();
-        await database.clear();
-      };
-}
+  @action
+  Future<void> logout() async {
+    await prefs.setAuth(false);
+    authStore.authChanged(false);
+  }
 
-class SettingsReducer {
-  static Reducer<SettingsState> reduce = combineReducers<SettingsState>([
-    TypedReducer<SettingsState, ThemeChanged>((s, _) => s.copyWith(isDarkMode: _.theme)),
-  ]);
-}
-
-@freezed
-class SettingsState with _$SettingsState {
-  const factory SettingsState({
-    @Default(false) bool isDarkMode,
-    @Default(false) bool isiOS,
-  }) = _SettingsState;
-}
-
-@freezed
-class SettingsAction with _$SettingsAction {
-  const factory SettingsAction.themeChanged(bool theme) = ThemeChanged;
+  @action
+  Future<void> wipeData() async {
+    authStore.authChanged(false);
+    authStore.ownerChanged(const User());
+    await prefs.clear();
+  }
 }

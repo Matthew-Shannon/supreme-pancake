@@ -6,7 +6,7 @@ part of 'sprite.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Sprite _$SpriteFromJson(Map<String, dynamic> json) => Sprite(
+_$_Sprite _$$_SpriteFromJson(Map<String, dynamic> json) => _$_Sprite(
       back_default: json['back_default'] as String? ?? null,
       back_female: json['back_female'] as String? ?? null,
       back_shiny: json['back_shiny'] as String? ?? null,
@@ -17,7 +17,7 @@ Sprite _$SpriteFromJson(Map<String, dynamic> json) => Sprite(
       front_shiny_female: json['front_shiny_female'] as String? ?? null,
     );
 
-Map<String, dynamic> _$SpriteToJson(Sprite instance) => <String, dynamic>{
+Map<String, dynamic> _$$_SpriteToJson(_$_Sprite instance) => <String, dynamic>{
       'back_default': instance.back_default,
       'back_female': instance.back_female,
       'back_shiny': instance.back_shiny,

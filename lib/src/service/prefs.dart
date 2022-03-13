@@ -1,12 +1,9 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
-import '../core/extensions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IPrefs {
   Future<void> clear();
-
-  Future<void> setId(int value);
-  Future<int> getId();
 
   Future<void> setPos(int value);
   Future<int> getPos();
@@ -16,6 +13,9 @@ abstract class IPrefs {
 
   Future<void> setTheme(bool value);
   Future<bool> getTheme();
+
+  Future<void> setOwner(String value);
+  Future<String> getOwner();
 }
 
 class Prefs implements IPrefs {
@@ -25,17 +25,6 @@ class Prefs implements IPrefs {
 
   @override
   Future<void> clear() => shared.clear();
-
-  // ID
-  @override
-  Future<void> setId(int value) => Future.value(value) //
-      .then((_) => shared.setInt('id', _))
-      .then(logData('Prefs.setId: value: $value'));
-
-  @override
-  Future<int> getId() => Future.value(0) //
-      .then((_) => shared.getInt('id') ?? _)
-      .then(logData('Prefs.getId: '));
 
   // POS
   @override
@@ -69,4 +58,21 @@ class Prefs implements IPrefs {
   Future<bool> getTheme() => Future.value(false) //
       .then((_) => shared.getBool('theme') ?? _)
       .then(logData('Prefs.getTheme: '));
+
+  // Owner
+  @override
+  Future<void> setOwner(String value) => Future.value(value) //
+      .then((_) => shared.setString('owner', _))
+      .then(logData('Prefs.setOwner: value: $value'));
+
+  @override
+  Future<String> getOwner() => Future.value('') //
+      .then((_) => shared.getString('owner') ?? _)
+      .then(logData('Prefs.getOwner: '));
+
+  // Util
+  T Function(T) logData<T>(String tag) => (t) {
+        log('[logData] $tag: $t');
+        return t;
+      };
 }

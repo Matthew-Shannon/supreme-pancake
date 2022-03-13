@@ -1,55 +1,38 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
-import 'package:get_it_mixin/get_it_mixin.dart';
-
-import 'core/const.dart';
 import 'core/view.dart';
-import 'model/state.dart';
-import 'service/nav.dart';
-import 'service/style.dart';
+import 'service/service.dart';
+import 'view/auth/auth.dart';
+import 'view/home/features/settings.dart';
 
 class AppView extends StatelessWidget with GetItMixin {
   AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext ctx) {
+    final SettingsStore settingsStore = get();
+    final AuthStore authStore = get();
     final IStyle style = get();
     final INav nav = get();
-    return StoreConnector<MyDexState, AppVM>(
-      converter: (_) => AppVM.fromStore(_, style, nav),
-      builder: (ctx, _) => body(ctx, _) //
+    return Observer(
+      builder: (_) => MaterialApp(
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(_),
+        builder: DevicePreview.appBuilder,
+        debugShowCheckedModeBanner: false,
+        home: nav.selectInitial(authStore.isAuthed.value),
+        theme: style.selectTheme(settingsStore.isDarkMode.value),
+      ) //
           .screenUtil()
           .devicePreview(true),
     );
   }
-
-  static Widget body(BuildContext ctx, AppVM vm) => MaterialApp(
-        locale: DevicePreview.locale(ctx),
-        builder: DevicePreview.appBuilder,
-        debugShowCheckedModeBanner: false,
-        useInheritedMediaQuery: true,
-        theme: vm.theme,
-        home: vm.home,
-      );
 }
 
-class AppVM {
-  final Widget home;
-  final ThemeData theme;
+extension AppEx on Widget {
+  Widget devicePreview([bool enabled = false]) => //
+      DevicePreview(enabled: enabled, builder: (_) => this);
 
-  const AppVM({
-    required this.home,
-    required this.theme,
-  });
-
-  factory AppVM.fromStore(MyDexStore store, IStyle style, INav nav) => AppVM(
-        home: store.state.authState.isAuthed //
-            ? nav.getBy(Const.homeView)
-            : nav.getBy(Const.authView),
-        theme: store.state.settingsState.isDarkMode //
-            ? style.darkTheme()
-            : style.lightTheme(),
-      );
+  Widget screenUtil() => //
+      ScreenUtilInit(designSize: const Size(360, 690), minTextAdapt: true, builder: () => this);
 }

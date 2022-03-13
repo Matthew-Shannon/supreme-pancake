@@ -1,79 +1,93 @@
-import 'package:dio/dio.dart';
-import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
-import 'package:json_annotation/json_annotation.dart';
-
 import '../../core/const.dart';
-import '../../core/extensions.dart';
-import '../../service/repo.dart';
+import '../../service/service.dart';
+import '../util.dart';
+import 'resource.dart';
 import 'sprite.dart';
 
+part 'pokemon.freezed.dart';
 part 'pokemon.g.dart';
 
-@entity
-@JsonSerializable()
-@SpriteRemoteConverter()
-class Pokemon extends Equatable {
-  @primaryKey
-  final int id;
-  final String name;
-  final int height;
-  final int weight;
-  final int order;
-  final int base_experience;
-  final Sprite sprites;
+@RestApi(baseUrl: Const.pokeBaseUrl)
+abstract class PokemonRemote {
+  factory PokemonRemote(Dio dio, {String baseUrl}) = _PokemonRemote;
 
-  const Pokemon({this.id = 0, this.name = '', this.height = 0, this.weight = 0, this.order = 0, this.base_experience = 0, this.sprites = const Sprite()});
+  @GET('pokemon/{id}/')
+  Future<Pokemon?> getPokemon(@Path('id') String id);
+}
 
-  @override
-  List<Object?> get props => [id, name, height, weight, order, base_experience, sprites];
+@freezed
+class Pokemon with _$Pokemon {
+  const factory Pokemon({
+    @Default(0) int id,
+    @Default('') String name,
+    @Default(0) int base_experience,
+    @Default(0.0) double height,
+    @Default(false) bool isDefault,
+    @Default(0) int order,
+    @Default(0.0) double weight,
+    @Default(NamedApiResource()) NamedApiResource species,
+    @Default([]) List<Ability> abilities,
+    @Default([]) List<NamedApiResource> forms,
+    // @Default([]) List<VersionGameIndex> gameIndices,
+    // @Default([]) List<HeldItem> heldItems,
+    // @Default([]) List<Move> moves,
+    // @Default([]) List<Stats> stats,
+    // @Default([]) List<Types> types,
+    @Default(Sprite()) Sprite sprites,
+  }) = _Pokemon;
 
-  factory Pokemon.fromJson(JSON json) => _$PokemonFromJson(json);
+  factory Pokemon.fromJson(JSON json) => //
+      _$PokemonFromJson(json);
+}
 
-  JSON toJson() => _$PokemonToJson(this);
+@freezed
+class Ability with _$Ability {
+  const factory Ability({
+    @Default(false) bool isHidden,
+    @Default(0) int slot,
+    @Default(NamedApiResource()) NamedApiResource ability,
+  }) = _Ability;
+  factory Ability.fromJson(JSON json) => _$AbilityFromJson(json);
+}
+
+class AbilityVM {
+  const AbilityVM(this.ability);
+  final Ability ability;
+  factory AbilityVM.def(Ability ability) => AbilityVM(ability);
+
+  String get id => 'Id:${ability.ability.id()}';
+  String get name => 'Name:${capitalize(ability.ability.name)}';
+  String get url => 'Url:${ability.ability.url}';
+  String get category => 'Category:${ability.ability.category()}';
 }
 
 class PokemonVM {
-  final Pokemon pokemon;
+  const PokemonVM(this.pokemon, this.sprites, this.abilities);
+  final List<AbilityVM> abilities;
   final SpriteVM sprites;
-  const PokemonVM(this.pokemon, this.sprites);
-  factory PokemonVM.def(Pokemon pokemon) => PokemonVM(pokemon, SpriteVM(pokemon.sprites));
+  final Pokemon pokemon;
 
-  bool isNotEmpty() => pokemon != const Pokemon();
-  String id() => 'Id: ${pokemon.id}';
-  String name() => 'Name: ${pokemon.name}';
-  String order() => 'Order: ${pokemon.order}';
-  String height() => 'Height: ${pokemon.height}';
-  String weight() => 'Weight: ${pokemon.weight}';
-  String baseExp() => 'BaseExp: ${pokemon.base_experience}';
+  factory PokemonVM.def(Pokemon pokemon) => PokemonVM(
+        pokemon,
+        SpriteVM(pokemon.sprites),
+        pokemon.abilities.map(AbilityVM.def).toList(),
+      );
 
-  List<String> fields() => [id(), name(), order(), height(), weight(), baseExp()];
+  String get id => 'ID:${pokemon.id}';
+  String get order => 'Order:${pokemon.order}';
+  String get name => 'Name:${capitalize(pokemon.name)}';
+  String get height => 'Height:${UnitConvert.extractHeight(pokemon.height)}';
+  String get weight => 'Weight:${UnitConvert.extractWeight(pokemon.weight)}';
+  String get baseExp => 'BaseExp:${pokemon.base_experience}';
+
+  List<String> fields() => [id, order, name, height, weight, baseExp];
 }
 
-@dao
-abstract class PokemonLocal extends BaseLocal<Pokemon> {
-  @Query('SELECT * FROM Pokemon')
-  Future<List<Pokemon>> onGetAll();
+class PokemonRepo {
+  final PokemonRemote remote;
+  const PokemonRepo(this.remote);
 
-  @Query('SELECT * FROM Pokemon WHERE id = :query OR name = :query')
-  Future<Pokemon?> onGet(String query);
-}
-
-class PokemonRepo extends BaseRepo<Pokemon> {
-  final Dio remote;
-  const PokemonRepo(PokemonLocal local, this.remote) : super(local);
-
-  @override
-  Future<Pokemon> doGet(String query) => Future.any([
-        local.onGet(query).thenUnwrap(Pokemon.new),
-        _doGet(query).then(doCache),
-      ]);
-
-  @override
-  Future<List<Pokemon>> doGetAll() => //
-      local.onGetAll();
-
-  Future<Pokemon> _doGet(String query) => remote //
-      .get<JSON>(Const.pokeBaseUrl + 'pokemon/$query')
-      .then((_) => Pokemon.fromJson(_.data ?? {}));
+  Future<Option<Pokemon>> doGet(String query) => remote //
+      .getPokemon(query)
+      .then(optionOf);
 }

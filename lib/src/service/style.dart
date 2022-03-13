@@ -1,12 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'style.freezed.dart';
 
 abstract class IStyle {
   ThemeData darkTheme();
   ThemeData lightTheme();
+  ThemeData selectTheme(bool status);
 }
 
 class Style implements IStyle {
@@ -27,14 +24,7 @@ class Style implements IStyle {
         toggleableActiveColor: Colors.indigoAccent,
         accentColor: Colors.indigoAccent,
       );
-}
 
-@freezed
-class BottomItem with _$BottomItem {
-  const factory BottomItem(
-    String title,
-    String viewName,
-    IconData normalIcon,
-    IconData selectedIcon,
-  ) = _BottomItem;
+  @override
+  ThemeData selectTheme(bool status) => status ? darkTheme() : lightTheme();
 }

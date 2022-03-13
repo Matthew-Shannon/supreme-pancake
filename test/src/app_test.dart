@@ -1,13 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:mydex/src/app.dart';
-import 'package:mydex/src/core/const.dart';
 import 'package:mydex/src/core/di.dart';
-import 'package:mydex/src/core/view.dart';
-import 'package:mydex/src/model/state.dart';
-import 'package:mydex/src/service/nav.dart';
-import 'package:mydex/src/service/style.dart';
+import 'package:mydex/src/service/service.dart';
 import 'package:mydex/src/view/auth/auth.dart';
 import 'package:mydex/src/view/home/features/settings.dart';
 
@@ -16,52 +9,50 @@ import 'core/util.dart';
 
 void main() {
   group('Auth', () {
-    late MockNav nav;
-    late IStyle skin;
-    late MyDexStore store;
+    late INav nav;
+    late IStyle style;
+    late IPrefs prefs;
+    late AuthStore authStore;
+    late SettingsStore settingsStore;
 
     group('view', () {
       setUp(() {
+        prefs = MockPrefs();
+        when(() => prefs.setTheme(any())).thenCall();
+
         nav = MockNav();
-        when(() => nav.getBy(any())).thenReturn(const Text(''));
+        when(() => nav.selectInitial(any())).thenReturn(const Text('asdf'));
 
-        skin = MockStyle();
-        when(skin.lightTheme).thenReturn(ThemeData.fallback());
-        when(skin.darkTheme).thenReturn(ThemeData.fallback());
+        style = MockStyle();
+        when(() => style.selectTheme(any())).thenReturn(ThemeData.fallback());
 
-        store = setupStore([MyDexReducer.authSelector, MyDexReducer.settingsSelector]);
+        authStore = AuthStore();
+        settingsStore = SettingsStore(prefs, authStore);
 
-        DI.instance.registerLazySingleton<MyDexStore>(() => store);
-        DI.instance.registerLazySingleton<IStyle>(() => skin);
+        DI.instance.registerLazySingleton<SettingsStore>(() => settingsStore);
+        DI.instance.registerLazySingleton<AuthStore>(() => authStore);
+        DI.instance.registerLazySingleton<IStyle>(() => style);
         DI.instance.registerLazySingleton<INav>(() => nav);
       });
 
       tearDown(() async => DI.instance.reset());
 
       testWidgets('auth', (tester) async {
-        await tester.pumpWidget(testApp(AppView.new).storeProvider(store));
-        verify(() => nav.getBy(Const.authView)).called(1);
+        await tester.inflate(AppView());
+        verify(() => nav.selectInitial(false)).called(1);
 
-        store.dispatch(const AuthAction.authChanged(false));
+        authStore.authChanged(true);
         await tester.pump(Duration.zero);
-        verify(() => nav.getBy(Const.authView)).called(1);
-
-        store.dispatch(const AuthAction.authChanged(true));
-        await tester.pump(Duration.zero);
-        verify(() => nav.getBy(Const.homeView)).called(1);
+        verify(() => nav.selectInitial(true)).called(1);
       });
 
       testWidgets('style', (tester) async {
-        await tester.pumpWidget(testApp(AppView.new).storeProvider(store));
-        verify(() => skin.lightTheme()).called(1);
+        await tester.inflate(AppView());
+        verify(() => style.selectTheme(false)).called(1);
 
-        store.dispatch(const SettingsAction.themeChanged(false));
+        await settingsStore.themeChanged(true);
         await tester.pump(Duration.zero);
-        verify(() => skin.lightTheme()).called(1);
-
-        store.dispatch(const SettingsAction.themeChanged(true));
-        await tester.pump(Duration.zero);
-        verify(() => skin.darkTheme()).called(1);
+        verify(() => style.selectTheme(true)).called(1);
       });
     });
   });

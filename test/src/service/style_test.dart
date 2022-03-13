@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mydex/src/service/style.dart';
+
+import '../core/util.dart';
 
 void main() {
   group('Style', () {
@@ -14,6 +14,10 @@ void main() {
 
     test('lightTheme', () {
       expect(style.lightTheme().brightness, Brightness.light);
+    });
+    test('selectTheme', () {
+      expect(style.selectTheme(false).brightness, Brightness.light);
+      expect(style.selectTheme(true).brightness, Brightness.dark);
     });
   });
 }

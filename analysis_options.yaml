@@ -16,11 +16,9 @@ linter:
     empty_constructor_bodies: true
     prefer_const_constructors: true
     prefer_conditional_assignment: true
-    prefer_constructors_over_static_methods: true
-
-    sort_unnamed_constructors_first: true
+    sort_unnamed_constructors_first: false
     sort_child_properties_last: true
-
+    prefer_constructors_over_static_methods: false
     always_declare_return_types: true
     unnecessary_await_in_return: true
     unnecessary_const: true
@@ -32,5 +30,7 @@ linter:
     avoid_returning_null_for_future: true
     unawaited_futures: true
     await_only_futures: true
-
+    annotate_overrides: true
     avoid_void_async: true
+    always_put_control_body_on_new_line: false
+

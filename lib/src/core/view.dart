@@ -1,30 +1,18 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:redux/redux.dart';
 
-import 'types.dart';
+export 'package:flutter/material.dart' hide Action, State, Listener;
+export 'package:flutter_mobx/flutter_mobx.dart';
+export 'package:flutter_screenutil/flutter_screenutil.dart';
+export 'package:get_it_mixin/get_it_mixin.dart';
+export 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+export 'package:mobx/mobx.dart' hide version, Listenable, when;
 
 class View {
-  static Widget card(List<Widget> children) => children //
-      .column()
-      .paddingN(l: 24.r, t: 24.r, r: 24.r, b: 12.r)
-      .card()
-      .padding(0.04.sh.onlyTop());
-
   static Widget action(String id, IconData icon, void onClick()) => //
       Icon(icon, key: Key(id)) //
           .onTap(onClick)
           .padding(12.w.onlyEnd());
-
-  static Widget listView(List<Widget> children) => //
-      ListView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        padding: 16.r.all(),
-        shrinkWrap: true,
-        children: children,
-      ).safeArea();
 
   static Widget singleCard(List<Widget> children) => children //
       .column()
@@ -42,12 +30,6 @@ class View {
 }
 
 extension WidgetEx on Widget {
-  Widget app() => //
-      MaterialApp(home: this);
-
-  Widget center() => //
-      Center(child: this);
-
   Widget safeArea() => //
       SafeArea(child: this);
 
@@ -57,22 +39,22 @@ extension WidgetEx on Widget {
   Widget sizedBox({double? width, double? height}) => //
       SizedBox(width: width, height: height, child: this);
 
-  Widget container({double? width, double? height, Key? key}) => //
-      Container(key: key, width: width, child: this);
+  Widget container({double? width, double? height, Key? key, Color? color}) => //
+      Container(key: key, color: color, width: width, child: this);
 
-  Widget material() => //
-      Material(child: this);
+  Widget center() => //
+      Center(child: this);
 
-  Widget onTap(Runnable onTap) => //
+  Widget onTap(void Function() onTap) => //
       GestureDetector(onTap: onTap, child: this);
 
-  Widget outlinedButton(String id, Runnable onClick) => //
+  Widget outlinedButton(String id, void Function() onClick) => //
       OutlinedButton(key: Key(id), onPressed: onClick, child: this);
 
-  Widget textButton(Runnable onClick) => //
+  Widget textButton(void Function() onClick) => //
       TextButton(onPressed: onClick, child: this);
 
-  Widget elevatedButton(Runnable onClick) => //
+  Widget elevatedButton(void Function() onClick) => //
       ElevatedButton(onPressed: onClick, child: this);
 
   Widget card([z = 8.0]) => //
@@ -89,16 +71,26 @@ extension WidgetEx on Widget {
 
   Widget paddingN({l = 0.0, t = 0.0, r = 0.0, b = 0.0}) => //
       padding(EdgeInsets.fromLTRB(l, t, r, b));
+
+  Widget switchListCell(bool value, void Function(bool) onChange) => //
+      SwitchListTile(title: this, onChanged: onChange, value: value);
 }
 
 extension InputDecoratinoEx on InputDecoration {
-  TextField textField(Consumer<String> onChange, {isPassword = false}) => //
+  TextField textField(void Function(String) onChange, {isPassword = false}) => //
       TextField(decoration: this, obscureText: isPassword, onChanged: onChange);
 }
 
 extension WidgetExT on List<Widget> {
-  Widget row([MainAxisAlignment align = MainAxisAlignment.start]) => //
-      Row(mainAxisAlignment: align, children: this);
+  Widget row({
+    MainAxisAlignment align = MainAxisAlignment.start,
+    MainAxisSize size = MainAxisSize.max,
+  }) => //
+      Row(
+        mainAxisAlignment: align,
+        mainAxisSize: size,
+        children: this,
+      );
 
   Widget column() => //
       Column(children: this);
@@ -106,26 +98,8 @@ extension WidgetExT on List<Widget> {
 
 extension doubleEx on double {
   EdgeInsets all() => EdgeInsets.all(this);
-  //EdgeInsets onlyStart() => EdgeInsets.only(left: this);
   EdgeInsets onlyTop() => EdgeInsets.only(top: this);
   EdgeInsets onlyEnd() => EdgeInsets.only(right: this);
   EdgeInsets onlyBottom() => EdgeInsets.only(bottom: this);
-}
-
-extension AppEx on Widget {
-  Widget devicePreview([bool enabled = false]) => //
-      DevicePreview(
-        enabled: enabled,
-        builder: (_) => this,
-      );
-
-  Widget screenUtil() => //
-      ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        builder: () => this,
-      );
-
-  Widget storeProvider<S>(Store<S> store) => //
-      StoreProvider<S>(store: store, child: this);
+//EdgeInsets onlyStart() => EdgeInsets.only(left: this);
 }

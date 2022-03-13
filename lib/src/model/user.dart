@@ -1,50 +1,35 @@
-import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
+import '../service/service.dart';
 
-import '../core/extensions.dart';
-import '../service/repo.dart';
+part 'user.freezed.dart';
+part 'user.g.dart';
 
-@entity
-class User extends Equatable {
-  @primaryKey
-  final int id;
-  final String name;
-  final String email;
-  final String password;
-  const User({this.id = 0, this.name = '', this.email = '', this.password = ''});
-
-  @override
-  List<Object?> get props => [id, name, email, password];
+@freezed
+class User with _$User {
+  const factory User({
+    @Default('') String name,
+    @Default('') String email,
+    @Default('') String password,
+  }) = _User;
+  factory User.fromJson(JSON json) => _$UserFromJson(json);
 }
 
 class UserVM {
   final User owner;
   const UserVM(this.owner);
 
-  String id() => 'Id: ${owner.id}';
   String name() => 'Name: ${owner.name}';
   String email() => 'Email: ${owner.email}';
   String password() => 'Password: ${owner.password}';
-  List<String> fields() => [id(), name(), email(), password()];
+  List<String> fields() => [name(), email(), password()];
 }
 
-@dao
-abstract class UserLocal extends BaseLocal<User> {
-  @Query('SELECT * FROM User')
-  Future<List<User>> onGetAll();
+class UserRepo {
+  final IPrefs prefs;
+  const UserRepo(this.prefs);
 
-  @Query('SELECT * FROM User WHERE id = :query OR email = :query')
-  Future<User?> onGet(String query);
-}
+  Future<void> doInsert(User user) => //
+      prefs.setOwner(jsonEncode(user.toJson()));
 
-class UserRepo extends BaseRepo<User> {
-  const UserRepo(UserLocal local) : super(local);
-
-  @override
-  Future<User> doGet(String query) => //
-      local.onGet(query).thenUnwrap(User.new);
-
-  @override
-  Future<List<User>> doGetAll() => //
-      local.onGetAll();
+  Future<Option<User>> doGet() async => //
+      prefs.getOwner().then((_) => _.isEmpty ? none() : some(User.fromJson(jsonDecode(_))));
 }

@@ -1,21 +1,9 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_logging/redux_logging.dart';
-import 'package:redux_thunk/redux_thunk.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/pokemon/pair.dart';
-import '../model/pokemon/pokemon.dart';
-import '../model/state.dart';
-import '../model/user.dart';
-import '../service/nav.dart';
-import '../service/prefs.dart';
-import '../service/repo.dart';
-import '../service/style.dart';
+import '../model/model.dart';
+import '../service/service.dart';
 import '../view/auth/auth.dart';
 import '../view/auth/features/login.dart';
 import '../view/auth/features/register.dart';
@@ -29,13 +17,12 @@ import 'const.dart';
 typedef DI = GetIt;
 
 class Graph {
-  static Future<DI> setup() => Future.value(DI.instance) //
-      .then(ReduxModule.setup)
+  static Future<void> setup() => Future.value(DI.instance) //
       .then(PresentationModule.setup)
       .then(ServiceModule.setup)
       .then(RepositoryModule.setup)
-      .then(MiddlewareModule.setup)
-      .then((di) => di.allReady().then((_) => di));
+      .then(StoreModule.setup)
+      .then((_) => _.allReady());
 }
 
 class ServiceModule {
@@ -43,8 +30,6 @@ class ServiceModule {
     // prefs
     ..registerSingletonAsync<SharedPreferences>(SharedPreferences.getInstance)
     ..registerSingletonWithDependencies<IPrefs>(() => Prefs(di.get()), dependsOn: [SharedPreferences])
-    // local
-    ..registerSingletonAsync<AppDatabase>($FloorAppDatabase.databaseBuilder(Const.databaseName).build)
     // remote
     ..registerLazySingleton<PrettyDioLogger>(PrettyDioLogger.new)
     ..registerLazySingleton<Dio>(Dio.new); //..interceptors.add(di.get<PrettyDioLogger>()));
@@ -53,41 +38,36 @@ class ServiceModule {
 class RepositoryModule {
   static DI setup(DI di) => di
     // user
-    ..registerSingletonWithDependencies<UserLocal>(() => di.get<AppDatabase>().userLocal, dependsOn: [AppDatabase])
     ..registerLazySingleton<UserRepo>(() => UserRepo(di.get()))
     // pair
-    ..registerSingletonWithDependencies<PairLocal>(() => di.get<AppDatabase>().pairLocal, dependsOn: [AppDatabase])
-    ..registerSingletonWithDependencies<PairRepo>(() => PairRepo(di.get(), di.get()), dependsOn: [PairLocal])
+    ..registerLazySingleton<ResourceRemote>(() => ResourceRemote(di.get()))
+    ..registerLazySingleton<ResourceRepo>(() => ResourceRepo(di.get()))
     // pokemon
-    ..registerSingletonWithDependencies<PokemonLocal>(() => di.get<AppDatabase>().pokemonLocal, dependsOn: [AppDatabase])
-    ..registerSingletonWithDependencies<PokemonRepo>(() => PokemonRepo(di.get(), di.get()), dependsOn: [PokemonLocal]);
+    ..registerLazySingleton<PokemonRemote>(() => PokemonRemote(di.get()))
+    ..registerLazySingleton<PokemonRepo>(() => PokemonRepo(di.get()));
 }
 
-class ReduxModule {
+class StoreModule {
   static DI setup(DI di) => di
-    ..registerLazySingleton<MyDexStore>(() => Store<MyDexState>(
-          MyDexReducer.reduce,
-          initialState: devState(),
-          middleware: [
-            LoggingMiddleware.printer(),
-            thunkMiddleware,
-          ],
-        ));
-}
-
-class MiddlewareModule {
-  static DI setup(DI di) => di
-    ..registerLazySingleton<HomeMiddleware>(() => HomeMiddleware(di.get()))
-    ..registerLazySingleton<SettingsMiddleware>(() => SettingsMiddleware(di.get(), di.get()))
-    ..registerLazySingleton<LoginMiddleware>(() => LoginMiddleware(di.get(), di.get()))
-    ..registerLazySingleton<SearchMiddleware>(() => SearchMiddleware(di.get(), di.get()))
-    ..registerLazySingleton<RegisterMiddleware>(() => RegisterMiddleware(di.get()));
+    ..registerLazySingleton<AuthStore>(() => !Const.isDev //
+        ? AuthStore()
+        : (AuthStore() //
+          ..authChanged(true)
+          ..ownerChanged(const User(name: 'matthew', email: 'mshannon93@gmail.com', password: 'abc123'))))
+    ..registerLazySingleton<HomeStore>(() => !Const.isDev //
+        ? HomeStore(di.get())
+        : (HomeStore(di.get()) //
+          ..posChanged(1)))
+    ..registerLazySingleton<SettingsStore>(() => SettingsStore(di.get(), di.get()))
+    ..registerLazySingleton<LoginStore>(() => LoginStore(di.get(), di.get(), di.get()))
+    ..registerLazySingleton<SearchStore>(() => SearchStore(di.get(), di.get()))
+    ..registerLazySingleton<RegisterStore>(() => RegisterStore(di.get()));
 }
 
 class PresentationModule {
   static DI setup(DI di) => di
     ..registerLazySingleton<IStyle>(Style.new)
-    ..registerLazySingleton<INav>(() => Nav({
+    ..registerLazySingleton<INav>(() => Nav(Const.homeView, Const.authView, {
           Const.authView: AuthView.new,
           Const.loginView: LoginView.new,
           Const.registerView: RegisterView.new,
@@ -98,16 +78,3 @@ class PresentationModule {
           Const.settingsView: SettingsView.new,
         }));
 }
-
-MyDexState devState() => const MyDexState().copyWith(
-      homeState: const HomeState(1),
-      authState: const AuthState(
-        isAuthed: true,
-        owner: User(
-          id: 1,
-          name: 'matthew',
-          email: 'mshannon93@gmail.com',
-          password: 'abc123',
-        ),
-      ),
-    );
