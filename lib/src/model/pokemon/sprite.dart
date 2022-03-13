@@ -26,11 +26,11 @@ class SpriteVM {
 
   List<String> normal() => [
         unwrap(sprites.front_default, sprites.front_female),
-        unwrap(sprites.back_default, sprites.back_female),
+        //unwrap(sprites.back_default, sprites.back_female),
       ];
   List<String> shiny() => [
         unwrap(sprites.front_shiny, sprites.front_shiny_female),
-        unwrap(sprites.back_shiny, sprites.back_shiny_female),
+        //unwrap(sprites.back_shiny, sprites.back_shiny_female),
       ];
 
   String unwrap(String? a, String? b) => a ?? b ?? Const.defImage;

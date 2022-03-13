@@ -126,9 +126,8 @@ abstract class SearchBase with Store {
   final Observable<Option<String>> query = Observable(none())..observe((x) => log('onQueryChange: ${x.newValue}'));
   final Observable<bool> isSearching = Observable(false)..observe((x) => log('isSearching: ${x.newValue}'));
   final PokemonRepo pokemonRepo;
-  final ResourceRepo pairRepo;
 
-  SearchBase(this.pokemonRepo, this.pairRepo);
+  SearchBase(this.pokemonRepo);
 
   @action
   void namedResChanged([List<NamedApiResource> _ = const []]) => namedRes.value = _;
@@ -170,10 +169,12 @@ abstract class SearchBase with Store {
 
   @action
   Future<void> searchTextChanged(String query) async => //
-      Future.value(query) //
-          .then(pairRepo.doGetAll)
-          .then(namedResChanged)
-          .then((_) => query)
-          .then(some)
-          .then(queryChanged);
+      query.length <= 1
+          ? Future.value()
+          : Future.value(query) //
+              .then(pokemonRepo.doGetAll)
+              .then(namedResChanged)
+              .then((_) => query)
+              .then(some)
+              .then(queryChanged);
 }

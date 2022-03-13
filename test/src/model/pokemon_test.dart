@@ -79,13 +79,15 @@ void main() {
 
       setUp(() async {
         remote = MockPokemonRemote();
-        when(() => remote.getPokemon(any())).thenReply(mockPokemon);
-
         repo = PokemonRepo(remote);
       });
 
       test('rest', () async {
-        await expectLater(repo.doGet(''), completion(some(mockPokemon)));
+        when(() => remote.getPokemon(any())).thenReply(mockPokemon);
+        await expectLater(repo.doGet('foo'), completion(some(mockPokemon)));
+
+        when(() => remote.getPokemonResources(any(), any())).thenReply(const NamedApiResourceList(results: [mockNamedRes, mockNamedResB, mockNamedResC]));
+        await expectLater(repo.doGetAll('a'), completion([mockNamedRes]));
       });
     });
   });

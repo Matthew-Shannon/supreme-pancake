@@ -13,6 +13,9 @@ abstract class PokemonRemote {
 
   @GET('pokemon/{id}/')
   Future<Pokemon?> getPokemon(@Path('id') String id);
+
+  @GET('pokemon/')
+  Future<NamedApiResourceList> getPokemonResources(@Query('offset') int offset, @Query('limit') int limit);
 }
 
 @freezed
@@ -90,4 +93,10 @@ class PokemonRepo {
   Future<Option<Pokemon>> doGet(String query) => remote //
       .getPokemon(query)
       .then(optionOf);
+
+  Future<List<NamedApiResource>> doGetAll(String query) => //
+      (remote.getPokemonResources(0, 20)) //
+          .then((_) => _.results //
+              .where((_) => query.contains(_.name) || query.contains('${_.id()}'))
+              .sorted((a, b) => a.name.length - b.name.length));
 }

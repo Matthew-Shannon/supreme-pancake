@@ -39,9 +39,6 @@ class RepositoryModule {
   static DI setup(DI di) => di
     // user
     ..registerLazySingleton<UserRepo>(() => UserRepo(di.get()))
-    // pair
-    ..registerLazySingleton<ResourceRemote>(() => ResourceRemote(di.get()))
-    ..registerLazySingleton<ResourceRepo>(() => ResourceRepo(di.get()))
     // pokemon
     ..registerLazySingleton<PokemonRemote>(() => PokemonRemote(di.get()))
     ..registerLazySingleton<PokemonRepo>(() => PokemonRepo(di.get()));
@@ -60,7 +57,7 @@ class StoreModule {
           ..posChanged(1)))
     ..registerLazySingleton<SettingsStore>(() => SettingsStore(di.get(), di.get()))
     ..registerLazySingleton<LoginStore>(() => LoginStore(di.get(), di.get(), di.get()))
-    ..registerLazySingleton<SearchStore>(() => SearchStore(di.get(), di.get()))
+    ..registerLazySingleton<SearchStore>(() => SearchStore(di.get()))
     ..registerLazySingleton<RegisterStore>(() => RegisterStore(di.get()));
 }
 

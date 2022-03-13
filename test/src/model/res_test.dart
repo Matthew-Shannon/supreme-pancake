@@ -1,4 +1,4 @@
-import 'package:mydex/src/model/model.dart';
+import 'package:mydex/src/model/pokemon/resource.dart';
 
 import '../core/mock.dart';
 import '../core/util.dart';
@@ -24,21 +24,6 @@ void main() {
       test('render', () {
         var vm = const NamedApiResourceVM(mockNamedRes);
         expect(vm.title, equals('a (1'));
-      });
-    });
-
-    group('repo', () {
-      late ResourceRemote remote;
-      late ResourceRepo repo;
-
-      setUp(() async {
-        remote = MockResourceRemote();
-        repo = ResourceRepo(remote);
-      });
-
-      test('rest', () async {
-        when(() => remote.getList(any(), any())).thenReply(const NamedApiResourceList(results: [mockNamedRes, mockNamedResB, mockNamedResC]));
-        await expectLater(repo.doGetAll('a'), completion([mockNamedRes]));
       });
     });
   });

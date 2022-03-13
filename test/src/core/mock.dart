@@ -20,10 +20,6 @@ class MockPokemonRemote extends Mock implements PokemonRemote {}
 
 class MockPokemonRepo extends Mock implements PokemonRepo {}
 
-class MockResourceRemote extends Mock implements ResourceRemote {}
-
-class MockNamedResRepo extends Mock implements ResourceRepo {}
-
 const mockNamedRes = NamedApiResource(name: 'a', url: 'https://pokeapi.co/api/v2/pokemon/1/');
 const mockNamedResB = NamedApiResource(name: 'b', url: 'https://pokeapi.co/api/v2/pokemon/2/');
 const mockNamedResC = NamedApiResource(name: 'c', url: 'https://pokeapi.co/api/v2/pokemon/3/');

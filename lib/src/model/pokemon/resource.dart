@@ -1,28 +1,8 @@
-import '../../core/const.dart';
 import '../../service/service.dart';
 import '../util.dart';
 
 part 'resource.freezed.dart';
 part 'resource.g.dart';
-
-@RestApi(baseUrl: Const.pokeBaseUrl)
-abstract class ResourceRemote {
-  factory ResourceRemote(Dio dio, {String baseUrl}) = _ResourceRemote;
-
-  @GET('pokemon/')
-  Future<NamedApiResourceList> getList(@Query('offset') int offset, @Query('limit') int limit);
-}
-
-class ResourceRepo {
-  final ResourceRemote remote;
-  const ResourceRepo(this.remote);
-
-  Future<List<NamedApiResource>> doGetAll(String query) => //
-      (remote.getList(0, 800)) //
-          .then((_) => _.results //
-              .where((_) => _.name.contains(query))
-              .sorted((a, b) => a.name.length - b.name.length));
-}
 
 class NamedApiResourceVM {
   final NamedApiResource res;

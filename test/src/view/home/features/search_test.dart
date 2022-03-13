@@ -8,18 +8,14 @@ import '../../../core/util.dart';
 
 void main() {
   group('search', () {
-    late ResourceRepo resourceRepo;
     late PokemonRepo pokemonRepo;
     late SearchStore store;
 
     setUp(() {
-      resourceRepo = MockNamedResRepo();
-      when(() => resourceRepo.doGetAll(any())).thenReply([mockNamedRes]);
-
       pokemonRepo = MockPokemonRepo();
       when(() => pokemonRepo.doGet(any())).thenReply(some(mockPokemon));
-
-      store = SearchStore(pokemonRepo, resourceRepo);
+      when(() => pokemonRepo.doGetAll(any())).thenReply([mockNamedRes]);
+      store = SearchStore(pokemonRepo);
     });
 
     group('middleware', () {
@@ -46,10 +42,14 @@ void main() {
       });
 
       test('searchTextChanged', () async {
+        await store.searchTextChanged('');
         expect(store.query.value, equals(none()));
 
         await store.searchTextChanged('a');
-        expect(store.query.value, equals(some('a')));
+        expect(store.query.value, equals(none()));
+
+        await store.searchTextChanged('ab');
+        expect(store.query.value, equals(some('ab')));
         expect(store.namedRes.value, equals([mockNamedRes]));
       });
       test('back', () async {
